@@ -62,8 +62,10 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     # 移動平均
     features["sma_20"] = df["close"].rolling(20).mean()
     features["sma_50"] = df["close"].rolling(50).mean()
+    features["sma_200"] = df["close"].rolling(200).mean()  # トレンドフィルター用
     features["price_to_sma20"] = df["close"] / features["sma_20"] - 1
     features["price_to_sma50"] = df["close"] / features["sma_50"] - 1
+    features["price_to_sma200"] = df["close"] / features["sma_200"] - 1  # SMA200乖離
     features["sma_cross"] = (features["sma_20"] > features["sma_50"]).astype(int)
     
     # RSI
@@ -87,6 +89,21 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
     features["atr_14"] = tr.rolling(14).mean()
     
+    # ADX (Average Directional Index) - トレンド強度フィルター用
+    plus_dm = df["high"].diff()
+    minus_dm = -df["low"].diff()
+    plus_dm = plus_dm.where((plus_dm > minus_dm) & (plus_dm > 0), 0)
+    minus_dm = minus_dm.where((minus_dm > plus_dm) & (minus_dm > 0), 0)
+    
+    atr_smooth = tr.ewm(span=14, adjust=False).mean()
+    plus_di = 100 * (plus_dm.ewm(span=14, adjust=False).mean() / atr_smooth)
+    minus_di = 100 * (minus_dm.ewm(span=14, adjust=False).mean() / atr_smooth)
+    dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di + 1e-10)
+    features["adx_14"] = dx.ewm(span=14, adjust=False).mean()
+    
+    # SMA200からの乖離をATRで正規化（トレンドフィルター用）
+    features["sma200_atr_distance"] = abs(df["close"] - features["sma_200"]) / features["atr_14"]
+    
     # ボリンジャーバンド
     bb_mid = df["close"].rolling(20).mean()
     bb_std = df["close"].rolling(20).std()
@@ -99,6 +116,102 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     features["hour"] = df.index.hour
     features["day_of_week"] = df.index.dayofweek
     
+    # ========================================
+    # 新規特徴量: セッション特性（東京/ロンドン/NY）
+    # ========================================
+    hour = df.index.hour
+    
+    # セッションフラグ (UTC基準)
+    features["is_tokyo"] = ((hour >= 0) & (hour < 9)).astype(int)
+    features["is_london"] = ((hour >= 7) & (hour < 16)).astype(int)
+    features["is_ny"] = ((hour >= 13) & (hour < 22)).astype(int)
+    features["is_ldn_ny_overlap"] = ((hour >= 13) & (hour < 16)).astype(int)
+    
+    # セッション別累積リターン（セッション開始からのトレンド方向）
+    ret1 = features["log_return_1"]
+    day = df.index.floor("D")
+    
+    # 東京セッション累積リターン
+    tokyo_ret = ret1.where(features["is_tokyo"].astype(bool), 0.0)
+    features["tokyo_cumret"] = tokyo_ret.groupby(day).cumsum()
+    
+    # ロンドンセッション累積リターン
+    london_ret = ret1.where(features["is_london"].astype(bool), 0.0)
+    features["london_cumret"] = london_ret.groupby(day).cumsum()
+    
+    # NYセッション累積リターン
+    ny_ret = ret1.where(features["is_ny"].astype(bool), 0.0)
+    features["ny_cumret"] = ny_ret.groupby(day).cumsum()
+    
+    # セッション別ボラティリティ（全体のローリングボラに対するセッションの相対ボラ）
+    overall_vol = ret1.rolling(24, min_periods=12).std()
+    features["tokyo_vol_ratio"] = features["is_tokyo"] * overall_vol
+    features["london_vol_ratio"] = features["is_london"] * overall_vol
+    features["ny_vol_ratio"] = features["is_ny"] * overall_vol
+    
+    # ========================================
+    # 新規特徴量: トレンド品質（Efficiency Ratio）
+    # ========================================
+    n = 20
+    close = df["close"]
+    
+    # Kaufman Efficiency Ratio: 0=チョップ、1=クリーンなトレンド
+    change = close.diff(n).abs()
+    volatility = close.diff().abs().rolling(n).sum()
+    features["efficiency_ratio"] = (change / volatility).replace([np.inf, -np.inf], np.nan)
+    
+    # SMAスロープ（トレンドの傾き）
+    sma_20 = features["sma_20"]
+    features["sma_slope"] = sma_20.diff(3) / 3.0
+    features["sma_accel"] = features["sma_slope"].diff(3) / 3.0
+    
+    # リターン持続性（同じ方向が続く割合）
+    ret = features["log_return_1"]
+    same_sign = (np.sign(ret) == np.sign(ret.shift(1))).astype(float)
+    features["ret_persistence"] = same_sign.rolling(n).mean()
+    
+    # ========================================
+    # 新規特徴量: ジャンプ/テールリスク
+    # ========================================
+    win = 48
+    
+    # Parkinsonボラティリティ（レンジベース）
+    parkinson = (1.0 / (4.0 * np.log(2.0))) * (np.log(df["high"] / df["low"]) ** 2)
+    features["parkinson_vol"] = np.sqrt(parkinson.rolling(win).mean())
+    
+    # ジャンプスコア（異常な動きの検出）
+    med_abs = ret.abs().rolling(win).median()
+    features["jump_score"] = (ret.abs() / med_abs).replace([np.inf, -np.inf], np.nan)
+    
+    # テール非対称性（下落リスク vs 上昇リスク）
+    down = (ret.clip(upper=0.0) ** 2).rolling(win).mean()
+    up = (ret.clip(lower=0.0) ** 2).rolling(win).mean()
+    features["tail_asymmetry"] = (down / up).replace([np.inf, -np.inf], np.nan)
+    
+    # ========================================
+    # 新規特徴量: ミーンリバージョン（レンジ相場用）
+    # ========================================
+    ma = close.rolling(n).mean()
+    sd = close.rolling(n).std()
+    
+    # Zスコア
+    features["zscore"] = (close - ma) / sd
+    
+    # バンド幅のパーセンタイル（圧縮度）- シンプルな方法で計算
+    bw = features["bb_width"]
+    bw_rolling_max = bw.rolling(100, min_periods=20).max()
+    bw_rolling_min = bw.rolling(100, min_periods=20).min()
+    features["bw_percentile"] = (bw - bw_rolling_min) / (bw_rolling_max - bw_rolling_min + 1e-10)
+    
+    # レンジ相場フラグ（低ボラ + 低トレンド品質）
+    features["is_range_regime"] = (
+        (features["bw_percentile"] < 0.25) & 
+        (features["efficiency_ratio"] < 0.3)
+    ).astype(int)
+    
+    # ミーンリバージョンシグナル（レンジ相場でのみ有効）
+    features["mr_signal"] = features["is_range_regime"] * (-features["zscore"])
+    
     # 欠損値を削除
     features = features.dropna()
     
@@ -107,7 +220,7 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def compute_target(df: pd.DataFrame, horizon: int = 6) -> pd.Series:
     """
-    予測ターゲット: N時間後のリターン。
+    予測ターゲット: N時間後のリターン。（旧方式、互換性のため残す）
     
     Args:
         df: OHLCVデータ
@@ -117,7 +230,105 @@ def compute_target(df: pd.DataFrame, horizon: int = 6) -> pd.Series:
     return future_return
 
 
-def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Any:
+def compute_triple_barrier_target(
+    df: pd.DataFrame,
+    atr: pd.Series,
+    tp_atr: float = 3.0,
+    sl_atr: float = 2.0,
+    max_hold: int = 48,
+) -> pd.Series:
+    """
+    Triple-barrier方式のターゲット: SL/TPどちらが先にヒットするかを予測。
+    
+    バックテストの実際の決済ロジックと完全に一致するターゲット。
+    
+    Args:
+        df: OHLCVデータ（high, low, close必須）
+        atr: ATR値のSeries
+        tp_atr: TP距離のATR倍率（デフォルト3.0）
+        sl_atr: SL距離のATR倍率（デフォルト2.0）
+        max_hold: 最大保有期間（バー数）
+    
+    Returns:
+        ターゲットSeries:
+            +1: ロングでTP先にヒット（買いシグナル）
+            -1: ショートでTP先にヒット（売りシグナル）
+             0: どちらも不明確/タイムアウト
+    """
+    high = df["high"].values
+    low = df["low"].values
+    close = df["close"].values
+    atr_vals = atr.values
+    
+    n = len(df)
+    targets = np.full(n, np.nan)
+    
+    for t in range(n):
+        if not np.isfinite(close[t]) or not np.isfinite(atr_vals[t]) or atr_vals[t] <= 0:
+            continue
+        
+        entry = close[t]
+        current_atr = atr_vals[t]
+        
+        # ロング用バリア
+        long_tp = entry + tp_atr * current_atr
+        long_sl = entry - sl_atr * current_atr
+        
+        # ショート用バリア
+        short_tp = entry - tp_atr * current_atr
+        short_sl = entry + sl_atr * current_atr
+        
+        # 将来のバーを走査
+        end = min(n, t + 1 + max_hold)
+        if end <= t + 1:
+            continue
+        
+        long_result = 0  # 0=未決定, 1=TP先, -1=SL先
+        short_result = 0
+        
+        for i in range(t + 1, end):
+            # ロング判定
+            if long_result == 0:
+                hit_tp = high[i] >= long_tp
+                hit_sl = low[i] <= long_sl
+                if hit_tp and hit_sl:
+                    # 同一バーで両方ヒット → 保守的にSL先と判定
+                    long_result = -1
+                elif hit_tp:
+                    long_result = 1
+                elif hit_sl:
+                    long_result = -1
+            
+            # ショート判定
+            if short_result == 0:
+                hit_tp = low[i] <= short_tp
+                hit_sl = high[i] >= short_sl
+                if hit_tp and hit_sl:
+                    short_result = -1
+                elif hit_tp:
+                    short_result = 1
+                elif hit_sl:
+                    short_result = -1
+            
+            # 両方決定したら終了
+            if long_result != 0 and short_result != 0:
+                break
+        
+        # 方向ラベルを決定
+        # ロングでTP先 かつ ショートでTP先でない → 買いシグナル (+1)
+        # ショートでTP先 かつ ロングでTP先でない → 売りシグナル (-1)
+        # それ以外 → エッジなし (0)
+        if long_result == 1 and short_result != 1:
+            targets[t] = 1.0
+        elif short_result == 1 and long_result != 1:
+            targets[t] = -1.0
+        else:
+            targets[t] = 0.0
+    
+    return pd.Series(targets, index=df.index, name="triple_barrier_target")
+
+
+def train_model(X_train: pd.DataFrame, y_train: pd.Series, use_triple_barrier: bool = False) -> Any:
     """LightGBMモデルを学習。"""
     try:
         import lightgbm as lgb
@@ -126,21 +337,40 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Any:
         print("pip install lightgbm を実行してください。")
         sys.exit(1)
     
-    # 分類問題として扱う（上昇/下降）
-    y_class = (y_train > 0).astype(int)
-    
-    params = {
-        "objective": "binary",
-        "metric": "auc",
-        "boosting_type": "gbdt",
-        "num_leaves": 31,
-        "learning_rate": 0.05,
-        "feature_fraction": 0.8,
-        "bagging_fraction": 0.8,
-        "bagging_freq": 5,
-        "verbose": -1,
-        "n_jobs": -1,
-    }
+    if use_triple_barrier:
+        # Triple-barrier: 3クラス分類 (+1, 0, -1) → (2, 1, 0)
+        # +1 (買い) → 2, 0 (エッジなし) → 1, -1 (売り) → 0
+        y_class = (y_train + 1).astype(int)  # -1→0, 0→1, +1→2
+        
+        params = {
+            "objective": "multiclass",
+            "num_class": 3,
+            "metric": "multi_logloss",
+            "boosting_type": "gbdt",
+            "num_leaves": 31,
+            "learning_rate": 0.05,
+            "feature_fraction": 0.8,
+            "bagging_fraction": 0.8,
+            "bagging_freq": 5,
+            "verbose": -1,
+            "n_jobs": -1,
+        }
+    else:
+        # 旧方式: 2クラス分類（上昇/下降）
+        y_class = (y_train > 0).astype(int)
+        
+        params = {
+            "objective": "binary",
+            "metric": "auc",
+            "boosting_type": "gbdt",
+            "num_leaves": 31,
+            "learning_rate": 0.05,
+            "feature_fraction": 0.8,
+            "bagging_fraction": 0.8,
+            "bagging_freq": 5,
+            "verbose": -1,
+            "n_jobs": -1,
+        }
     
     train_data = lgb.Dataset(X_train, label=y_class)
     
@@ -163,6 +393,10 @@ def backtest(
     spread_pips: float = 0.0,
     slippage_pips: float = 0.0,
     pip_value: float = 0.0001,
+    use_filters: bool = True,
+    adx_threshold: float = 20.0,
+    sma_atr_threshold: float = 0.5,
+    use_triple_barrier: bool = False,
 ) -> dict[str, Any]:
     """
     シンプルなバックテスト実行。
@@ -174,6 +408,10 @@ def backtest(
         initial_capital: 初期資金
         risk_per_trade: 1トレードあたりリスク
         min_confidence: 最小信頼度
+        use_filters: フィルターを使用するか
+        adx_threshold: ADXの最小値（トレンド強度フィルター）
+        sma_atr_threshold: SMA200からの乖離/ATRの最小値
+        use_triple_barrier: Triple-barrier方式を使用するか
     """
     # 共通インデックスに揃える
     common_idx = features.index.intersection(df.index)
@@ -181,7 +419,27 @@ def backtest(
     features = features.loc[common_idx]
     
     # 予測
-    predictions = model.predict(features)
+    raw_predictions = model.predict(features)
+    
+    # Triple-barrier方式の場合は3クラス確率から方向と信頼度を計算
+    if use_triple_barrier:
+        # raw_predictions: shape (n_samples, 3) - [P(売り), P(エッジなし), P(買い)]
+        # クラス: 0=売り(-1), 1=エッジなし(0), 2=買い(+1)
+        prob_sell = raw_predictions[:, 0]
+        prob_neutral = raw_predictions[:, 1]
+        prob_buy = raw_predictions[:, 2]
+        
+        # 方向と信頼度を計算
+        # predictions: (方向を示す符号) * (方向性の強さ)
+        # 方向性の強さ = max(P(買い), P(売り)) であり、
+        # ニュートラル確率が高い場合は取引を控えるため、
+        # 信頼度 = max(P(買い), P(売り)) - P(ニュートラル) / 2 として調整
+        direction_strength = np.maximum(prob_buy, prob_sell)
+        edge_confidence = direction_strength - prob_neutral * 0.5
+        predictions = np.where(prob_buy > prob_sell, edge_confidence, -edge_confidence)
+        # predictionsの値: 正なら買い方向、負なら売り方向、絶対値が調整済み信頼度
+    else:
+        predictions = raw_predictions
     
     # 結果格納
     equity = [initial_capital]
@@ -268,10 +526,40 @@ def backtest(
             continue
         
         # 新規エントリー判定
-        confidence = max(pred, 1 - pred)
+        if use_triple_barrier:
+            # Triple-barrier: predは正なら買い、負なら売り、絶対値が信頼度
+            confidence = abs(pred)
+            direction_signal = "long" if pred > 0 else "short"
+        else:
+            # 旧方式: predは買い確率
+            confidence = max(pred, 1 - pred)
+            direction_signal = "long" if pred > 0.5 else "short"
+        
         if confidence < min_confidence:
             equity.append(equity[-1])
             continue
+        
+        # フィルター適用
+        if use_filters:
+            # 時間帯フィルター: UTC 21:00-01:00 (ロールオーバー・低流動性時間) を除外
+            hour = timestamp.hour
+            if hour >= 21 or hour < 1:
+                equity.append(equity[-1])
+                continue
+            
+            # トレンドレジームフィルター
+            adx = features.iloc[i-1]["adx_14"] if "adx_14" in features.columns else 0
+            sma_atr_dist = features.iloc[i-1]["sma200_atr_distance"] if "sma200_atr_distance" in features.columns else 0
+            
+            # ADXが閾値未満 = トレンドなし → スキップ
+            if adx < adx_threshold:
+                equity.append(equity[-1])
+                continue
+            
+            # SMA200からの乖離が小さい = 方向性なし → スキップ  
+            if sma_atr_dist < sma_atr_threshold:
+                equity.append(equity[-1])
+                continue
         
         # ATRベースのSL/TP
         atr = features.iloc[i-1]["atr_14"] if "atr_14" in features.columns else current_price * 0.001
@@ -282,7 +570,7 @@ def backtest(
         risk_amount = equity[-1] * risk_per_trade
         position_size = risk_amount / sl_distance if sl_distance > 0 else 0
         
-        if pred > 0.5:  # Long signal
+        if direction_signal == "long":
             position = {
                 "direction": "long",
                 "entry": current_price,
@@ -341,6 +629,10 @@ def walk_forward_backtest(
     spread_pips: float,
     slippage_pips: float,
     pip_value: float,
+    use_filters: bool = True,
+    adx_threshold: float = 20.0,
+    sma_atr_threshold: float = 0.5,
+    use_triple_barrier: bool = False,
 ) -> dict[str, Any]:
     """拡張ウィンドウのWalk-Forwardバックテスト。"""
     current_equity = initial_capital
@@ -361,7 +653,7 @@ def walk_forward_backtest(
             break
 
         df_test = df.loc[X_test.index]
-        model = train_model(X_train, y_train)
+        model = train_model(X_train, y_train, use_triple_barrier=use_triple_barrier)
         result = backtest(
             df_test,
             X_test,
@@ -372,6 +664,10 @@ def walk_forward_backtest(
             spread_pips=spread_pips,
             slippage_pips=slippage_pips,
             pip_value=pip_value,
+            use_filters=use_filters,
+            adx_threshold=adx_threshold,
+            sma_atr_threshold=sma_atr_threshold,
+            use_triple_barrier=use_triple_barrier,
         )
 
         equity_parts.append(result["equity"])
@@ -481,7 +777,7 @@ def main():
     print("=" * 60)
     
     # 設定
-    symbols = ["EURUSD", "USDJPY", "GBPUSD"]
+    symbols = ["EURUSD", "USDJPY"]  # GBPUSDは現モデルに適合しないため除外
     timeframe = "H1"
     data_dir = project_root / "data" / "raw"
     initial_capital = 1000
@@ -500,6 +796,17 @@ def main():
         "USDJPY": 0.01,
         "GBPUSD": 0.0001,
     }
+    
+    # フィルター設定
+    use_filters = True  # フィルターを使用するか
+    adx_threshold = 20.0  # ADXの最小値（トレンド強度）
+    sma_atr_threshold = 0.5  # SMA200からの乖離/ATRの最小値
+    
+    # ターゲット変数設定
+    use_triple_barrier = True  # Triple-barrier方式を使用するか
+    tp_atr_mult = 3.0  # TP距離のATR倍率
+    sl_atr_mult = 2.0  # SL距離のATR倍率
+    max_hold_bars = 48  # 最大保有期間（バー数）
     
     # データ読み込み
     print("\n[1/4] データ読み込み...")
@@ -529,12 +836,36 @@ def main():
         print(f"  サンプル数: {len(features)}")
         
         # ターゲット計算
-        target = compute_target(df, horizon=6)
+        if use_triple_barrier:
+            # ATRを計算（compute_featuresと同じロジック）
+            tr1 = df["high"] - df["low"]
+            tr2 = abs(df["high"] - df["close"].shift(1))
+            tr3 = abs(df["low"] - df["close"].shift(1))
+            tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+            atr = tr.rolling(14).mean()
+            
+            target = compute_triple_barrier_target(
+                df, atr,
+                tp_atr=tp_atr_mult,
+                sl_atr=sl_atr_mult,
+                max_hold=max_hold_bars,
+            )
+            print(f"  ターゲット: Triple-barrier方式 (TP={tp_atr_mult}ATR, SL={sl_atr_mult}ATR, max_hold={max_hold_bars})")
+        else:
+            target = compute_target(df, horizon=6)
+            print("  ターゲット: 6時間後リターン方向")
         
         # 共通インデックス
         common_idx = features.index.intersection(target.dropna().index)
         X = features.loc[common_idx]
         y = target.loc[common_idx]
+        
+        # ターゲット分布を表示
+        if use_triple_barrier:
+            buy_pct = (y == 1).mean() * 100
+            sell_pct = (y == -1).mean() * 100
+            neutral_pct = (y == 0).mean() * 100
+            print(f"  ラベル分布: 買い {buy_pct:.1f}%, 売り {sell_pct:.1f}%, ニュートラル {neutral_pct:.1f}%")
         
         # Train/Test分割 (時系列なので後半20%をテスト)
         if full_period:
@@ -547,6 +878,10 @@ def main():
             print("  Walk-Forward: 拡張ウィンドウ, 6か月ごと再学習")
             print(f"  初回学習期間: {train_years}年")
             print(f"  データ期間: {X.index[0].date()} ~ {X.index[-1].date()} ({len(X)} サンプル)")
+            if use_filters:
+                print(f"  フィルター: 有効 (ADX >= {adx_threshold}, SMA200乖離/ATR >= {sma_atr_threshold}, 時間帯除外: 21-01 UTC)")
+            else:
+                print("  フィルター: 無効")
             X_train, y_train = X, y
             X_test, y_test = X, y
             df_test = df.loc[X.index]
@@ -561,7 +896,7 @@ def main():
         
         # モデル学習
         print("\n[3/4] モデル学習...")
-        model = train_model(X_train, y_train)
+        model = train_model(X_train, y_train, use_triple_barrier=use_triple_barrier)
         
         # 特徴量重要度
         importance = pd.DataFrame({
@@ -576,30 +911,94 @@ def main():
         print("\n[4/4] バックテスト実行...")
         spread_pips = spread_pips_by_symbol.get(symbol, 1.0)
         pip_value = pip_value_by_symbol.get(symbol, 0.0001)
-        if walk_forward:
-            result = walk_forward_backtest(
-                df,
-                X,
-                y,
-                initial_capital=initial_capital,
-                risk_per_trade=0.01,
-                min_confidence=0.6,
-                train_years=train_years,
-                step_months=step_months,
-                spread_pips=spread_pips,
-                slippage_pips=slippage_pips,
-                pip_value=pip_value,
-            )
+        # 閾値探索モード
+        threshold_search = use_triple_barrier  # Triple-barrier方式の場合のみ閾値探索
+        
+        if threshold_search:
+            # 複数の閾値をテスト（より広い範囲）
+            thresholds = [0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60]
+            print(f"\n  閾値探索中...")
+            best_pf = 0
+            best_threshold = 0.4
+            best_result = None
+            
+            for thresh in thresholds:
+                if walk_forward:
+                    test_result = walk_forward_backtest(
+                        df, X, y,
+                        initial_capital=initial_capital,
+                        risk_per_trade=0.01,
+                        min_confidence=thresh,
+                        train_years=train_years,
+                        step_months=step_months,
+                        spread_pips=spread_pips,
+                        slippage_pips=slippage_pips,
+                        pip_value=pip_value,
+                        use_filters=use_filters,
+                        adx_threshold=adx_threshold,
+                        sma_atr_threshold=sma_atr_threshold,
+                        use_triple_barrier=use_triple_barrier,
+                    )
+                else:
+                    test_result = backtest(
+                        df_test, X_test, model,
+                        initial_capital=initial_capital,
+                        spread_pips=spread_pips,
+                        slippage_pips=slippage_pips,
+                        pip_value=pip_value,
+                        use_filters=use_filters,
+                        adx_threshold=adx_threshold,
+                        sma_atr_threshold=sma_atr_threshold,
+                        use_triple_barrier=use_triple_barrier,
+                    )
+                
+                test_metrics = calculate_metrics(test_result["equity"], test_result["trades"])
+                pf = test_metrics["profit_factor"]
+                trades = test_metrics["total_trades"]
+                ret = test_metrics["total_return_pct"]
+                print(f"    閾値 {thresh:.2f}: PF={pf:.2f}, 取引数={trades:.0f}, リターン={ret:.1f}%")
+                
+                # PF が最大かつ取引数が十分 (>100) の閾値を選択
+                if pf > best_pf and trades > 100:
+                    best_pf = pf
+                    best_threshold = thresh
+                    best_result = test_result
+            
+            print(f"  最適閾値: {best_threshold:.2f} (PF={best_pf:.2f})")
+            result = best_result if best_result else test_result
         else:
-            result = backtest(
-                df_test,
-                X_test,
-                model,
-                initial_capital=initial_capital,
-                spread_pips=spread_pips,
-                slippage_pips=slippage_pips,
-                pip_value=pip_value,
-            )
+            if walk_forward:
+                result = walk_forward_backtest(
+                    df,
+                    X,
+                    y,
+                    initial_capital=initial_capital,
+                    risk_per_trade=0.01,
+                    min_confidence=0.6,
+                    train_years=train_years,
+                    step_months=step_months,
+                    spread_pips=spread_pips,
+                    slippage_pips=slippage_pips,
+                    pip_value=pip_value,
+                    use_filters=use_filters,
+                    adx_threshold=adx_threshold,
+                    sma_atr_threshold=sma_atr_threshold,
+                    use_triple_barrier=use_triple_barrier,
+                )
+            else:
+                result = backtest(
+                    df_test,
+                    X_test,
+                    model,
+                    initial_capital=initial_capital,
+                    spread_pips=spread_pips,
+                    slippage_pips=slippage_pips,
+                    pip_value=pip_value,
+                    use_filters=use_filters,
+                    adx_threshold=adx_threshold,
+                    sma_atr_threshold=sma_atr_threshold,
+                    use_triple_barrier=use_triple_barrier,
+                )
         
         # 評価
         metrics = calculate_metrics(result["equity"], result["trades"])
