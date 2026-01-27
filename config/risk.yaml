@@ -1,0 +1,250 @@
+# =============================================================================
+# FX Trading System - Risk Management Configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Account-Level Risk Limits
+# -----------------------------------------------------------------------------
+account_limits:
+  # Maximum daily loss as percentage of account balance
+  max_daily_loss_pct: 2.0
+  
+  # Maximum weekly loss as percentage of account balance
+  max_weekly_loss_pct: 5.0
+  
+  # Maximum drawdown from peak equity
+  max_drawdown_pct: 10.0
+  
+  # Maximum total exposure as percentage of account
+  max_exposure_pct: 50.0
+  
+  # Maximum number of concurrent positions
+  max_positions: 3
+  
+  # Maximum positions per symbol
+  max_positions_per_symbol: 1
+
+# -----------------------------------------------------------------------------
+# Trade-Level Risk Parameters
+# -----------------------------------------------------------------------------
+trade_risk:
+  # Risk per trade as percentage of account
+  risk_per_trade_pct: 1.0
+  
+  # Minimum lot size
+  min_lot_size: 0.01
+  
+  # Maximum lot size (override symbol settings if lower)
+  max_lot_size: 1.0
+  
+  # Position sizing method: fixed | volatility_target | kelly
+  sizing_method: "volatility_target"
+  
+  # Volatility target parameters
+  volatility_target:
+    # Target daily volatility (percentage)
+    target_vol_pct: 1.0
+    # ATR period for volatility calculation
+    atr_period: 14
+    # Lookback for volatility estimation
+    lookback_bars: 20
+
+# -----------------------------------------------------------------------------
+# Stop Loss Configuration
+# -----------------------------------------------------------------------------
+stop_loss:
+  # Enable stop loss
+  enabled: true
+  
+  # SL calculation method: atr | fixed_pips | percentage
+  method: "atr"
+  
+  # ATR-based SL
+  atr:
+    multiplier: 2.0
+    period: 14
+  
+  # Fixed pips SL (fallback)
+  fixed_pips:
+    EURUSD: 30
+    USDJPY: 30
+    GBPUSD: 40
+  
+  # Percentage-based SL
+  percentage:
+    max_loss_pct: 2.0
+  
+  # Minimum SL in pips (safety floor)
+  min_sl_pips: 10
+  
+  # Maximum SL in pips (safety ceiling)
+  max_sl_pips: 100
+
+# -----------------------------------------------------------------------------
+# Take Profit Configuration
+# -----------------------------------------------------------------------------
+take_profit:
+  # Enable take profit
+  enabled: true
+  
+  # TP calculation method: atr | fixed_pips | risk_reward
+  method: "risk_reward"
+  
+  # Risk-reward ratio (TP = SL * ratio)
+  risk_reward_ratio: 1.5
+  
+  # ATR-based TP
+  atr:
+    multiplier: 3.0
+    period: 14
+  
+  # Fixed pips TP
+  fixed_pips:
+    EURUSD: 45
+    USDJPY: 45
+    GBPUSD: 60
+  
+  # Partial TP settings
+  partial_tp:
+    enabled: false
+    levels:
+      - pct_close: 50
+        at_rr_ratio: 1.0
+      - pct_close: 50
+        at_rr_ratio: 2.0
+
+# -----------------------------------------------------------------------------
+# Trailing Stop Configuration
+# -----------------------------------------------------------------------------
+trailing_stop:
+  # Enable trailing stop
+  enabled: true
+  
+  # When to activate trailing (ATR multiplier from entry)
+  activation_atr: 1.5
+  
+  # Trailing distance (ATR multiplier)
+  trail_atr: 1.0
+  
+  # Step size for trailing (pips)
+  step_pips: 5
+
+# -----------------------------------------------------------------------------
+# Trade Filters
+# -----------------------------------------------------------------------------
+filters:
+  # Spread filter
+  spread:
+    enabled: true
+    # Maximum spread as ratio of ATR
+    max_spread_atr_ratio: 0.3
+    # Maximum spread in pips (hard limit)
+    max_spread_pips: 5.0
+  
+  # Volatility filter
+  volatility:
+    enabled: true
+    # Minimum ATR (as percentage of price)
+    min_atr_pct: 0.05
+    # Maximum ATR (as percentage of price)
+    max_atr_pct: 0.5
+  
+  # Time filter
+  time:
+    enabled: true
+    # Avoid trading during specific hours (UTC)
+    blackout_hours: [22, 23, 0, 1, 2]
+    # Avoid trading on specific days (1=Monday, 5=Friday)
+    reduced_days: [5]
+    reduced_day_cutoff_hour: 20
+  
+  # Regime filter
+  regime:
+    enabled: true
+    # Only trade in these regimes
+    allowed_regimes:
+      - "trending"
+      - "ranging"
+    # Avoid high volatility regime
+    avoid_high_volatility: true
+
+# -----------------------------------------------------------------------------
+# Emergency Stop (Circuit Breakers)
+# -----------------------------------------------------------------------------
+emergency:
+  # Maximum consecutive losses before pause
+  max_consecutive_losses: 5
+  
+  # Pause duration after max consecutive losses (hours)
+  pause_duration_hours: 24
+  
+  # Drawdown level to pause trading
+  pause_drawdown_pct: 5.0
+  
+  # Drawdown level to stop trading completely
+  stop_drawdown_pct: 10.0
+  
+  # Daily loss level to pause
+  pause_daily_loss_pct: 2.0
+  
+  # Error rate threshold (errors per hour)
+  max_error_rate: 10
+  
+  # Correlation spike detection
+  correlation_spike:
+    enabled: true
+    threshold: 0.9
+    window_hours: 24
+
+# -----------------------------------------------------------------------------
+# Recovery Settings
+# -----------------------------------------------------------------------------
+recovery:
+  # Reduce position size after drawdown
+  scale_down:
+    enabled: true
+    # Start scaling at this DD level
+    start_dd_pct: 3.0
+    # Minimum scale factor
+    min_scale: 0.5
+  
+  # Scale back up after recovery
+  scale_up:
+    enabled: true
+    # Days of profit required to scale up
+    profit_days_required: 5
+    # Scale up step
+    scale_step: 0.25
+
+# -----------------------------------------------------------------------------
+# Exposure Limits by Currency
+# -----------------------------------------------------------------------------
+currency_exposure:
+  enabled: true
+  max_exposure_per_currency_pct: 30.0
+  
+  # Specific limits
+  limits:
+    USD: 40.0
+    EUR: 30.0
+    JPY: 30.0
+    GBP: 25.0
+
+# -----------------------------------------------------------------------------
+# Monitoring & Alerts
+# -----------------------------------------------------------------------------
+alerts:
+  # Enable alerts
+  enabled: true
+  
+  # Alert channels
+  channels:
+    - "log"
+    # - "email"
+    # - "telegram"
+  
+  # Alert thresholds
+  thresholds:
+    daily_loss_warning_pct: 1.0
+    drawdown_warning_pct: 3.0
+    consecutive_loss_warning: 3

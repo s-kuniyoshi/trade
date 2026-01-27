@@ -1,0 +1,36 @@
+2026-01-26 16:23:00 | ERROR    | src.inference.predictor:_load_model:201 | Failed to load model: [Errno 2] No such file or directory: 'models\\production\\latest\\model.pkl'
+2026-01-26 16:42:10 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:10 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:10 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:11 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:26 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:26 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:26 | ERROR    | src.communication.zmq_server:_handle_get_signal:321 | Error generating signal: Prediction failed
+2026-01-26 16:42:27 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:42 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 17:09:28 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 3 attempts: Always fails
+2026-01-26 17:09:29 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Error: Error message (source: test)
+2026-01-26 17:09:29 | CRITICAL | src.communication.alerting:send:166 | ALERT [CRITICAL] - Critical: Critical message (source: test)
+2026-01-26 17:09:29 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Failure
+2026-01-26 17:09:29 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Circuit breaker 'test' is open
+2026-01-26 17:09:30 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 4 attempts: Circuit breaker 'test' is open
+2026-01-26 17:09:30 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Test: Test message (source: test)
+2026-01-26 17:10:09 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 3 attempts: Always fails
+2026-01-26 17:10:10 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Error: Error message (source: test)
+2026-01-26 17:10:10 | CRITICAL | src.communication.alerting:send:166 | ALERT [CRITICAL] - Critical: Critical message (source: test)
+2026-01-26 17:10:10 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Failure
+2026-01-26 17:10:10 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Circuit breaker 'test' is open
+2026-01-26 17:10:10 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Failure
+2026-01-26 17:10:10 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Test: Test message (source: test)

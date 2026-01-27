@@ -1,0 +1,1276 @@
+2026-01-26 14:57:27 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 14:58:56 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 14:59:06 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 14:59:08 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:08 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=348, val=75, test=75
+2026-01-26 14:59:08 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:08 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:08 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 14:59:08 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:08 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:08 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 14:59:08 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.099229, Val RMSE: 0.105928
+2026-01-26 14:59:08 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.933
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 14:59:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=platt, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | WARNING  | src.training.calibration:fit:135 | Insufficient data for calibration: 2 < 50. Skipping calibration.
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | WARNING  | src.training.calibration:transform:200 | Calibrator not fitted. Returning raw probabilities.
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:09 | INFO     | src.training.calibration:save:310 | Calibrator saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-0\test_save_load0\calibrator
+2026-01-26 14:59:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:09 | INFO     | src.training.calibration:load:356 | Calibrator loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-0\test_save_load0\calibrator: method=isotonic
+2026-01-26 14:59:10 | INFO     | src.training.hyperopt:save:122 | Optimization result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-0\test_save_load1\optim_result
+2026-01-26 14:59:25 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=348, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.099229, Val RMSE: 0.105928
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.933
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 14:59:27 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=platt, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | WARNING  | src.training.calibration:fit:135 | Insufficient data for calibration: 2 < 50. Skipping calibration.
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | WARNING  | src.training.calibration:transform:200 | Calibrator not fitted. Returning raw probabilities.
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 14:59:27 | INFO     | src.training.calibration:save:310 | Calibrator saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_save_load0\calibrator
+2026-01-26 14:59:27 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.calibration:load:356 | Calibrator loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_save_load0\calibrator: method=isotonic
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_add_model_success0\model_v1
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 14:59:27 | INFO     | src.training.model_comparison:export_results:676 | Comparison results exported to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_export_results0\report.json
+2026-01-26 14:59:27 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 14:59:27 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 14:59:27 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_save_load1\result
+2026-01-26 14:59:27 | INFO     | src.training.hyperopt:save:122 | Optimization result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_save_load2\optim_result
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_init_with_mock_model0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_validate_features_valid0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_validate_features_empty0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_validate_features_multipl0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_validate_features_missing0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_validate_features_nan_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_validate_features_inf_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_estimate_confidence0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_map_direction_buy0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_map_direction_sell0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_map_direction_neutral0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_predict_single0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_predict_with_quantiles0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_predict_batch0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_cache_behavior0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_clear_cache0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:clear_cache:446 | Cache cleared
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_get_cache_stats0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_get_model_info0\model: 4 features, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_init0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_register_model0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_register_model0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_register_with_metadata0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_register_with_metadata0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_promote_to_production0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_promote_to_production0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_promote_to_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_promote_to_production0\registry\20260126_055929
+2026-01-26 14:59:29 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_055929
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_list_versions0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_list_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_list_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_list_versions_with_filter0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_list_versions_with_filter0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 14:59:29 | INFO     | src.training.registry:list_versions:292 | Listed 0 versions
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_load_version0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_load_version0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:load_version:332 | Loaded model version: 20260126_055929
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_load_latest_production0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_load_latest_production0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_load_latest_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_load_latest_production0\registry\20260126_055929
+2026-01-26 14:59:29 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_055929
+2026-01-26 14:59:29 | INFO     | src.training.registry:load_version:332 | Loaded model version: latest
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_compare_versions0\registry, keep_versions=5
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_compare_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_compare_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:compare_versions:402 | Compared versions: 20260126_055929 vs 20260126_055929
+2026-01-26 14:59:29 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_cleanup_old_versions0\registry, keep_versions=2
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_cleanup_old_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_cleanup_old_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_cleanup_old_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 14:59:29 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_055929, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-1\test_cleanup_old_versions0\registry\20260126_055929, direction_accuracy=0.550
+2026-01-26 15:01:29 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:01:35 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:01:41 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:01:48 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:01:49 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:01:49 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:01:49 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:01:49 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:01:49 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:01:49 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-2\test_save_load0\result
+2026-01-26 15:01:57 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:02:03 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:02:26 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:02:51 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:58:07 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:58:08 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=348, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.099229, Val RMSE: 0.105928
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.933
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 15:58:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=platt, samples=100, direction_accuracy=0.990
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | WARNING  | src.training.calibration:fit:135 | Insufficient data for calibration: 2 < 50. Skipping calibration.
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | WARNING  | src.training.calibration:transform:200 | Calibrator not fitted. Returning raw probabilities.
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:58:09 | INFO     | src.training.calibration:save:310 | Calibrator saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-4\test_save_load0\calibrator
+2026-01-26 15:58:09 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.calibration:load:356 | Calibrator loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-4\test_save_load0\calibrator: method=isotonic
+2026-01-26 15:58:09 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:09 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-4\test_add_model_success0\model_v1
+2026-01-26 15:58:09 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:09 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:58:09 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:09 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:58:10 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:58:10 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:58:10 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:58:10 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:58:10 | INFO     | src.training.model_comparison:export_results:676 | Comparison results exported to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-4\test_export_results0\report.json
+2026-01-26 15:58:10 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:58:10 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:58:10 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-4\test_save_load1\result
+2026-01-26 15:58:10 | INFO     | src.training.hyperopt:save:122 | Optimization result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-4\test_save_load2\optim_result
+2026-01-26 15:59:32 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:59:33 | INFO     | src.training.hyperopt:optimize:437 | Starting hyperparameter optimization: lightgbm_opt_20260126_065933
+2026-01-26 15:59:33 | INFO     | src.training.hyperopt:optimize:438 | Sampler: tpe, Pruner: median
+2026-01-26 15:59:33 | INFO     | src.training.hyperopt:optimize:439 | N trials: 2, Timeout: 10s
+2026-01-26 15:59:34 | INFO     | src.training.hyperopt:optimize:492 | Optimization complete!
+2026-01-26 15:59:34 | INFO     | src.training.hyperopt:optimize:493 | Best trial: 0
+2026-01-26 15:59:34 | INFO     | src.training.hyperopt:optimize:494 | Best RMSE: 0.136909
+2026-01-26 15:59:34 | INFO     | src.training.hyperopt:optimize:495 | Time: 0.3s
+2026-01-26 15:59:34 | INFO     | src.training.hyperopt:optimize:496 | Best parameters: {'num_leaves': 57, 'max_depth': 15, 'min_data_in_leaf': 38, 'learning_rate': 0.030405325392865647, 'n_estimators': 400, 'lambda_l1': 0.15599452033620265, 'lambda_l2': 0.05808361216819946, 'min_gain_to_split': 0.08661761457749352, 'feature_fraction': 0.8005575058716043, 'bagging_fraction': 0.8540362888980227, 'bagging_freq': 1}
+2026-01-26 15:59:39 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=348, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.099229, Val RMSE: 0.105928
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.933
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:40 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:40 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:40 | INFO     | src.training.hyperopt:optimize:437 | Starting hyperparameter optimization: lightgbm_opt_20260126_065940
+2026-01-26 15:59:40 | INFO     | src.training.hyperopt:optimize:438 | Sampler: tpe, Pruner: median
+2026-01-26 15:59:40 | INFO     | src.training.hyperopt:optimize:439 | N trials: 2, Timeout: 10s
+2026-01-26 15:59:41 | INFO     | src.training.hyperopt:optimize:492 | Optimization complete!
+2026-01-26 15:59:41 | INFO     | src.training.hyperopt:optimize:493 | Best trial: 0
+2026-01-26 15:59:41 | INFO     | src.training.hyperopt:optimize:494 | Best RMSE: 0.136909
+2026-01-26 15:59:41 | INFO     | src.training.hyperopt:optimize:495 | Time: 0.2s
+2026-01-26 15:59:41 | INFO     | src.training.hyperopt:optimize:496 | Best parameters: {'num_leaves': 57, 'max_depth': 15, 'min_data_in_leaf': 38, 'learning_rate': 0.030405325392865647, 'n_estimators': 400, 'lambda_l1': 0.15599452033620265, 'lambda_l2': 0.05808361216819946, 'min_gain_to_split': 0.08661761457749352, 'feature_fraction': 0.8005575058716043, 'bagging_fraction': 0.8540362888980227, 'bagging_freq': 1}
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 15:59:41 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=platt, samples=100, direction_accuracy=0.990
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | WARNING  | src.training.calibration:fit:135 | Insufficient data for calibration: 2 < 50. Skipping calibration.
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | WARNING  | src.training.calibration:transform:200 | Calibrator not fitted. Returning raw probabilities.
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 15:59:41 | INFO     | src.training.calibration:save:310 | Calibrator saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-5\test_save_load0\calibrator
+2026-01-26 15:59:41 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.calibration:load:356 | Calibrator loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-5\test_save_load0\calibrator: method=isotonic
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-5\test_add_model_success0\model_v1
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 15:59:41 | INFO     | src.training.model_comparison:export_results:676 | Comparison results exported to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-5\test_export_results0\report.json
+2026-01-26 15:59:41 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 15:59:41 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 15:59:41 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-5\test_save_load1\result
+2026-01-26 15:59:41 | INFO     | src.training.hyperopt:save:122 | Optimization result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-5\test_save_load2\optim_result
+2026-01-26 16:00:06 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:00:07 | INFO     | src.training.hyperopt:optimize:437 | Starting hyperparameter optimization: lightgbm_opt_20260126_070007
+2026-01-26 16:00:07 | INFO     | src.training.hyperopt:optimize:438 | Sampler: tpe, Pruner: median
+2026-01-26 16:00:07 | INFO     | src.training.hyperopt:optimize:439 | N trials: 2, Timeout: 10s
+2026-01-26 16:00:08 | INFO     | src.training.hyperopt:optimize:492 | Optimization complete!
+2026-01-26 16:00:08 | INFO     | src.training.hyperopt:optimize:493 | Best trial: 0
+2026-01-26 16:00:08 | INFO     | src.training.hyperopt:optimize:494 | Best RMSE: 0.136909
+2026-01-26 16:00:08 | INFO     | src.training.hyperopt:optimize:495 | Time: 0.4s
+2026-01-26 16:00:08 | INFO     | src.training.hyperopt:optimize:496 | Best parameters: {'num_leaves': 57, 'max_depth': 15, 'min_data_in_leaf': 38, 'learning_rate': 0.030405325392865647, 'n_estimators': 400, 'lambda_l1': 0.15599452033620265, 'lambda_l2': 0.05808361216819946, 'min_gain_to_split': 0.08661761457749352, 'feature_fraction': 0.8005575058716043, 'bagging_fraction': 0.8540362888980227, 'bagging_freq': 1}
+2026-01-26 16:00:14 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_init_with_mock_model0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_validate_features_valid0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_validate_features_empty0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_validate_features_multipl0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_validate_features_missing0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_validate_features_nan_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_validate_features_inf_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_estimate_confidence0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:16 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_map_direction_buy0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_map_direction_sell0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_map_direction_neutral0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_predict_single0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_predict_with_quantiles0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_predict_batch0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_cache_behavior0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_clear_cache0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:clear_cache:446 | Cache cleared
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_get_cache_stats0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-6\test_get_model_info0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:00:17 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:13 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:01:14 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-7\test_estimate_confidence0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:14 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:18 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_init_with_mock_model0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_validate_features_valid0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_validate_features_empty0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_validate_features_multipl0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_validate_features_missing0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_validate_features_nan_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_validate_features_inf_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_estimate_confidence0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_map_direction_buy0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_map_direction_sell0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_map_direction_neutral0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_predict_single0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_predict_with_quantiles0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_predict_batch0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_cache_behavior0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_clear_cache0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:clear_cache:446 | Cache cleared
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_get_cache_stats0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-8\test_get_model_info0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:20 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:48 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_init_with_mock_model0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_validate_features_valid0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_validate_features_empty0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_validate_features_multipl0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_validate_features_missing0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_validate_features_nan_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_validate_features_inf_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_estimate_confidence0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_map_direction_buy0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_map_direction_sell0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_map_direction_neutral0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_predict_single0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_predict_with_quantiles0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_predict_batch0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_cache_behavior0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_clear_cache0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:clear_cache:446 | Cache cleared
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_get_cache_stats0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-9\test_get_model_info0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:01:51 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:01:57 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:01:58 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_init0\registry, keep_versions=5
+2026-01-26 16:01:58 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_register_model0\registry, keep_versions=5
+2026-01-26 16:01:58 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070158, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_register_model0\registry\20260126_070158, direction_accuracy=0.550
+2026-01-26 16:01:58 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_register_with_metadata0\registry, keep_versions=5
+2026-01-26 16:01:58 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070158, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_register_with_metadata0\registry\20260126_070158, direction_accuracy=0.550
+2026-01-26 16:01:58 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_promote_to_production0\registry, keep_versions=5
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070158, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_promote_to_production0\registry\20260126_070158, direction_accuracy=0.550
+2026-01-26 16:01:59 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_promote_to_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_promote_to_production0\registry\20260126_070158
+2026-01-26 16:01:59 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_070158
+2026-01-26 16:01:59 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_list_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_list_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 16:01:59 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_list_versions_with_filter0\registry, keep_versions=5
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_list_versions_with_filter0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 16:01:59 | INFO     | src.training.registry:list_versions:292 | Listed 0 versions
+2026-01-26 16:01:59 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_load_version0\registry, keep_versions=5
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_load_version0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:load_version:332 | Loaded model version: 20260126_070159
+2026-01-26 16:01:59 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_load_latest_production0\registry, keep_versions=5
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_load_latest_production0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_load_latest_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_load_latest_production0\registry\20260126_070159
+2026-01-26 16:01:59 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_070159
+2026-01-26 16:01:59 | INFO     | src.training.registry:load_version:332 | Loaded model version: latest
+2026-01-26 16:01:59 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_compare_versions0\registry, keep_versions=5
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_compare_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_compare_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:compare_versions:402 | Compared versions: 20260126_070159 vs 20260126_070159
+2026-01-26 16:01:59 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_cleanup_old_versions0\registry, keep_versions=2
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_cleanup_old_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_cleanup_old_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_cleanup_old_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:01:59 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070159, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-10\test_cleanup_old_versions0\registry\20260126_070159, direction_accuracy=0.550
+2026-01-26 16:03:03 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:03:04 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-11\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:03:04 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070304, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-11\test_list_versions0\registry\20260126_070304, direction_accuracy=0.550
+2026-01-26 16:03:05 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070304, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-11\test_list_versions0\registry\20260126_070304, direction_accuracy=0.550
+2026-01-26 16:03:05 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 16:03:45 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:03:46 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-12\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:03:46 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070346, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-12\test_list_versions0\registry\20260126_070346, direction_accuracy=0.550
+2026-01-26 16:03:48 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070347, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-12\test_list_versions0\registry\20260126_070347, direction_accuracy=0.550
+2026-01-26 16:03:48 | INFO     | src.training.registry:list_versions:292 | Listed 2 versions
+2026-01-26 16:03:52 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:03:53 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_init0\registry, keep_versions=5
+2026-01-26 16:03:53 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_register_model0\registry, keep_versions=5
+2026-01-26 16:03:53 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070353, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_register_model0\registry\20260126_070353, direction_accuracy=0.550
+2026-01-26 16:03:53 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_register_with_metadata0\registry, keep_versions=5
+2026-01-26 16:03:53 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070353, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_register_with_metadata0\registry\20260126_070353, direction_accuracy=0.550
+2026-01-26 16:03:53 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_promote_to_production0\registry, keep_versions=5
+2026-01-26 16:03:53 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070353, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_promote_to_production0\registry\20260126_070353, direction_accuracy=0.550
+2026-01-26 16:03:53 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_promote_to_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_promote_to_production0\registry\20260126_070353
+2026-01-26 16:03:53 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_070353
+2026-01-26 16:03:53 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:03:53 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070353, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_list_versions0\registry\20260126_070353, direction_accuracy=0.550
+2026-01-26 16:03:54 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070354, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_list_versions0\registry\20260126_070354, direction_accuracy=0.550
+2026-01-26 16:03:54 | INFO     | src.training.registry:list_versions:292 | Listed 2 versions
+2026-01-26 16:03:54 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_list_versions_with_filter0\registry, keep_versions=5
+2026-01-26 16:03:54 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070354, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_list_versions_with_filter0\registry\20260126_070354, direction_accuracy=0.550
+2026-01-26 16:03:54 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 16:03:54 | INFO     | src.training.registry:list_versions:292 | Listed 0 versions
+2026-01-26 16:03:54 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_load_version0\registry, keep_versions=5
+2026-01-26 16:03:54 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070354, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_load_version0\registry\20260126_070354, direction_accuracy=0.550
+2026-01-26 16:03:54 | INFO     | src.training.registry:load_version:332 | Loaded model version: 20260126_070354
+2026-01-26 16:03:54 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_load_latest_production0\registry, keep_versions=5
+2026-01-26 16:03:54 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070354, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_load_latest_production0\registry\20260126_070354, direction_accuracy=0.550
+2026-01-26 16:03:54 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_load_latest_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_load_latest_production0\registry\20260126_070354
+2026-01-26 16:03:55 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_070354
+2026-01-26 16:03:55 | INFO     | src.training.registry:load_version:332 | Loaded model version: latest
+2026-01-26 16:03:55 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_compare_versions0\registry, keep_versions=5
+2026-01-26 16:03:55 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070355, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_compare_versions0\registry\20260126_070355, direction_accuracy=0.550
+2026-01-26 16:03:55 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070355, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_compare_versions0\registry\20260126_070355, direction_accuracy=0.550
+2026-01-26 16:03:55 | INFO     | src.training.registry:compare_versions:402 | Compared versions: 20260126_070355 vs 20260126_070355
+2026-01-26 16:03:55 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_cleanup_old_versions0\registry, keep_versions=2
+2026-01-26 16:03:55 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070355, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_cleanup_old_versions0\registry\20260126_070355, direction_accuracy=0.550
+2026-01-26 16:03:55 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070355, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_cleanup_old_versions0\registry\20260126_070355, direction_accuracy=0.550
+2026-01-26 16:03:55 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070355, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_cleanup_old_versions0\registry\20260126_070355, direction_accuracy=0.550
+2026-01-26 16:03:55 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070355, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-13\test_cleanup_old_versions0\registry\20260126_070355, direction_accuracy=0.550
+2026-01-26 16:05:01 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:05:02 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-14\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:05:02 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070502, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-14\test_list_versions0\registry\20260126_070502, direction_accuracy=0.550
+2026-01-26 16:05:03 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070503, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-14\test_list_versions0\registry\20260126_070503, direction_accuracy=0.550
+2026-01-26 16:05:03 | INFO     | src.training.registry:list_versions:292 | Listed 2 versions
+2026-01-26 16:05:32 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:05:33 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-15\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:05:33 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070533, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-15\test_list_versions0\registry\20260126_070533, direction_accuracy=0.550
+2026-01-26 16:05:35 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070535, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-15\test_list_versions0\registry\20260126_070535, direction_accuracy=0.550
+2026-01-26 16:05:35 | INFO     | src.training.registry:list_versions:292 | Listed 2 versions
+2026-01-26 16:05:42 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=348, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 194
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.099229, Val RMSE: 0.105928
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.933
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:43 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:43 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:43 | INFO     | src.training.hyperopt:optimize:437 | Starting hyperparameter optimization: lightgbm_opt_20260126_070543
+2026-01-26 16:05:43 | INFO     | src.training.hyperopt:optimize:438 | Sampler: tpe, Pruner: median
+2026-01-26 16:05:43 | INFO     | src.training.hyperopt:optimize:439 | N trials: 2, Timeout: 10s
+2026-01-26 16:05:44 | INFO     | src.training.hyperopt:optimize:492 | Optimization complete!
+2026-01-26 16:05:44 | INFO     | src.training.hyperopt:optimize:493 | Best trial: 0
+2026-01-26 16:05:44 | INFO     | src.training.hyperopt:optimize:494 | Best RMSE: 0.136909
+2026-01-26 16:05:44 | INFO     | src.training.hyperopt:optimize:495 | Time: 0.2s
+2026-01-26 16:05:44 | INFO     | src.training.hyperopt:optimize:496 | Best parameters: {'num_leaves': 57, 'max_depth': 15, 'min_data_in_leaf': 38, 'learning_rate': 0.030405325392865647, 'n_estimators': 400, 'lambda_l1': 0.15599452033620265, 'lambda_l2': 0.05808361216819946, 'min_gain_to_split': 0.08661761457749352, 'feature_fraction': 0.8005575058716043, 'bagging_fraction': 0.8540362888980227, 'bagging_freq': 1}
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=platt
+2026-01-26 16:05:44 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=platt, samples=100, direction_accuracy=0.990
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | WARNING  | src.training.calibration:fit:135 | Insufficient data for calibration: 2 < 50. Skipping calibration.
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | WARNING  | src.training.calibration:transform:200 | Calibrator not fitted. Returning raw probabilities.
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.calibration:fit:166 | Calibrator fitted: method=isotonic, samples=100, direction_accuracy=0.990
+2026-01-26 16:05:44 | INFO     | src.training.calibration:save:310 | Calibrator saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_save_load0\calibrator
+2026-01-26 16:05:44 | INFO     | src.training.calibration:__init__:72 | ConfidenceCalibrator initialized: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.calibration:load:356 | Calibrator loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_save_load0\calibrator: method=isotonic
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_add_model_success0\model_v1
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:__init__:116 | ModelComparator initialized
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:add_model:164 | Added model: model_v1 (version=v1, baseline=True)
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:compare_metrics:288 | Comparison complete: 1 models, 17 metrics
+2026-01-26 16:05:44 | INFO     | src.training.model_comparison:export_results:676 | Comparison results exported to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_export_results0\report.json
+2026-01-26 16:05:44 | INFO     | src.training.trainer:prepare_data:233 | Data split: train=350, val=75, test=75
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:275 | Training LightGBM model...
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train_lightgbm:288 | Training complete. Best iteration: 49
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:332 | Train RMSE: 0.106182, Val RMSE: 0.123803
+2026-01-26 16:05:44 | INFO     | src.training.trainer:train:334 | Train Direction Acc: 0.969, Val Direction Acc: 0.947
+2026-01-26 16:05:44 | INFO     | src.training.trainer:save:132 | Training result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_save_load1\result
+2026-01-26 16:05:44 | INFO     | src.training.hyperopt:save:122 | Optimization result saved to C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_save_load2\optim_result
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_init_with_mock_model0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_validate_features_valid0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_validate_features_empty0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_validate_features_multipl0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_validate_features_missing0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_validate_features_nan_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_validate_features_inf_val0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_estimate_confidence0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_map_direction_buy0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_map_direction_sell0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_map_direction_neutral0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_predict_single0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_predict_with_quantiles0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_predict_batch0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_cache_behavior0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_clear_cache0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:clear_cache:446 | Cache cleared
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_get_cache_stats0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=enabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:_load_model:195 | Model loaded from C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_get_model_info0\model: 4 features, direction_accuracy=0.550
+2026-01-26 16:05:45 | INFO     | src.inference.predictor:__init__:175 | PredictionService initialized: cache=disabled, warmup_time=0.00ms
+2026-01-26 16:05:45 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_init0\registry, keep_versions=5
+2026-01-26 16:05:45 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_register_model0\registry, keep_versions=5
+2026-01-26 16:05:45 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070545, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_register_model0\registry\20260126_070545, direction_accuracy=0.550
+2026-01-26 16:05:46 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_register_with_metadata0\registry, keep_versions=5
+2026-01-26 16:05:46 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070546, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_register_with_metadata0\registry\20260126_070546, direction_accuracy=0.550
+2026-01-26 16:05:46 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_promote_to_production0\registry, keep_versions=5
+2026-01-26 16:05:46 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070546, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_promote_to_production0\registry\20260126_070546, direction_accuracy=0.550
+2026-01-26 16:05:46 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_promote_to_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_promote_to_production0\registry\20260126_070546
+2026-01-26 16:05:46 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_070546
+2026-01-26 16:05:46 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_list_versions0\registry, keep_versions=5
+2026-01-26 16:05:46 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070546, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_list_versions0\registry\20260126_070546, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_list_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:list_versions:292 | Listed 2 versions
+2026-01-26 16:05:47 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_list_versions_with_filter0\registry, keep_versions=5
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_list_versions_with_filter0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:list_versions:292 | Listed 1 versions
+2026-01-26 16:05:47 | INFO     | src.training.registry:list_versions:292 | Listed 0 versions
+2026-01-26 16:05:47 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_load_version0\registry, keep_versions=5
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_load_version0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:load_version:332 | Loaded model version: 20260126_070547
+2026-01-26 16:05:47 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_load_latest_production0\registry, keep_versions=5
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_load_latest_production0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | WARNING  | src.training.registry:_create_symlink:129 | Symlink failed, falling back to copy: C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_load_latest_production0\registry\production\latest -> C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_load_latest_production0\registry\20260126_070547
+2026-01-26 16:05:47 | INFO     | src.training.registry:promote_to_production:230 | Model promoted to production: 20260126_070547
+2026-01-26 16:05:47 | INFO     | src.training.registry:load_version:332 | Loaded model version: latest
+2026-01-26 16:05:47 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_compare_versions0\registry, keep_versions=5
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_compare_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_compare_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:compare_versions:402 | Compared versions: 20260126_070547 vs 20260126_070547
+2026-01-26 16:05:47 | INFO     | src.training.registry:__init__:73 | ModelRegistry initialized: base_path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_cleanup_old_versions0\registry, keep_versions=2
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_cleanup_old_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_cleanup_old_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_cleanup_old_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:05:47 | INFO     | src.training.registry:register:187 | Model registered: version=20260126_070547, path=C:\Users\kuniyoshi\AppData\Local\Temp\pytest-of-kuniyoshi\pytest-16\test_cleanup_old_versions0\registry\20260126_070547, direction_accuracy=0.550
+2026-01-26 16:09:59 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:10:18 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:10:19 | INFO     | src.features.mtf:compute_all_features:468 | Computed 52 features
+2026-01-26 16:10:19 | INFO     | src.features.mtf:compute_all_features:468 | Computed 44 features
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:267 | Backtest complete: 479 trades
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:267 | Backtest complete: 0 trades
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:267 | Backtest complete: 1 trades
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:19 | INFO     | src.training.backtest:run:267 | Backtest complete: 9 trades
+2026-01-26 16:10:19 | INFO     | src.training.walk_forward:get_splits:164 | Created 15 walk-forward splits
+2026-01-26 16:10:19 | INFO     | src.training.walk_forward:get_splits:164 | Created 15 walk-forward splits
+2026-01-26 16:10:19 | INFO     | src.training.walk_forward:get_splits:164 | Created 15 walk-forward splits
+2026-01-26 16:10:47 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:10:48 | INFO     | src.features.mtf:compute_all_features:468 | Computed 52 features
+2026-01-26 16:10:48 | INFO     | src.features.mtf:compute_all_features:468 | Computed 44 features
+2026-01-26 16:10:48 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:267 | Backtest complete: 479 trades
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:267 | Backtest complete: 0 trades
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:267 | Backtest complete: 1 trades
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:208 | Starting backtest on 1000 bars
+2026-01-26 16:10:49 | INFO     | src.training.backtest:run:267 | Backtest complete: 9 trades
+2026-01-26 16:10:49 | INFO     | src.training.walk_forward:get_splits:164 | Created 15 walk-forward splits
+2026-01-26 16:10:49 | INFO     | src.training.walk_forward:get_splits:164 | Created 15 walk-forward splits
+2026-01-26 16:10:49 | INFO     | src.training.walk_forward:get_splits:164 | Created 15 walk-forward splits
+2026-01-26 16:10:56 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:18:17 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:18:26 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:18:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5555, timeout=5000ms, min_confidence=0.65
+2026-01-26 16:18:38 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:18:45 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:18:54 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:18:55 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5555, timeout=5000ms, min_confidence=0.65
+2026-01-26 16:22:37 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:22:43 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:22:59 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:23:00 | ERROR    | src.inference.predictor:_load_model:201 | Failed to load model: [Errno 2] No such file or directory: 'models\\production\\latest\\model.pkl'
+2026-01-26 16:23:13 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:23:14 | INFO     | src.communication.signal_service:__init__:92 | SignalService initialized: base_timeframe=H1, higher_timeframes=['H4', 'D1'], min_confidence=0.65
+2026-01-26 16:23:26 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:23:27 | INFO     | src.communication.signal_service:__init__:92 | SignalService initialized: base_timeframe=H1, higher_timeframes=['H4', 'D1'], min_confidence=0.65
+2026-01-26 16:23:28 | INFO     | src.features.mtf:compute_all_features:468 | Computed 52 features
+2026-01-26 16:23:28 | INFO     | src.communication.signal_service:generate_signal:277 | Signal generated for USDJPY: direction=buy, confidence=0.750, return=0.001200
+2026-01-26 16:23:28 | INFO     | src.communication.signal_service:clear_buffer:341 | Buffer cleared for USDJPY
+2026-01-26 16:23:55 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:23:56 | INFO     | src.communication.signal_service:__init__:92 | SignalService initialized: base_timeframe=H1, higher_timeframes=['H4', 'D1'], min_confidence=0.65
+2026-01-26 16:23:56 | INFO     | src.features.mtf:compute_all_features:468 | Computed 52 features
+2026-01-26 16:23:56 | INFO     | src.communication.signal_service:generate_signal:277 | Signal generated for USDJPY: direction=buy, confidence=0.750, return=0.001000
+2026-01-26 16:42:09 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:10 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:11 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:11 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:25 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:26 | ERROR    | src.communication.zmq_server:_handle_get_signal:321 | Error generating signal: Prediction failed
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:27 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:27 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:41 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:42:42 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:42 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:42:46 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:42:48 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:42:48 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:31 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:43:32 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:43:32 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:05 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: GET_SIGNAL requires data field
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:handle_request:194 | Error handling request: Test error
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:44:06 | ERROR    | src.communication.zmq_server:_handle_get_signal:314 | Invalid request data: Missing features in request
+2026-01-26 16:44:06 | INFO     | src.communication.zmq_server:__init__:78 | ZMQServer initialized: port=5556, timeout=1000ms, min_confidence=0.65
+2026-01-26 16:46:15 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:48:35 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:51:38 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:54:42 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 16:59:30 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 17:09:26 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 17:09:28 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/4): Temporary failure. Retrying in 10ms...
+2026-01-26 17:09:28 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 2/4): Temporary failure. Retrying in 21ms...
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:execute:123 | test_op succeeded after 2 retries
+2026-01-26 17:09:28 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/3): Always fails. Retrying in 10ms...
+2026-01-26 17:09:28 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 2/3): Always fails. Retrying in 20ms...
+2026-01-26 17:09:28 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 3 attempts: Always fails
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=5, timeout=30.0s
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=3, timeout=30.0s
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:28 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting operation
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=0.1s
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: open -> half_open
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=0.1s
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: open -> half_open
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: half_open -> closed
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=0.1s
+2026-01-26 17:09:28 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: open -> half_open
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:_on_failure:366 | Circuit 'test' HALF_OPEN failure, reopening
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: half_open -> open
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:reset:424 | Circuit 'test' manually reset from open
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test error)
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test)
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 2, error: Test)
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 3, error: Test)
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test)
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 2, error: Test)
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test)
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 2, error: Test)
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 3, error: Test)
+2026-01-26 17:09:29 | INFO     | src.communication.alerting:__init__:424 | AlertManager initialized with 1 handlers
+2026-01-26 17:09:29 | WARNING  | src.communication.alerting:send:170 | ALERT [WARNING] - Test Alert: This is a test (source: test)
+2026-01-26 17:09:29 | INFO     | src.communication.alerting:__init__:424 | AlertManager initialized with 1 handlers
+2026-01-26 17:09:29 | INFO     | src.communication.alerting:send:172 | ALERT [INFO] - Info: Info message (source: test)
+2026-01-26 17:09:29 | WARNING  | src.communication.alerting:send:170 | ALERT [WARNING] - Warning: Warning message (source: test)
+2026-01-26 17:09:29 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Error: Error message (source: test)
+2026-01-26 17:09:29 | CRITICAL | src.communication.alerting:send:166 | ALERT [CRITICAL] - Critical: Critical message (source: test)
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=5, timeout=30.0s
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=5, timeout=30.0s
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/3): Temporary failure. Retrying in 10ms...
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:execute:123 | test_op succeeded after 1 retries
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:29 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Failure
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Failure)
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting test_op
+2026-01-26 17:09:29 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Circuit breaker 'test' is open
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:09:29 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/4): Failure. Retrying in 104ms...
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting test_op
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 2/4): Circuit breaker 'test' is open. Retrying in 201ms...
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting test_op
+2026-01-26 17:09:29 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 3/4): Circuit breaker 'test' is open. Retrying in 417ms...
+2026-01-26 17:09:30 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting test_op
+2026-01-26 17:09:30 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 4 attempts: Circuit breaker 'test' is open
+2026-01-26 17:09:30 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Test: Test message (source: test)
+2026-01-26 17:10:08 | INFO     | src.utils.logger:setup_logger:103 | Logger initialized: fx_trading (level=INFO)
+2026-01-26 17:10:09 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/4): Temporary failure. Retrying in 10ms...
+2026-01-26 17:10:09 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 2/4): Temporary failure. Retrying in 20ms...
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:execute:123 | test_op succeeded after 2 retries
+2026-01-26 17:10:09 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/3): Always fails. Retrying in 10ms...
+2026-01-26 17:10:09 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 2/3): Always fails. Retrying in 20ms...
+2026-01-26 17:10:09 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 3 attempts: Always fails
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=5, timeout=30.0s
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=3, timeout=30.0s
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:09 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting operation
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=0.1s
+2026-01-26 17:10:09 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: open -> half_open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=0.1s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: open -> half_open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: half_open -> closed
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=0.1s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: open -> half_open
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:_on_failure:366 | Circuit 'test' HALF_OPEN failure, reopening
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: half_open -> open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:reset:424 | Circuit 'test' manually reset from open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test error)
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test)
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 2, error: Test)
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 3, error: Test)
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test)
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 2, error: Test)
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:record_connect:542 | Connection 'test' connected
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Test)
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 2, error: Test)
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 3, error: Test)
+2026-01-26 17:10:10 | INFO     | src.communication.alerting:__init__:424 | AlertManager initialized with 1 handlers
+2026-01-26 17:10:10 | WARNING  | src.communication.alerting:send:170 | ALERT [WARNING] - Test Alert: This is a test (source: test)
+2026-01-26 17:10:10 | INFO     | src.communication.alerting:__init__:424 | AlertManager initialized with 1 handlers
+2026-01-26 17:10:10 | INFO     | src.communication.alerting:send:172 | ALERT [INFO] - Info: Info message (source: test)
+2026-01-26 17:10:10 | WARNING  | src.communication.alerting:send:170 | ALERT [WARNING] - Warning: Warning message (source: test)
+2026-01-26 17:10:10 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Error: Error message (source: test)
+2026-01-26 17:10:10 | CRITICAL | src.communication.alerting:send:166 | ALERT [CRITICAL] - Critical: Critical message (source: test)
+2026-01-26 17:10:10 | WARNING  | src.communication.alerting:should_allow:347 | Alert rate limit exceeded for source 'test', entering 0.1s cooldown
+2026-01-26 17:10:10 | WARNING  | src.communication.alerting:should_allow:347 | Alert rate limit exceeded for source 'source1', entering 60.0s cooldown
+2026-01-26 17:10:10 | WARNING  | src.communication.alerting:should_allow:347 | Alert rate limit exceeded for source 'source2', entering 60.0s cooldown
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=5, timeout=30.0s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=5, timeout=30.0s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:execute:137 | test_op failed (attempt 1/3): Temporary failure. Retrying in 10ms...
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:execute:123 | test_op succeeded after 1 retries
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Failure
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Failure)
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:execute:318 | Circuit 'test' is OPEN, rejecting test_op
+2026-01-26 17:10:10 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Circuit breaker 'test' is open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:272 | CircuitBreaker 'test' initialized: failure_threshold=1, timeout=30.0s
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:__init__:611 | ResilientExecutor 'test' initialized
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:_transition_to:403 | Circuit 'test' state: closed -> open
+2026-01-26 17:10:10 | ERROR    | src.communication.error_handling:execute:144 | test_op failed after 1 attempts: Failure
+2026-01-26 17:10:10 | WARNING  | src.communication.error_handling:record_failure:525 | Connection 'test' failure (consecutive: 1, error: Failure)
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:reset:424 | Circuit 'test' manually reset from open
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:reset:565 | Connection 'test' metrics reset
+2026-01-26 17:10:10 | INFO     | src.communication.error_handling:reset:664 | ResilientExecutor 'test' reset
+2026-01-26 17:10:10 | ERROR    | src.communication.alerting:send:168 | ALERT [ERROR] - Test: Test message (source: test)

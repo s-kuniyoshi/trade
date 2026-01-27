@@ -1,0 +1,157 @@
+# =============================================================================
+# FX Trading System - Trading Configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# General Settings
+# -----------------------------------------------------------------------------
+general:
+  system_name: "FX-ML-Trading-System"
+  version: "1.0.0"
+  mode: "paper"  # paper | live
+  timezone: "Asia/Tokyo"
+
+# -----------------------------------------------------------------------------
+# Broker & Platform
+# -----------------------------------------------------------------------------
+broker:
+  platform: "mt5"
+  server: ""  # MT5 server name
+  account: 0  # MT5 account number
+  timeout_seconds: 30
+
+# -----------------------------------------------------------------------------
+# Trading Symbols
+# -----------------------------------------------------------------------------
+symbols:
+  enabled:
+    - symbol: "EURUSD"
+      priority: 1
+      pip_value: 0.0001
+      min_lot: 0.01
+      max_lot: 10.0
+      
+    - symbol: "USDJPY"
+      priority: 1
+      pip_value: 0.01
+      min_lot: 0.01
+      max_lot: 10.0
+      
+    - symbol: "GBPUSD"
+      priority: 2
+      pip_value: 0.0001
+      min_lot: 0.01
+      max_lot: 10.0
+
+# -----------------------------------------------------------------------------
+# Timeframes
+# -----------------------------------------------------------------------------
+timeframes:
+  # Primary timeframe for entry signals
+  primary: "H1"
+  
+  # Higher timeframes for regime detection
+  higher:
+    - "H4"
+    - "D1"
+  
+  # Lower timeframe for entry timing (optional)
+  lower: "M15"
+
+# -----------------------------------------------------------------------------
+# Trading Hours
+# -----------------------------------------------------------------------------
+trading_hours:
+  enabled: true
+  
+  # UTC-based trading windows
+  sessions:
+    tokyo:
+      start: "00:00"  # UTC
+      end: "09:00"
+      enabled: true
+      
+    london:
+      start: "08:00"
+      end: "17:00"
+      enabled: true
+      
+    newyork:
+      start: "13:00"
+      end: "22:00"
+      enabled: true
+  
+  # Days to trade (1=Monday, 7=Sunday)
+  trading_days: [1, 2, 3, 4, 5]
+  
+  # Avoid trading around major news events
+  news_blackout_minutes: 30
+
+# -----------------------------------------------------------------------------
+# Signal Generation
+# -----------------------------------------------------------------------------
+signals:
+  # Minimum confidence to generate signal
+  min_confidence: 0.65
+  
+  # Signal types
+  allowed_directions:
+    - "long"
+    - "short"
+  
+  # Maximum signals per symbol per day
+  max_signals_per_day: 5
+  
+  # Cooldown between signals for same symbol (minutes)
+  signal_cooldown_minutes: 60
+
+# -----------------------------------------------------------------------------
+# Order Execution
+# -----------------------------------------------------------------------------
+execution:
+  # Order type
+  order_type: "market"  # market | limit
+  
+  # Slippage tolerance (points)
+  max_slippage: 20
+  
+  # Retry settings
+  max_retries: 3
+  retry_delay_ms: 1000
+  
+  # Use async order sending
+  async_orders: true
+  
+  # Magic number for EA identification
+  magic_number: 20260126
+
+# -----------------------------------------------------------------------------
+# Communication (MT5 <-> Python)
+# -----------------------------------------------------------------------------
+communication:
+  protocol: "zeromq"  # zeromq | http
+  
+  zeromq:
+    request_port: 5555
+    response_port: 5556
+    timeout_ms: 5000
+    
+  http:
+    host: "127.0.0.1"
+    port: 8080
+    timeout_ms: 5000
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+logging:
+  level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+  
+  # Log files
+  trade_log: "logs/trading/trades.log"
+  signal_log: "logs/trading/signals.log"
+  error_log: "logs/trading/errors.log"
+  
+  # Log rotation
+  max_file_size_mb: 10
+  backup_count: 5

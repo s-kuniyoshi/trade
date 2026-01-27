@@ -1,0 +1,307 @@
+# =============================================================================
+# FX Trading System - Model Configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Model Selection
+# -----------------------------------------------------------------------------
+model:
+  # Active model type: lightgbm | xgboost | ensemble | transformer
+  active: "lightgbm"
+  
+  # Model version (for registry)
+  version: "1.0.0"
+  
+  # Model directory
+  model_dir: "models/production/latest"
+  
+  # Fallback model directory
+  fallback_dir: "models/production/previous"
+
+# -----------------------------------------------------------------------------
+# Prediction Target
+# -----------------------------------------------------------------------------
+target:
+  # Target type: return | direction | quantile
+  type: "return"
+  
+  # Prediction horizons (bars ahead)
+  horizons:
+    - 3   # 3 bars (e.g., 3 hours for H1)
+    - 6   # 6 bars
+    - 12  # 12 bars
+  
+  # Primary horizon for trading decisions
+  primary_horizon: 6
+  
+  # Direction threshold (for return -> direction conversion)
+  direction_threshold: 0.0001
+  
+  # Quantiles to predict (for uncertainty estimation)
+  quantiles: [0.05, 0.25, 0.50, 0.75, 0.95]
+
+# -----------------------------------------------------------------------------
+# LightGBM Configuration
+# -----------------------------------------------------------------------------
+lightgbm:
+  # Core parameters
+  objective: "regression"
+  metric: "rmse"
+  boosting_type: "gbdt"
+  
+  # Tree parameters
+  num_leaves: 31
+  max_depth: -1
+  min_data_in_leaf: 20
+  
+  # Learning parameters
+  learning_rate: 0.05
+  n_estimators: 1000
+  early_stopping_rounds: 50
+  
+  # Regularization
+  lambda_l1: 0.1
+  lambda_l2: 0.1
+  min_gain_to_split: 0.01
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 5
+  
+  # Other
+  verbose: -1
+  n_jobs: -1
+  random_state: 42
+
+# -----------------------------------------------------------------------------
+# XGBoost Configuration (for ensemble)
+# -----------------------------------------------------------------------------
+xgboost:
+  objective: "reg:squarederror"
+  eval_metric: "rmse"
+  booster: "gbtree"
+  
+  max_depth: 6
+  min_child_weight: 1
+  
+  learning_rate: 0.05
+  n_estimators: 1000
+  early_stopping_rounds: 50
+  
+  reg_alpha: 0.1
+  reg_lambda: 0.1
+  subsample: 0.8
+  colsample_bytree: 0.8
+  
+  n_jobs: -1
+  random_state: 42
+
+# -----------------------------------------------------------------------------
+# Ensemble Configuration
+# -----------------------------------------------------------------------------
+ensemble:
+  # Models to include
+  models:
+    - name: "lightgbm"
+      weight: 0.6
+    - name: "xgboost"
+      weight: 0.4
+  
+  # Ensemble method: weighted_average | stacking
+  method: "weighted_average"
+
+# -----------------------------------------------------------------------------
+# Feature Configuration
+# -----------------------------------------------------------------------------
+features:
+  # Feature groups to include
+  groups:
+    price:
+      enabled: true
+      features:
+        - "log_return_1"
+        - "log_return_5"
+        - "log_return_10"
+        - "log_return_20"
+        - "range_hl"
+        - "realized_vol_10"
+        - "realized_vol_20"
+        - "gap"
+    
+    technical:
+      enabled: true
+      features:
+        - "ema_20"
+        - "ema_50"
+        - "ema_slope_20"
+        - "macd"
+        - "macd_signal"
+        - "macd_hist"
+        - "rsi_14"
+        - "stoch_k"
+        - "stoch_d"
+        - "atr_14"
+        - "bollinger_upper"
+        - "bollinger_lower"
+        - "bollinger_width"
+        - "adx_14"
+    
+    mtf:
+      enabled: true
+      # Higher timeframes to include
+      timeframes: ["H4", "D1"]
+      features:
+        - "ema_slope"
+        - "atr"
+        - "trend_direction"
+        - "range_position"
+    
+    temporal:
+      enabled: true
+      features:
+        - "hour"
+        - "day_of_week"
+        - "session"
+        - "is_london"
+        - "is_newyork"
+        - "is_overlap"
+    
+    cost:
+      enabled: true
+      features:
+        - "spread"
+        - "spread_ma_20"
+        - "tick_volume"
+        - "volume_ma_20"
+  
+  # Feature preprocessing
+  preprocessing:
+    # Scaling method: standard | minmax | robust | none
+    scaling: "standard"
+    
+    # Handle missing values: drop | fill_zero | fill_mean | fill_forward
+    missing_values: "fill_forward"
+    
+    # Remove outliers
+    outlier_removal:
+      enabled: true
+      method: "iqr"  # iqr | zscore
+      threshold: 3.0
+
+# -----------------------------------------------------------------------------
+# Training Configuration
+# -----------------------------------------------------------------------------
+training:
+  # Data split
+  train_ratio: 0.7
+  validation_ratio: 0.15
+  test_ratio: 0.15
+  
+  # Walk-forward settings
+  walk_forward:
+    enabled: true
+    train_window_bars: 4380  # ~6 months of H1 data
+    test_window_bars: 730    # ~1 month of H1 data
+    step_bars: 730           # ~1 month step
+  
+  # Time series cross-validation
+  cv:
+    n_splits: 5
+    embargo_bars: 24  # Gap between train and test
+  
+  # Hyperparameter optimization
+  hyperopt:
+    enabled: true
+    method: "optuna"  # optuna | grid | random
+    n_trials: 50
+    timeout_seconds: 3600
+  
+  # Retraining schedule
+  retrain:
+    # Schedule: weekly | monthly | on_degradation
+    schedule: "weekly"
+    day_of_week: 0  # Monday
+    hour: 2  # 2 AM
+    
+    # Minimum data for retraining
+    min_new_bars: 168  # 1 week of H1
+
+# -----------------------------------------------------------------------------
+# Model Evaluation
+# -----------------------------------------------------------------------------
+evaluation:
+  # Metrics to track
+  metrics:
+    - "rmse"
+    - "mae"
+    - "direction_accuracy"
+    - "profit_factor"
+    - "sharpe_ratio"
+    - "max_drawdown"
+  
+  # Minimum thresholds to deploy model
+  deployment_thresholds:
+    direction_accuracy: 0.52
+    profit_factor: 1.2
+    sharpe_ratio: 0.5
+    max_drawdown: 0.15
+  
+  # Model comparison
+  comparison:
+    # Compare with previous model
+    vs_previous: true
+    # Minimum improvement required
+    min_improvement_pct: 5.0
+
+# -----------------------------------------------------------------------------
+# Confidence Calibration
+# -----------------------------------------------------------------------------
+calibration:
+  enabled: true
+  
+  # Calibration method: platt | isotonic | beta
+  method: "isotonic"
+  
+  # Minimum confidence for trading
+  min_confidence: 0.65
+  
+  # Confidence adjustment
+  adjustment:
+    # Reduce confidence during high volatility
+    high_vol_penalty: 0.1
+    # Reduce confidence for counter-trend signals
+    counter_trend_penalty: 0.05
+
+# -----------------------------------------------------------------------------
+# Model Registry
+# -----------------------------------------------------------------------------
+registry:
+  # Storage location
+  path: "models/"
+  
+  # Keep N previous models
+  keep_versions: 5
+  
+  # Metadata to store
+  metadata:
+    - "training_date"
+    - "data_range"
+    - "metrics"
+    - "features"
+    - "hyperparameters"
+
+# -----------------------------------------------------------------------------
+# Inference Settings
+# -----------------------------------------------------------------------------
+inference:
+  # Batch size for predictions
+  batch_size: 32
+  
+  # Cache predictions
+  cache:
+    enabled: true
+    ttl_seconds: 300
+  
+  # Warm-up on service start
+  warmup:
+    enabled: true
+    n_samples: 100
