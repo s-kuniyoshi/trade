@@ -397,6 +397,11 @@ def backtest(
     adx_threshold: float = 20.0,
     sma_atr_threshold: float = 0.5,
     use_triple_barrier: bool = False,
+    symbol: str = "",
+    # リスク管理パラメータ
+    max_drawdown_pct: float = 0.25,  # 最大DD制限（これを超えたら取引停止）
+    consecutive_loss_limit: int = 5,  # 連敗制限（これを超えたらリスク半減）
+    vol_scale_threshold: float = 1.5,  # ボラティリティ閾値（平均の何倍でリスク調整）
 ) -> dict[str, Any]:
     """
     シンプルなバックテスト実行。
@@ -412,6 +417,9 @@ def backtest(
         adx_threshold: ADXの最小値（トレンド強度フィルター）
         sma_atr_threshold: SMA200からの乖離/ATRの最小値
         use_triple_barrier: Triple-barrier方式を使用するか
+        max_drawdown_pct: 最大DD制限（これを超えたら取引停止）
+        consecutive_loss_limit: 連敗制限（これを超えたらリスク半減）
+        vol_scale_threshold: ボラティリティ閾値（平均の何倍でリスク調整）
     """
     # 共通インデックスに揃える
     common_idx = features.index.intersection(df.index)
@@ -448,6 +456,15 @@ def backtest(
     cost_pips = spread_pips + slippage_pips
     cost_price = cost_pips * pip_value
     
+    # リスク管理状態
+    peak_equity = initial_capital  # 最高資産
+    consecutive_losses = 0  # 連敗カウント
+    trading_halted = False  # 取引停止フラグ
+    
+    # ボラティリティの移動平均（ATRの20期間平均）
+    atr_col = features["atr_14"] if "atr_14" in features.columns else None
+    avg_atr = atr_col.rolling(20).mean() if atr_col is not None else None
+    
     for i in range(1, len(df)):
         current_price = df.iloc[i]["close"]
         prev_price = df.iloc[i-1]["close"]
@@ -472,6 +489,8 @@ def backtest(
                         "pnl": pnl,
                         "reason": "sl",
                     })
+                    # リスク管理: 連敗カウント更新
+                    consecutive_losses += 1
                     position = None
                     continue
                 elif df.iloc[i]["high"] >= position["tp"]:
@@ -488,6 +507,10 @@ def backtest(
                         "pnl": pnl,
                         "reason": "tp",
                     })
+                    # リスク管理: 連敗リセット、ピーク更新
+                    consecutive_losses = 0
+                    if equity[-1] > peak_equity:
+                        peak_equity = equity[-1]
                     position = None
                     continue
             else:  # short
@@ -504,6 +527,8 @@ def backtest(
                         "pnl": pnl,
                         "reason": "sl",
                     })
+                    # リスク管理: 連敗カウント更新
+                    consecutive_losses += 1
                     position = None
                     continue
                 elif df.iloc[i]["low"] <= position["tp"]:
@@ -519,6 +544,10 @@ def backtest(
                         "pnl": pnl,
                         "reason": "tp",
                     })
+                    # リスク管理: 連敗リセット、ピーク更新
+                    consecutive_losses = 0
+                    if equity[-1] > peak_equity:
+                        peak_equity = equity[-1]
                     position = None
                     continue
             
@@ -538,6 +567,23 @@ def backtest(
         if confidence < min_confidence:
             equity.append(equity[-1])
             continue
+        
+        # USDJPYはロングオンリー（ショートにエッジがないため）
+        if symbol == "USDJPY" and direction_signal == "short":
+            equity.append(equity[-1])
+            continue
+        
+        # リスク管理: 最大ドローダウン制限
+        current_dd = (peak_equity - equity[-1]) / peak_equity if peak_equity > 0 else 0
+        if current_dd >= max_drawdown_pct:
+            if not trading_halted:
+                trading_halted = True
+            equity.append(equity[-1])
+            continue
+        else:
+            # DDが閾値の半分以下に回復したら再開
+            if trading_halted and current_dd < max_drawdown_pct * 0.5:
+                trading_halted = False
         
         # フィルター適用
         if use_filters:
@@ -566,8 +612,25 @@ def backtest(
         sl_distance = atr * 2
         tp_distance = atr * 3
         
-        # ポジションサイズ計算
-        risk_amount = equity[-1] * risk_per_trade
+        # ポジションサイズ計算（リスク管理付き）
+        adjusted_risk = risk_per_trade
+        
+        # 連敗制限: N連敗以上でリスク半減
+        if consecutive_losses >= consecutive_loss_limit:
+            adjusted_risk *= 0.5
+        
+        # ボラティリティ調整: 高ボラ時はリスク縮小
+        if avg_atr is not None and i > 20:
+            current_avg_atr = avg_atr.iloc[i-1]
+            if pd.notna(current_avg_atr) and current_avg_atr > 0:
+                vol_ratio = atr / current_avg_atr
+                if vol_ratio > vol_scale_threshold:
+                    # ボラが平均の1.5倍を超えたら、超過分に応じてリスク縮小
+                    # 例: vol_ratio=2.0 → adjusted_risk *= 0.75
+                    vol_adjustment = 1.0 / vol_ratio
+                    adjusted_risk *= max(0.5, vol_adjustment)
+        
+        risk_amount = equity[-1] * adjusted_risk
         position_size = risk_amount / sl_distance if sl_distance > 0 else 0
         
         if direction_signal == "long":
@@ -633,6 +696,11 @@ def walk_forward_backtest(
     adx_threshold: float = 20.0,
     sma_atr_threshold: float = 0.5,
     use_triple_barrier: bool = False,
+    symbol: str = "",
+    # リスク管理パラメータ
+    max_drawdown_pct: float = 0.25,
+    consecutive_loss_limit: int = 5,
+    vol_scale_threshold: float = 1.5,
 ) -> dict[str, Any]:
     """拡張ウィンドウのWalk-Forwardバックテスト。"""
     current_equity = initial_capital
@@ -668,6 +736,10 @@ def walk_forward_backtest(
             adx_threshold=adx_threshold,
             sma_atr_threshold=sma_atr_threshold,
             use_triple_barrier=use_triple_barrier,
+            symbol=symbol,
+            max_drawdown_pct=max_drawdown_pct,
+            consecutive_loss_limit=consecutive_loss_limit,
+            vol_scale_threshold=vol_scale_threshold,
         )
 
         equity_parts.append(result["equity"])
@@ -808,6 +880,11 @@ def main():
     sl_atr_mult = 2.0  # SL距離のATR倍率
     max_hold_bars = 48  # 最大保有期間（バー数）
     
+    # リスク管理設定
+    max_drawdown_pct = 0.25  # 最大DD制限（25%超で取引停止）
+    consecutive_loss_limit = 5  # 連敗制限（5連敗でリスク半減）
+    vol_scale_threshold = 1.5  # ボラティリティ閾値（平均の1.5倍でリスク調整）
+    
     # データ読み込み
     print("\n[1/4] データ読み込み...")
     datasets = {}
@@ -938,6 +1015,10 @@ def main():
                         adx_threshold=adx_threshold,
                         sma_atr_threshold=sma_atr_threshold,
                         use_triple_barrier=use_triple_barrier,
+                        symbol=symbol,
+                        max_drawdown_pct=max_drawdown_pct,
+                        consecutive_loss_limit=consecutive_loss_limit,
+                        vol_scale_threshold=vol_scale_threshold,
                     )
                 else:
                     test_result = backtest(
@@ -950,6 +1031,10 @@ def main():
                         adx_threshold=adx_threshold,
                         sma_atr_threshold=sma_atr_threshold,
                         use_triple_barrier=use_triple_barrier,
+                        symbol=symbol,
+                        max_drawdown_pct=max_drawdown_pct,
+                        consecutive_loss_limit=consecutive_loss_limit,
+                        vol_scale_threshold=vol_scale_threshold,
                     )
                 
                 test_metrics = calculate_metrics(test_result["equity"], test_result["trades"])
@@ -984,6 +1069,10 @@ def main():
                     adx_threshold=adx_threshold,
                     sma_atr_threshold=sma_atr_threshold,
                     use_triple_barrier=use_triple_barrier,
+                    symbol=symbol,
+                    max_drawdown_pct=max_drawdown_pct,
+                    consecutive_loss_limit=consecutive_loss_limit,
+                    vol_scale_threshold=vol_scale_threshold,
                 )
             else:
                 result = backtest(
@@ -998,6 +1087,10 @@ def main():
                     adx_threshold=adx_threshold,
                     sma_atr_threshold=sma_atr_threshold,
                     use_triple_barrier=use_triple_barrier,
+                    symbol=symbol,
+                    max_drawdown_pct=max_drawdown_pct,
+                    consecutive_loss_limit=consecutive_loss_limit,
+                    vol_scale_threshold=vol_scale_threshold,
                 )
         
         # 評価
