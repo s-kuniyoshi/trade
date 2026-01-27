@@ -116,6 +116,8 @@ class PredictionService:
     
     Loads trained LightGBM models and performs real-time inference with
     confidence estimation, caching, and ZeroMQ integration preparation.
+    
+    Supports both regression and Triple-barrier 3-class classification models.
     """
     
     def __init__(
@@ -125,6 +127,7 @@ class PredictionService:
         cache_ttl_seconds: int | None = None,
         warmup_enabled: bool | None = None,
         warmup_n_samples: int | None = None,
+        use_triple_barrier: bool = False,  # True for 3-class classification
     ):
         """
         Initialize prediction service.
@@ -149,6 +152,9 @@ class PredictionService:
             config.model.inference.get("warmup", {}).get("n_samples", 100)
         self.batch_size = config.model.inference.get("batch_size", 32)
         self.direction_threshold = config.model.target.direction_threshold
+        
+        # Triple-barrier mode (3-class classification)
+        self.use_triple_barrier = use_triple_barrier
         
         # Model path
         if model_path is None:
@@ -343,13 +349,34 @@ class PredictionService:
         X = features[self.feature_names].copy()
         
         # Make prediction
-        prediction = float(self.model.predict(X)[0])
+        raw_prediction = self.model.predict(X)
         
-        # Estimate confidence
-        confidence = self._estimate_confidence(prediction)
-        
-        # Map to direction
-        direction = self._map_direction(prediction)
+        if self.use_triple_barrier:
+            # Triple-barrier: 3-class classification
+            # raw_prediction shape: (1, 3) - [P(sell), P(neutral), P(buy)]
+            prob_sell = float(raw_prediction[0, 0])
+            prob_neutral = float(raw_prediction[0, 1])
+            prob_buy = float(raw_prediction[0, 2])
+            
+            # Calculate direction and confidence
+            direction_strength = max(prob_buy, prob_sell)
+            edge_confidence = direction_strength - prob_neutral * 0.5
+            
+            if prob_buy > prob_sell:
+                direction = "buy"
+                confidence = max(0.0, edge_confidence)
+            else:
+                direction = "sell"
+                confidence = max(0.0, edge_confidence)
+            
+            # Expected return is approximated from class probabilities
+            # Positive for buy direction, negative for sell
+            prediction = (prob_buy - prob_sell) * 0.01  # Scale to typical return range
+        else:
+            # Regression model
+            prediction = float(raw_prediction[0])
+            confidence = self._estimate_confidence(prediction)
+            direction = self._map_direction(prediction)
         
         # Build result
         result = {
@@ -358,6 +385,12 @@ class PredictionService:
             "confidence": confidence,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
+        
+        # Add probabilities for Triple-barrier mode
+        if self.use_triple_barrier:
+            result["prob_buy"] = prob_buy
+            result["prob_sell"] = prob_sell
+            result["prob_neutral"] = prob_neutral
         
         # Add quantiles if requested
         if include_quantiles:

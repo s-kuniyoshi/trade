@@ -31,7 +31,18 @@ class SignalService:
     
     Manages multi-timeframe OHLCV data buffers, calculates features,
     and generates trading signals with confidence filtering.
+    
+    Incorporates risk management features:
+    - USDJPY long-only (no short signals)
+    - ADX trend filter
+    - SMA200 distance filter
+    - Time-of-day filter (avoid low liquidity hours)
+    - Consecutive loss tracking
+    - Volatility-based position sizing
     """
+    
+    # Symbol-specific restrictions based on backtesting
+    LONG_ONLY_SYMBOLS = {"USDJPY"}  # Symbols that only trade long
     
     def __init__(
         self,
@@ -39,6 +50,14 @@ class SignalService:
         feature_engine: FeatureEngine,
         buffer_sizes: dict[str, int] | None = None,
         min_confidence: float | None = None,
+        # Filter settings
+        use_filters: bool = True,
+        adx_threshold: float = 20.0,
+        sma_atr_threshold: float = 0.5,
+        # Risk management settings
+        max_drawdown_pct: float = 0.25,
+        consecutive_loss_limit: int = 5,
+        vol_scale_threshold: float = 1.5,
     ):
         """
         Initialize signal service.
@@ -48,6 +67,12 @@ class SignalService:
             feature_engine: FeatureEngine instance for feature calculation
             buffer_sizes: Buffer sizes per timeframe (from config if None)
             min_confidence: Minimum confidence threshold (from config if None)
+            use_filters: Whether to apply trading filters
+            adx_threshold: Minimum ADX for trend strength
+            sma_atr_threshold: Minimum SMA200 distance in ATR units
+            max_drawdown_pct: Maximum drawdown before halting trading
+            consecutive_loss_limit: Number of consecutive losses before reducing risk
+            vol_scale_threshold: ATR multiplier threshold for volatility adjustment
         """
         config = get_config()
         
@@ -85,6 +110,23 @@ class SignalService:
         self.min_confidence = min_confidence if min_confidence is not None else \
             config.trading.signals.get("min_confidence", 0.65)
         
+        # Filter settings
+        self.use_filters = use_filters
+        self.adx_threshold = adx_threshold
+        self.sma_atr_threshold = sma_atr_threshold
+        
+        # Risk management settings
+        self.max_drawdown_pct = max_drawdown_pct
+        self.consecutive_loss_limit = consecutive_loss_limit
+        self.vol_scale_threshold = vol_scale_threshold
+        
+        # Risk management state (per symbol)
+        self.consecutive_losses: dict[str, int] = {}
+        self.peak_equity: dict[str, float] = {}
+        self.current_equity: dict[str, float] = {}
+        self.trading_halted: dict[str, bool] = {}
+        self.avg_atr: dict[str, float] = {}
+        
         # Data buffers: {symbol: {timeframe: DataFrame}}
         self.buffers: dict[str, dict[str, pd.DataFrame]] = {}
         self.buffer_lock = Lock()
@@ -93,7 +135,10 @@ class SignalService:
             f"SignalService initialized: "
             f"base_timeframe={self.base_timeframe}, "
             f"higher_timeframes={self.higher_timeframes}, "
-            f"min_confidence={self.min_confidence}"
+            f"min_confidence={self.min_confidence}, "
+            f"use_filters={self.use_filters}, "
+            f"adx_threshold={self.adx_threshold}, "
+            f"sma_atr_threshold={self.sma_atr_threshold}"
         )
     
     def add_bar(
@@ -244,8 +289,23 @@ class SignalService:
                 )
                 return None
             
-            # Calculate stop loss and take profit
+            # USDJPY long-only filter
+            if symbol in self.LONG_ONLY_SYMBOLS and prediction["direction"] == "sell":
+                logger.debug(
+                    f"Signal filtered for {symbol}: "
+                    f"short signals disabled for this symbol (long-only)"
+                )
+                return None
+            
+            # Get current price and features for filters
             current_price = self.buffers[symbol][self.base_timeframe].iloc[-1]["close"]
+            
+            # Apply trading filters
+            if self.use_filters:
+                filter_result = self._apply_filters(symbol, current_features)
+                if filter_result is not None:
+                    logger.debug(f"Signal filtered for {symbol}: {filter_result}")
+                    return None
             
             # Get ATR from features (if available)
             atr = 0.01  # Default fallback
@@ -407,3 +467,148 @@ class SignalService:
             tp = current_price
         
         return sl, tp
+    
+    def _apply_filters(
+        self,
+        symbol: str,
+        features: pd.DataFrame,
+    ) -> str | None:
+        """
+        Apply trading filters based on backtesting insights.
+        
+        Args:
+            symbol: Trading symbol
+            features: Current features DataFrame
+            
+        Returns:
+            Filter rejection reason string, or None if all filters pass
+        """
+        # Get current timestamp for time filter
+        last_bar = self.buffers[symbol][self.base_timeframe].index[-1]
+        hour = pd.Timestamp(last_bar).hour
+        
+        # Time filter: Avoid low liquidity hours (UTC 21:00-01:00)
+        if hour >= 21 or hour < 1:
+            return f"time_filter: hour={hour} in excluded range (21-01 UTC)"
+        
+        # ADX trend filter
+        if "adx_14" in features.columns:
+            adx = float(features.iloc[-1]["adx_14"])
+            if adx < self.adx_threshold:
+                return f"adx_filter: {adx:.1f} < {self.adx_threshold}"
+        
+        # SMA200 distance filter
+        if "sma200_atr_distance" in features.columns:
+            sma_dist = float(features.iloc[-1]["sma200_atr_distance"])
+            if sma_dist < self.sma_atr_threshold:
+                return f"sma_distance_filter: {sma_dist:.2f} < {self.sma_atr_threshold}"
+        
+        return None
+    
+    def update_trade_result(
+        self,
+        symbol: str,
+        pnl: float,
+        is_win: bool,
+    ) -> None:
+        """
+        Update risk management state after a trade closes.
+        
+        Args:
+            symbol: Trading symbol
+            pnl: Profit/loss amount
+            is_win: Whether the trade was profitable
+        """
+        # Initialize if needed
+        if symbol not in self.consecutive_losses:
+            self.consecutive_losses[symbol] = 0
+        if symbol not in self.current_equity:
+            self.current_equity[symbol] = 10000.0  # Default
+        if symbol not in self.peak_equity:
+            self.peak_equity[symbol] = 10000.0
+        
+        # Update equity
+        self.current_equity[symbol] += pnl
+        
+        if is_win:
+            # Reset consecutive losses on win
+            self.consecutive_losses[symbol] = 0
+            # Update peak equity
+            if self.current_equity[symbol] > self.peak_equity[symbol]:
+                self.peak_equity[symbol] = self.current_equity[symbol]
+        else:
+            # Increment consecutive losses
+            self.consecutive_losses[symbol] += 1
+        
+        # Check drawdown
+        if self.peak_equity[symbol] > 0:
+            current_dd = (self.peak_equity[symbol] - self.current_equity[symbol]) / self.peak_equity[symbol]
+            
+            if current_dd >= self.max_drawdown_pct:
+                self.trading_halted[symbol] = True
+                logger.warning(
+                    f"Trading halted for {symbol}: "
+                    f"drawdown {current_dd*100:.1f}% >= {self.max_drawdown_pct*100:.1f}%"
+                )
+            elif self.trading_halted.get(symbol, False) and current_dd < self.max_drawdown_pct * 0.5:
+                # Resume trading if DD recovers to half of threshold
+                self.trading_halted[symbol] = False
+                logger.info(f"Trading resumed for {symbol}: drawdown recovered")
+        
+        logger.debug(
+            f"Trade result updated for {symbol}: "
+            f"pnl={pnl:.2f}, win={is_win}, "
+            f"consecutive_losses={self.consecutive_losses[symbol]}, "
+            f"equity={self.current_equity[symbol]:.2f}"
+        )
+    
+    def get_risk_adjustment(self, symbol: str) -> float:
+        """
+        Get risk adjustment multiplier based on current state.
+        
+        Args:
+            symbol: Trading symbol
+            
+        Returns:
+            Risk multiplier (0.0 to 1.0)
+        """
+        # Check if trading is halted
+        if self.trading_halted.get(symbol, False):
+            return 0.0
+        
+        multiplier = 1.0
+        
+        # Consecutive loss adjustment
+        consecutive = self.consecutive_losses.get(symbol, 0)
+        if consecutive >= self.consecutive_loss_limit:
+            multiplier *= 0.5
+            logger.debug(
+                f"Risk reduced for {symbol}: "
+                f"{consecutive} consecutive losses >= {self.consecutive_loss_limit}"
+            )
+        
+        # Volatility adjustment
+        if symbol in self.avg_atr and symbol in self.buffers:
+            if self.base_timeframe in self.buffers[symbol]:
+                df = self.buffers[symbol][self.base_timeframe]
+                if "atr_14" in df.columns and len(df) > 0:
+                    current_atr = float(df.iloc[-1].get("atr_14", 0) or 0)
+                    avg = float(self.avg_atr.get(symbol, current_atr) or current_atr)
+                    if avg > 0 and current_atr > 0:
+                        vol_ratio = current_atr / avg
+                        if vol_ratio > self.vol_scale_threshold:
+                            vol_adj = max(0.5, 1.0 / vol_ratio)
+                            multiplier *= vol_adj
+                            logger.debug(
+                                f"Risk reduced for {symbol}: "
+                                f"vol_ratio={vol_ratio:.2f} > {self.vol_scale_threshold}"
+                            )
+        
+        return multiplier
+    
+    def set_initial_equity(self, symbol: str, equity: float) -> None:
+        """Set initial equity for a symbol."""
+        self.current_equity[symbol] = equity
+        self.peak_equity[symbol] = equity
+        self.consecutive_losses[symbol] = 0
+        self.trading_halted[symbol] = False

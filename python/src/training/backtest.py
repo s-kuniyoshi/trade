@@ -95,6 +95,13 @@ class BacktestConfig:
     lot_size: float = 100000  # Standard lot
     use_dynamic_spread: bool = True
     max_positions: int = 3
+    # Risk management settings
+    max_drawdown_pct: float = 0.25  # Max DD before halting
+    consecutive_loss_limit: int = 5  # Consecutive losses before risk reduction
+    vol_scale_threshold: float = 1.5  # ATR multiplier for volatility adjustment
+    risk_per_trade: float = 0.01  # Risk per trade as fraction of equity
+    # Symbol restrictions
+    long_only_symbols: set[str] = field(default_factory=lambda: {"USDJPY"})
 
 
 @dataclass
@@ -179,6 +186,11 @@ class Backtester:
         self._open_trades: list[Trade] = []
         self._trade_counter = 0
         self._equity_history: list[tuple[datetime, float]] = []
+        # Risk management state
+        self._peak_equity = self.config.initial_balance
+        self._consecutive_losses: dict[str, int] = {}
+        self._trading_halted: dict[str, bool] = {}
+        self._avg_atr: dict[str, float] = {}
     
     def run(
         self,
@@ -317,11 +329,41 @@ class Backtester:
         if len(self._open_trades) >= self.config.max_positions:
             return
         
+        # Risk management: Long-only symbols
+        if symbol in self.config.long_only_symbols and direction == "sell":
+            return
+        
+        # Risk management: Check if trading is halted due to drawdown
+        if self._trading_halted.get(symbol, False):
+            # Check if DD has recovered to half of threshold
+            if self._peak_equity > 0:
+                current_dd = (self._peak_equity - self._equity) / self._peak_equity
+                if current_dd < self.config.max_drawdown_pct * 0.5:
+                    self._trading_halted[symbol] = False
+                else:
+                    return
+        
+        # Risk management: Check drawdown limit
+        if self._peak_equity > 0:
+            current_dd = (self._peak_equity - self._equity) / self._peak_equity
+            if current_dd >= self.config.max_drawdown_pct:
+                self._trading_halted[symbol] = True
+                return
+        
         # Get order parameters
         lots = signal.get("lots", 0.1)
         sl = signal.get("sl")
         tp = signal.get("tp")
         confidence = signal.get("confidence", 0.5)
+        
+        # Risk management: Adjust lots based on consecutive losses
+        risk_multiplier = 1.0
+        consecutive = self._consecutive_losses.get(symbol, 0)
+        if consecutive >= self.config.consecutive_loss_limit:
+            risk_multiplier *= 0.5
+        
+        # Apply risk adjustment to lot size
+        lots = lots * risk_multiplier
         
         # Determine entry price with spread and slippage
         if direction == "buy":
@@ -365,6 +407,17 @@ class Backtester:
         self._open_trades.remove(trade)
         self._trades.append(trade)
         self._balance += trade.pnl
+        
+        # Risk management: Update consecutive losses and peak equity
+        symbol = trade.symbol
+        if trade.pnl > 0:
+            # Win: reset consecutive losses, update peak equity
+            self._consecutive_losses[symbol] = 0
+            if self._equity > self._peak_equity:
+                self._peak_equity = self._equity
+        else:
+            # Loss: increment consecutive losses
+            self._consecutive_losses[symbol] = self._consecutive_losses.get(symbol, 0) + 1
         
         logger.debug(f"Closed trade {trade.id}: PnL={trade.pnl:.2f} ({reason})")
     
