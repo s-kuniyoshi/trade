@@ -107,21 +107,52 @@ CONFIG = {
 
 
 # =============================================================================
-# 特徴量計算（run_backtest.pyと同じロジック）
+# 特徴量計算（run_backtest.pyと完全一致）
 # =============================================================================
 
 def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    バックテストと同じ特徴量を計算。
+    テクニカル指標ベースの特徴量を計算。
+    
+    リーク防止: すべて過去データのみ使用（shift使用）
+    
+    ※ run_backtest.py の compute_features() と完全一致
     """
     features = pd.DataFrame(index=df.index)
     
-    # 基本価格特徴量
-    features["returns"] = df["close"].pct_change()
-    features["log_returns"] = np.log(df["close"] / df["close"].shift(1))
+    # 価格系
+    features["log_return_1"] = np.log(df["close"] / df["close"].shift(1))
+    features["log_return_5"] = np.log(df["close"] / df["close"].shift(5))
+    features["log_return_20"] = np.log(df["close"] / df["close"].shift(20))
+    
+    # レンジ
+    features["range_hl"] = (df["high"] - df["low"]) / df["close"]
     
     # ボラティリティ
-    features["volatility_20"] = features["returns"].rolling(20).std()
+    features["realized_vol_20"] = features["log_return_1"].rolling(20).std() * np.sqrt(252 * 24)
+    
+    # 移動平均
+    features["sma_20"] = df["close"].rolling(20).mean()
+    features["sma_50"] = df["close"].rolling(50).mean()
+    features["sma_200"] = df["close"].rolling(200).mean()  # トレンドフィルター用
+    features["price_to_sma20"] = df["close"] / features["sma_20"] - 1
+    features["price_to_sma50"] = df["close"] / features["sma_50"] - 1
+    features["price_to_sma200"] = df["close"] / features["sma_200"] - 1  # SMA200乖離
+    features["sma_cross"] = (features["sma_20"] > features["sma_50"]).astype(int)
+    
+    # RSI
+    delta = df["close"].diff()
+    gain = delta.where(delta > 0, 0).rolling(14).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+    rs = gain / loss
+    features["rsi_14"] = 100 - (100 / (1 + rs))
+    
+    # MACD
+    ema_12 = df["close"].ewm(span=12, adjust=False).mean()
+    ema_26 = df["close"].ewm(span=26, adjust=False).mean()
+    features["macd"] = ema_12 - ema_26
+    features["macd_signal"] = features["macd"].ewm(span=9, adjust=False).mean()
+    features["macd_hist"] = features["macd"] - features["macd_signal"]
     
     # ATR
     tr1 = df["high"] - df["low"]
@@ -130,93 +161,131 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
     features["atr_14"] = tr.rolling(14).mean()
     
-    # 移動平均
-    for period in [5, 10, 20, 50, 100, 200]:
-        features[f"sma_{period}"] = df["close"].rolling(period).mean()
-        features[f"ema_{period}"] = df["close"].ewm(span=period).mean()
-    
-    # 価格とSMAの関係
-    features["price_to_sma20"] = df["close"] / features["sma_20"] - 1
-    features["price_to_sma50"] = df["close"] / features["sma_50"] - 1
-    features["price_to_sma200"] = df["close"] / features["sma_200"] - 1
-    
-    # SMA200からの乖離（ATR単位）
-    features["sma200_atr_distance"] = abs(df["close"] - features["sma_200"]) / features["atr_14"]
-    
-    # RSI
-    delta = df["close"].diff()
-    gain = delta.where(delta > 0, 0).rolling(14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
-    rs = gain / loss.replace(0, np.nan)
-    features["rsi_14"] = 100 - (100 / (1 + rs))
-    
-    # MACD
-    ema12 = df["close"].ewm(span=12).mean()
-    ema26 = df["close"].ewm(span=26).mean()
-    features["macd"] = ema12 - ema26
-    features["macd_signal"] = features["macd"].ewm(span=9).mean()
-    features["macd_hist"] = features["macd"] - features["macd_signal"]
-    
-    # ボリンジャーバンド
-    sma20 = features["sma_20"]
-    std20 = df["close"].rolling(20).std()
-    features["bb_upper"] = sma20 + 2 * std20
-    features["bb_lower"] = sma20 - 2 * std20
-    features["bb_width"] = (features["bb_upper"] - features["bb_lower"]) / sma20
-    features["bb_position"] = (df["close"] - features["bb_lower"]) / (features["bb_upper"] - features["bb_lower"])
-    
-    # ADX
+    # ADX (Average Directional Index) - トレンド強度フィルター用
     plus_dm = df["high"].diff()
     minus_dm = -df["low"].diff()
     plus_dm = plus_dm.where((plus_dm > minus_dm) & (plus_dm > 0), 0)
     minus_dm = minus_dm.where((minus_dm > plus_dm) & (minus_dm > 0), 0)
     
-    atr14 = features["atr_14"]
-    plus_di = 100 * (plus_dm.rolling(14).mean() / atr14)
-    minus_di = 100 * (minus_dm.rolling(14).mean() / atr14)
-    dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di).replace(0, np.nan)
-    features["adx_14"] = dx.rolling(14).mean()
-    features["plus_di"] = plus_di
-    features["minus_di"] = minus_di
+    atr_smooth = tr.ewm(span=14, adjust=False).mean()
+    plus_di = 100 * (plus_dm.ewm(span=14, adjust=False).mean() / atr_smooth)
+    minus_di = 100 * (minus_dm.ewm(span=14, adjust=False).mean() / atr_smooth)
+    dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di + 1e-10)
+    features["adx_14"] = dx.ewm(span=14, adjust=False).mean()
     
-    # セッション特徴量
-    if hasattr(df.index, 'hour'):
-        hour = df.index.hour
-    else:
-        hour = pd.to_datetime(df.index).hour
+    # SMA200からの乖離をATRで正規化（トレンドフィルター用）
+    features["sma200_atr_distance"] = abs(df["close"] - features["sma_200"]) / features["atr_14"]
     
-    features["hour"] = hour
+    # ボリンジャーバンド
+    bb_mid = df["close"].rolling(20).mean()
+    bb_std = df["close"].rolling(20).std()
+    features["bb_upper"] = bb_mid + 2 * bb_std
+    features["bb_lower"] = bb_mid - 2 * bb_std
+    features["bb_width"] = (features["bb_upper"] - features["bb_lower"]) / bb_mid
+    features["bb_position"] = (df["close"] - features["bb_lower"]) / (features["bb_upper"] - features["bb_lower"])
+    
+    # 時間特徴量
+    features["hour"] = df.index.hour
+    features["day_of_week"] = df.index.dayofweek
+    
+    # ========================================
+    # 新規特徴量: セッション特性（東京/ロンドン/NY）
+    # ========================================
+    hour = df.index.hour
+    
+    # セッションフラグ (UTC基準)
     features["is_tokyo"] = ((hour >= 0) & (hour < 9)).astype(int)
     features["is_london"] = ((hour >= 7) & (hour < 16)).astype(int)
     features["is_ny"] = ((hour >= 13) & (hour < 22)).astype(int)
+    features["is_ldn_ny_overlap"] = ((hour >= 13) & (hour < 16)).astype(int)
     
-    # セッション累積リターン
-    tokyo_ret = features["returns"].where(features["is_tokyo"] == 1, 0)
-    london_ret = features["returns"].where(features["is_london"] == 1, 0)
-    ny_ret = features["returns"].where(features["is_ny"] == 1, 0)
+    # セッション別累積リターン（セッション開始からのトレンド方向）
+    ret1 = features["log_return_1"]
+    day = df.index.floor("D")
     
-    features["tokyo_cumret"] = tokyo_ret.rolling(24).sum()
-    features["london_cumret"] = london_ret.rolling(24).sum()
-    features["ny_cumret"] = ny_ret.rolling(24).sum()
+    # 東京セッション累積リターン
+    tokyo_ret = ret1.where(features["is_tokyo"].astype(bool), 0.0)
+    features["tokyo_cumret"] = tokyo_ret.groupby(day).cumsum()
     
-    # トレンド品質
-    features["efficiency_ratio"] = abs(df["close"].diff(10)) / tr.rolling(10).sum()
-    features["sma_slope"] = features["sma_20"].diff(5) / features["atr_14"]
+    # ロンドンセッション累積リターン
+    london_ret = ret1.where(features["is_london"].astype(bool), 0.0)
+    features["london_cumret"] = london_ret.groupby(day).cumsum()
     
-    # Parkinson volatility
-    features["parkinson_vol"] = np.sqrt(np.log(df["high"] / df["low"]) ** 2 / (4 * np.log(2))).rolling(20).mean()
+    # NYセッション累積リターン
+    ny_ret = ret1.where(features["is_ny"].astype(bool), 0.0)
+    features["ny_cumret"] = ny_ret.groupby(day).cumsum()
     
-    # Tail asymmetry
-    ret_5 = features["returns"].rolling(5).apply(lambda x: x.quantile(0.95) - x.quantile(0.05), raw=False)
-    ret_50 = features["returns"].rolling(5).apply(lambda x: x.quantile(0.5), raw=False)
-    features["tail_asymmetry"] = ret_5 - 2 * ret_50
+    # セッション別ボラティリティ（全体のローリングボラに対するセッションの相対ボラ）
+    overall_vol = ret1.rolling(24, min_periods=12).std()
+    features["tokyo_vol_ratio"] = features["is_tokyo"] * overall_vol
+    features["london_vol_ratio"] = features["is_london"] * overall_vol
+    features["ny_vol_ratio"] = features["is_ny"] * overall_vol
     
-    # ミーンリバージョン指標
-    features["zscore"] = (df["close"] - features["sma_20"]) / std20
-    features["bw_percentile"] = features["bb_position"]
+    # ========================================
+    # 新規特徴量: トレンド品質（Efficiency Ratio）
+    # ========================================
+    n = 20
+    close = df["close"]
     
-    # 欠損値処理
-    features = features.replace([np.inf, -np.inf], np.nan)
+    # Kaufman Efficiency Ratio: 0=チョップ、1=クリーンなトレンド
+    change = close.diff(n).abs()
+    volatility = close.diff().abs().rolling(n).sum()
+    features["efficiency_ratio"] = (change / volatility).replace([np.inf, -np.inf], np.nan)
+    
+    # SMAスロープ（トレンドの傾き）
+    sma_20 = features["sma_20"]
+    features["sma_slope"] = sma_20.diff(3) / 3.0
+    features["sma_accel"] = features["sma_slope"].diff(3) / 3.0
+    
+    # リターン持続性（同じ方向が続く割合）
+    ret = features["log_return_1"]
+    same_sign = (np.sign(ret) == np.sign(ret.shift(1))).astype(float)
+    features["ret_persistence"] = same_sign.rolling(n).mean()
+    
+    # ========================================
+    # 新規特徴量: ジャンプ/テールリスク
+    # ========================================
+    win = 48
+    
+    # Parkinsonボラティリティ（レンジベース）
+    parkinson = (1.0 / (4.0 * np.log(2.0))) * (np.log(df["high"] / df["low"]) ** 2)
+    features["parkinson_vol"] = np.sqrt(parkinson.rolling(win).mean())
+    
+    # ジャンプスコア（異常な動きの検出）
+    med_abs = ret.abs().rolling(win).median()
+    features["jump_score"] = (ret.abs() / med_abs).replace([np.inf, -np.inf], np.nan)
+    
+    # テール非対称性（下落リスク vs 上昇リスク）
+    down = (ret.clip(upper=0.0) ** 2).rolling(win).mean()
+    up = (ret.clip(lower=0.0) ** 2).rolling(win).mean()
+    features["tail_asymmetry"] = (down / up).replace([np.inf, -np.inf], np.nan)
+    
+    # ========================================
+    # 新規特徴量: ミーンリバージョン（レンジ相場用）
+    # ========================================
+    ma = close.rolling(n).mean()
+    sd = close.rolling(n).std()
+    
+    # Zスコア
+    features["zscore"] = (close - ma) / sd
+    
+    # バンド幅のパーセンタイル（圧縮度）- シンプルな方法で計算
+    bw = features["bb_width"]
+    bw_rolling_max = bw.rolling(100, min_periods=20).max()
+    bw_rolling_min = bw.rolling(100, min_periods=20).min()
+    features["bw_percentile"] = (bw - bw_rolling_min) / (bw_rolling_max - bw_rolling_min + 1e-10)
+    
+    # レンジ相場フラグ（低ボラ + 低トレンド品質）
+    features["is_range_regime"] = (
+        (features["bw_percentile"] < 0.25) & 
+        (features["efficiency_ratio"] < 0.3)
+    ).astype(int)
+    
+    # ミーンリバージョンシグナル（レンジ相場でのみ有効）
+    features["mr_signal"] = features["is_range_regime"] * (-features["zscore"])
+    
+    # 欠損値を削除
+    features = features.dropna()
     
     return features
 
