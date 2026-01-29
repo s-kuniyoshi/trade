@@ -67,6 +67,45 @@ class TradingHoursConfig(BaseModel):
     news_blackout_minutes: int = 30
 
 
+class NewsFilterConfig(BaseModel):
+    """
+    Configuration for news-based trading filter.
+    
+    Blocks trading during high-impact economic events.
+    """
+    enabled: bool = True
+    """Whether news filter is active."""
+    
+    blackout_before_minutes: int = 30
+    """Minutes before event to start blackout."""
+    
+    blackout_after_minutes: int = 15
+    """Minutes after event to end blackout."""
+    
+    min_impact: str = "high"
+    """Minimum impact level to trigger blackout: 'low', 'medium', 'high'."""
+    
+    default_action: str = "block_entry"
+    """Action during blackout: 'block_entry', 'close_positions', 'tighten_stops'."""
+    
+    refresh_interval_minutes: int = 60
+    """How often to refresh calendar data."""
+    
+    cache_dir: str = "data/cache/news"
+    """Directory for caching news data."""
+    
+    symbol_overrides: dict[str, dict[str, Any]] = Field(default_factory=dict)
+    """
+    Per-symbol configuration overrides.
+    
+    Example:
+        USDJPY:
+            min_impact: medium
+            action: close_positions
+            blackout_before_minutes: 45
+    """
+
+
 class ZeroMQConfig(BaseModel):
     """ZeroMQ communication configuration."""
     request_port: int = 5555
@@ -81,11 +120,20 @@ class HttpConfig(BaseModel):
     timeout_ms: int = 5000
 
 
+class DiscordConfig(BaseModel):
+    """Discord notification configuration."""
+    enabled: bool = True
+    webhook_url: str = ""
+    min_severity: str = "warning"  # info, warning, error, critical
+    username: str = "Trading Bot"
+
+
 class CommunicationConfig(BaseModel):
     """Communication configuration."""
     protocol: str = "zeromq"
     zeromq: ZeroMQConfig = Field(default_factory=ZeroMQConfig)
     http: HttpConfig = Field(default_factory=HttpConfig)
+    discord: DiscordConfig = Field(default_factory=DiscordConfig)
 
 
 class TradingConfig(BaseModel):
@@ -95,6 +143,7 @@ class TradingConfig(BaseModel):
     symbols: dict[str, Any] = Field(default_factory=dict)
     timeframes: dict[str, Any] = Field(default_factory=dict)
     trading_hours: TradingHoursConfig = Field(default_factory=TradingHoursConfig)
+    news_filter: NewsFilterConfig = Field(default_factory=NewsFilterConfig)
     signals: dict[str, Any] = Field(default_factory=dict)
     execution: dict[str, Any] = Field(default_factory=dict)
     communication: CommunicationConfig = Field(default_factory=CommunicationConfig)

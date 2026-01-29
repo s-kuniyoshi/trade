@@ -1,17 +1,20 @@
 """
-デモ取引スクリプト
+FX自動売買スクリプト
 
-バックテストで確立した戦略をMT5デモ口座で実行する。
+バックテストで確立した戦略をMT5で実行する。
+デモ口座・ライブ口座の両方に対応。
 
 主な機能:
 - MT5からリアルタイムデータ取得
 - LightGBMモデルによるシグナル生成
-- USDJPYロングオンリー、フィルター適用
+- ニュースフィルター（重要指標前後の取引停止）
 - リスク管理（DD制限、連敗制限、ボラティリティ調整）
 - 自動売買（エントリー・決済）
 
 使用方法:
-    python scripts/run_demo.py
+    python scripts/run_trading.py
+    または
+    start_trading.bat をダブルクリック
 """
 
 import sys
@@ -450,6 +453,27 @@ class DemoTrader:
         self.consecutive_losses: dict[str, int] = {s: 0 for s in config["symbols"]}
         self.trading_halted = False
         self.avg_atr: dict[str, float] = {}
+        
+        # ニュースフィルター初期化
+        self.news_filter = None
+        try:
+            from python.src.news.news_filter import NewsFilter, NewsFilterConfig
+            from python.src.news.news_provider import EventImpact
+            
+            news_config = NewsFilterConfig(
+                enabled=True,
+                blackout_before_minutes=30,
+                blackout_after_minutes=15,
+                min_impact=EventImpact.HIGH,
+            )
+            self.news_filter = NewsFilter(
+                config=news_config,
+                symbols=config["symbols"],
+            )
+            self.news_filter.start_auto_refresh()
+            logger.info("ニュースフィルター初期化完了")
+        except Exception as e:
+            logger.warning(f"ニュースフィルター初期化失敗（続行）: {e}")
     
     # =========================================================================
     # ルールベース戦略
@@ -888,6 +912,16 @@ class DemoTrader:
         for symbol in self.config["symbols"]:
             logger.info(f"--- {symbol} ---")
             
+            # ニュースブラックアウトチェック
+            if self.news_filter is not None:
+                blackout = self.news_filter.check_blackout(symbol)
+                if blackout.is_blocked:
+                    events = ", ".join(e.title for e in blackout.blocking_events[:2])
+                    logger.warning(f"ニュースブラックアウト中: {events}")
+                    if blackout.blackout_ends:
+                        logger.info(f"  解除予定: {blackout.blackout_ends.strftime('%H:%M')} UTC")
+                    continue
+            
             # 既存ポジションチェック
             positions = get_open_positions(symbol)
             if positions:
@@ -1004,6 +1038,11 @@ class DemoTrader:
                 time.sleep(self.config["check_interval_seconds"])
         except KeyboardInterrupt:
             logger.info("停止しました。")
+        finally:
+            # ニュースフィルター停止
+            if self.news_filter is not None:
+                self.news_filter.stop_auto_refresh()
+                logger.info("ニュースフィルター停止")
 
 
 # =============================================================================

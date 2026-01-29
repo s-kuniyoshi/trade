@@ -8,8 +8,9 @@ and generates trading signals using PredictionService.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
 from threading import Lock
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
@@ -17,6 +18,10 @@ from ..features.mtf import FeatureEngine
 from ..inference.predictor import PredictionService
 from ..utils.config import get_config
 from ..utils.logger import get_logger
+
+# Avoid circular import - import at runtime when needed
+if TYPE_CHECKING:
+    from ..news.news_filter import NewsFilter
 
 logger = get_logger("communication.signal_service")
 
@@ -131,6 +136,40 @@ class SignalService:
         self.buffers: dict[str, dict[str, pd.DataFrame]] = {}
         self.buffer_lock = Lock()
         
+        # News filter (lazy import to avoid circular dependency)
+        self.news_filter: NewsFilter | None = None
+        news_config = config.trading.news_filter
+        if news_config.enabled:
+            try:
+                # Lazy import to avoid circular dependency
+                from ..news.news_filter import (
+                    BlackoutAction,
+                    NewsFilter,
+                    NewsFilterConfig,
+                )
+                from ..news.news_provider import EventImpact
+                
+                filter_config = NewsFilterConfig(
+                    enabled=news_config.enabled,
+                    blackout_before_minutes=news_config.blackout_before_minutes,
+                    blackout_after_minutes=news_config.blackout_after_minutes,
+                    min_impact=EventImpact(news_config.min_impact),
+                    default_action=BlackoutAction(news_config.default_action),
+                    refresh_interval_minutes=news_config.refresh_interval_minutes,
+                    cache_dir=Path(news_config.cache_dir),
+                    symbol_overrides=news_config.symbol_overrides,
+                )
+                self.news_filter = NewsFilter(
+                    config=filter_config,
+                    on_blackout_start=self._on_news_blackout_start,
+                    on_blackout_end=self._on_news_blackout_end,
+                )
+                self.news_filter.start_auto_refresh()
+                logger.info("News filter initialized and auto-refresh started")
+            except Exception as e:
+                logger.error(f"Failed to initialize news filter: {e}")
+                self.news_filter = None
+        
         logger.info(
             f"SignalService initialized: "
             f"base_timeframe={self.base_timeframe}, "
@@ -138,7 +177,8 @@ class SignalService:
             f"min_confidence={self.min_confidence}, "
             f"use_filters={self.use_filters}, "
             f"adx_threshold={self.adx_threshold}, "
-            f"sma_atr_threshold={self.sma_atr_threshold}"
+            f"sma_atr_threshold={self.sma_atr_threshold}, "
+            f"news_filter={'enabled' if self.news_filter else 'disabled'}"
         )
     
     def add_bar(
@@ -240,6 +280,16 @@ class SignalService:
             - Confidence below threshold
         """
         try:
+            # Check news blackout first
+            if self.news_filter is not None:
+                blackout = self.news_filter.check_blackout(symbol)
+                if blackout.is_blocked:
+                    event_names = ", ".join(e.title for e in blackout.blocking_events[:2])
+                    logger.debug(
+                        f"Signal blocked for {symbol} due to news: {event_names}"
+                    )
+                    return None
+            
             # Check if we have sufficient data
             if not self._has_sufficient_data(symbol):
                 logger.debug(f"Insufficient data for {symbol}")
@@ -612,3 +662,90 @@ class SignalService:
         self.peak_equity[symbol] = equity
         self.consecutive_losses[symbol] = 0
         self.trading_halted[symbol] = False
+    
+    # =========================================================================
+    # News Filter Methods
+    # =========================================================================
+    
+    def _on_news_blackout_start(
+        self,
+        symbol: str,
+        events: list,
+    ) -> None:
+        """
+        Callback when news blackout starts for a symbol.
+        
+        Args:
+            symbol: Trading symbol
+            events: List of blocking events
+        """
+        event_names = ", ".join(e.title for e in events[:3])
+        logger.warning(
+            f"News blackout started for {symbol}: {event_names}"
+        )
+    
+    def _on_news_blackout_end(self, symbol: str) -> None:
+        """
+        Callback when news blackout ends for a symbol.
+        
+        Args:
+            symbol: Trading symbol
+        """
+        logger.info(f"News blackout ended for {symbol}, trading resumed")
+    
+    def check_news_blackout(self, symbol: str) -> dict[str, Any] | None:
+        """
+        Check if trading is blocked due to news for a symbol.
+        
+        Args:
+            symbol: Trading symbol
+            
+        Returns:
+            Blackout status dict if blocked, None if trading allowed
+        """
+        if self.news_filter is None:
+            return None
+        
+        status = self.news_filter.check_blackout(symbol)
+        
+        if status.is_blocked:
+            return status.to_dict()
+        
+        return None
+    
+    def get_upcoming_news(
+        self,
+        symbol: str | None = None,
+        hours_ahead: int = 24,
+    ) -> list[dict[str, Any]]:
+        """
+        Get upcoming news events.
+        
+        Args:
+            symbol: Filter by symbol (optional)
+            hours_ahead: Hours to look ahead
+            
+        Returns:
+            List of upcoming events
+        """
+        if self.news_filter is None:
+            return []
+        
+        events = self.news_filter.get_upcoming_events(
+            symbol=symbol,
+            hours_ahead=hours_ahead,
+        )
+        
+        return [e.to_dict() for e in events]
+    
+    def get_news_filter_status(self) -> dict[str, Any]:
+        """Get news filter status summary."""
+        if self.news_filter is None:
+            return {"enabled": False}
+        
+        return self.news_filter.get_status()
+    
+    def stop_news_filter(self) -> None:
+        """Stop news filter auto-refresh."""
+        if self.news_filter is not None:
+            self.news_filter.stop_auto_refresh()

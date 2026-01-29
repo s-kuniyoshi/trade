@@ -1,0 +1,16 @@
+[
+  {
+    "severity": "warning",
+    "title": "News Filter Test",
+    "message": "Testing news filter integration. This is a test notification from the trading bot.",
+    "source": "test_script",
+    "timestamp": "2026-01-29T13:15:23.824302+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "event": "Non-Farm Payrolls",
+      "action": "block_entry"
+    }
+  }
+]

@@ -257,6 +257,134 @@ class FileAlertHandler(AlertHandler):
 
 
 # =============================================================================
+# Discord Alert Handler
+# =============================================================================
+
+class DiscordAlertHandler(AlertHandler):
+    """
+    Handler that sends alerts to Discord via webhook.
+    
+    Formats alerts as rich embeds with color-coded severity.
+    """
+    
+    # Discord embed colors by severity
+    SEVERITY_COLORS = {
+        AlertSeverity.INFO: 0x3498DB,      # Blue
+        AlertSeverity.WARNING: 0xF39C12,   # Orange
+        AlertSeverity.ERROR: 0xE74C3C,     # Red
+        AlertSeverity.CRITICAL: 0x8E44AD,  # Purple
+    }
+    
+    def __init__(
+        self,
+        webhook_url: str,
+        min_severity: AlertSeverity = AlertSeverity.WARNING,
+        username: str = "Trading Bot",
+        avatar_url: str | None = None,
+    ):
+        """
+        Initialize Discord alert handler.
+        
+        Args:
+            webhook_url: Discord webhook URL
+            min_severity: Minimum severity to send
+            username: Bot username to display
+            avatar_url: Optional avatar URL
+        """
+        self.webhook_url = webhook_url
+        self.min_severity = min_severity
+        self.username = username
+        self.avatar_url = avatar_url
+        
+        self._severity_order = [
+            AlertSeverity.INFO,
+            AlertSeverity.WARNING,
+            AlertSeverity.ERROR,
+            AlertSeverity.CRITICAL,
+        ]
+    
+    def send(self, alert: Alert) -> bool:
+        """Send alert to Discord."""
+        if not self.supports_severity(alert.severity):
+            return False
+        
+        try:
+            import requests
+            
+            # Build embed
+            embed = {
+                "title": f"{alert.severity.value.upper()}: {alert.title}",
+                "description": alert.message,
+                "color": self.SEVERITY_COLORS.get(alert.severity, 0x95A5A6),
+                "timestamp": alert.timestamp.isoformat(),
+                "fields": [
+                    {
+                        "name": "Source",
+                        "value": alert.source,
+                        "inline": True,
+                    },
+                ],
+                "footer": {
+                    "text": "Trading Bot Alert",
+                },
+            }
+            
+            # Add error type if present
+            if alert.error_type:
+                embed["fields"].append({
+                    "name": "Error Type",
+                    "value": alert.error_type,
+                    "inline": True,
+                })
+            
+            # Add metadata fields
+            for key, value in list(alert.metadata.items())[:5]:
+                embed["fields"].append({
+                    "name": key.replace("_", " ").title(),
+                    "value": str(value)[:100],
+                    "inline": True,
+                })
+            
+            # Build payload
+            payload = {
+                "username": self.username,
+                "embeds": [embed],
+            }
+            
+            if self.avatar_url:
+                payload["avatar_url"] = self.avatar_url
+            
+            # Send request
+            response = requests.post(
+                self.webhook_url,
+                json=payload,
+                timeout=10,
+            )
+            
+            if response.status_code in (200, 204):
+                return True
+            else:
+                logger.warning(
+                    f"Discord webhook returned {response.status_code}: "
+                    f"{response.text[:200]}"
+                )
+                return False
+                
+        except ImportError:
+            logger.warning("requests library not available for Discord alerts")
+            return False
+        except Exception as e:
+            logger.error(f"Failed to send Discord alert: {e}")
+            return False
+    
+    def supports_severity(self, severity: AlertSeverity) -> bool:
+        """Check if severity meets minimum threshold."""
+        min_idx = self._severity_order.index(self.min_severity)
+        severity_idx = self._severity_order.index(severity)
+        return severity_idx >= min_idx
+
+
+# =============================================================================
 # Rate Limiter
 # =============================================================================
 
@@ -547,13 +675,46 @@ _global_alert_manager: AlertManager | None = None
 
 
 def get_alert_manager() -> AlertManager:
-    """Get or create global alert manager."""
+    """
+    Get or create global alert manager.
+    
+    Automatically configures Discord handler if configured in trading.yaml.
+    """
     global _global_alert_manager
     
     if _global_alert_manager is None:
         _global_alert_manager = AlertManager(
             alert_file_path="logs/alerts/alerts.json"
         )
+        
+        # Try to add Discord handler from config
+        try:
+            from ..utils.config import get_config
+            config = get_config()
+            discord_config = config.trading.communication.discord
+            
+            if discord_config.enabled and discord_config.webhook_url:
+                # Map severity string to enum
+                severity_map = {
+                    "info": AlertSeverity.INFO,
+                    "warning": AlertSeverity.WARNING,
+                    "error": AlertSeverity.ERROR,
+                    "critical": AlertSeverity.CRITICAL,
+                }
+                min_severity = severity_map.get(
+                    discord_config.min_severity.lower(),
+                    AlertSeverity.WARNING
+                )
+                
+                discord_handler = DiscordAlertHandler(
+                    webhook_url=discord_config.webhook_url,
+                    min_severity=min_severity,
+                    username=discord_config.username,
+                )
+                _global_alert_manager.add_handler(discord_handler)
+                logger.info("Discord alert handler configured")
+        except Exception as e:
+            logger.debug(f"Discord handler not configured: {e}")
     
     return _global_alert_manager
 

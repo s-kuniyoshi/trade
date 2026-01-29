@@ -88,6 +88,34 @@ trading_hours:
   news_blackout_minutes: 30
 
 # -----------------------------------------------------------------------------
+# News Filter (Economic Calendar)
+# -----------------------------------------------------------------------------
+news_filter:
+  enabled: true
+  
+  # Blackout window around high-impact news
+  blackout_before_minutes: 30
+  blackout_after_minutes: 15
+  
+  # Minimum impact level to trigger blackout: low, medium, high
+  min_impact: "high"
+  
+  # Action during blackout: block_entry, close_positions, tighten_stops
+  default_action: "block_entry"
+  
+  # Calendar refresh interval
+  refresh_interval_minutes: 60
+  
+  # Cache directory for news data
+  cache_dir: "data/cache/news"
+  
+  # Per-symbol overrides (optional)
+  symbol_overrides:
+    USDJPY:
+      min_impact: "medium"  # More conservative for USDJPY
+      blackout_before_minutes: 45
+
+# -----------------------------------------------------------------------------
 # Signal Generation
 # -----------------------------------------------------------------------------
 signals:
@@ -140,6 +168,13 @@ communication:
     host: "127.0.0.1"
     port: 8080
     timeout_ms: 5000
+  
+  # Discord notifications
+  discord:
+    enabled: true
+    webhook_url: "https://discord.com/api/webhooks/1466420741649207456/4NiDYdRveS5ycjzoLQsdIzVpJM6PHlqsEIKeksLZBSh4Y0eilFVpD6gGToMVH4m9HyvH"
+    min_severity: "warning"  # info, warning, error, critical
+    username: "FX Trading Bot"
 
 # -----------------------------------------------------------------------------
 # Logging
