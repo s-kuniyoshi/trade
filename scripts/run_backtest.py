@@ -848,25 +848,33 @@ def main():
     print(" FX自動売買システム - フル検証パイプライン")
     print("=" * 60)
     
-    # 設定
-    symbols = ["EURUSD", "USDJPY"]  # GBPUSDは現モデルに適合しないため除外
+    # 設定 - バックテスト結果に基づく推奨通貨ペア
+    # Top performers:
+    # - USDJPY × EMACross: PF 1.08, Return 27.2%
+    # - EURJPY × ML_LightGBM: PF 1.05, Return 22.3%
+    # - AUDUSD × TripleScreen: PF 1.11, Return 9.7%
+    symbols = ["USDJPY", "EURJPY", "AUDUSD", "GBPUSD"]
     timeframe = "H1"
     data_dir = project_root / "data" / "raw"
-    initial_capital = 1000
+    initial_capital = 10000
     full_period = False
     walk_forward = True
     train_years = 2
     step_months = 6
     spread_pips_by_symbol = {
         "EURUSD": 1.0,
-        "USDJPY": 1.5,
-        "GBPUSD": 1.8,
+        "USDJPY": 1.2,
+        "GBPUSD": 1.5,
+        "AUDUSD": 1.2,
+        "EURJPY": 1.5,
     }
     slippage_pips = 0.2
     pip_value_by_symbol = {
         "EURUSD": 0.0001,
         "USDJPY": 0.01,
         "GBPUSD": 0.0001,
+        "AUDUSD": 0.0001,
+        "EURJPY": 0.01,
     }
     
     # フィルター設定

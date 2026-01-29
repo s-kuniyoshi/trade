@@ -123,9 +123,17 @@ def main():
     print("MT5 ヒストリカルデータ ダウンローダー")
     print("=" * 60)
     
-    # 設定
-    symbols = ["EURUSD", "USDJPY", "GBPUSD"]
+    # 設定 - メジャー通貨ペア + クロス通貨ペア (全12ペア)
+    symbols = [
+        # メジャーペア (6ペア)
+        "EURUSD", "USDJPY", "GBPUSD", "USDCHF", "AUDUSD", "USDCAD",
+        # クロス円 (4ペア)
+        "EURJPY", "GBPJPY", "AUDJPY", "CADJPY",
+        # ユーロクロス (2ペア)
+        "EURGBP", "EURAUD",
+    ]
     timeframes = [
+        (mt5.TIMEFRAME_M15, "M15"),
         (mt5.TIMEFRAME_H1, "H1"),
         (mt5.TIMEFRAME_H4, "H4"),
         (mt5.TIMEFRAME_D1, "D1"),

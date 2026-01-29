@@ -55,23 +55,40 @@ import lightgbm as lgb
 # 設定
 # =============================================================================
 
+# =============================================================================
+# 推奨戦略設定（バックテスト結果に基づく）
+# =============================================================================
+# バックテスト結果:
+# - USDJPY × EMACross: PF 1.08, WR 43.2%, Return 27.2%
+# - EURJPY × ML_LightGBM: PF 1.05, WR 43.0%, Return 22.3%  
+# - AUDUSD × TripleScreen: PF 1.11, WR 45.1%, Return 9.7%
+# - GBPUSD × RSI_Stoch: PF 1.02, WR 42.9%, Return 6.3%
+
+# 各シンボルに最適な戦略を割り当て（バックテスト結果に基づく）
+SYMBOL_STRATEGIES = {
+    "USDJPY": "EMACross",      # PF 1.08, Return +27.2% (3位)
+    "EURJPY": "Breakout",      # PF 1.10, Return +12.3% (2位) ← MLより高PF
+    "AUDUSD": "TripleScreen",  # PF 1.11, Return +9.7%  (1位)
+    "GBPUSD": "RSI_Stoch",     # PF 1.02, Return +6.3%  (5位)
+}
+
 CONFIG = {
-    # 取引対象
-    "symbols": ["EURUSD", "USDJPY"],
+    # 取引対象（推奨ポートフォリオ）
+    "symbols": ["USDJPY", "EURJPY", "AUDUSD"],
     "timeframe": "H1",
     
     # モデル設定
-    "model_path": project_root / "models",  # モデル保存先
+    "model_path": project_root / "models",
     
     # 取引設定
-    "initial_capital": 10000.0,  # 初期資金（デモ口座）
-    "risk_per_trade": 0.01,  # 1トレードあたりリスク（1%）
-    "leverage": 3,  # レバレッジ倍率
-    "min_confidence": 0.50,  # 最小信頼度
+    "initial_capital": 10000.0,
+    "risk_per_trade": 0.01,
+    "leverage": 3,
+    "min_confidence": 0.40,  # ML戦略用
     
     # SL/TP設定
-    "sl_atr_mult": 2.0,  # SL距離のATR倍率
-    "tp_atr_mult": 3.0,  # TP距離のATR倍率
+    "sl_atr_mult": 2.0,
+    "tp_atr_mult": 3.0,
     
     # フィルター設定
     "use_filters": True,
@@ -79,30 +96,36 @@ CONFIG = {
     "sma_atr_threshold": 0.5,
     
     # リスク管理
-    "max_drawdown_pct": 0.25,  # 最大DD制限
-    "consecutive_loss_limit": 5,  # 連敗制限
-    "vol_scale_threshold": 1.5,  # ボラティリティ閾値
+    "max_drawdown_pct": 0.25,
+    "consecutive_loss_limit": 5,
+    "vol_scale_threshold": 1.5,
     
     # シンボル別制限
-    "long_only_symbols": {"USDJPY"},  # ロングオンリー
+    "long_only_symbols": {"USDJPY"},
     
-    # スプレッド・スリッページ
+    # スプレッド
     "max_spread_pips": {
         "EURUSD": 2.0,
-        "USDJPY": 3.0,
+        "USDJPY": 2.0,
+        "EURJPY": 2.5,
+        "AUDUSD": 2.0,
+        "GBPUSD": 2.5,
     },
     
     # pip値
     "pip_value": {
         "EURUSD": 0.0001,
         "USDJPY": 0.01,
+        "EURJPY": 0.01,
+        "AUDUSD": 0.0001,
+        "GBPUSD": 0.0001,
     },
     
     # 実行間隔
-    "check_interval_seconds": 60,  # シグナルチェック間隔
+    "check_interval_seconds": 60,
     
     # デバッグ
-    "dry_run": False,  # False=実際の注文を出す（デモ口座）
+    "dry_run": False,
 }
 
 
@@ -427,6 +450,158 @@ class DemoTrader:
         self.consecutive_losses: dict[str, int] = {s: 0 for s in config["symbols"]}
         self.trading_halted = False
         self.avg_atr: dict[str, float] = {}
+    
+    # =========================================================================
+    # ルールベース戦略
+    # =========================================================================
+    
+    def strategy_ema_cross(self, features: pd.DataFrame) -> dict | None:
+        """
+        EMACross戦略: EMA12/26クロス
+        - USDJPY向け（最高リターン）
+        """
+        if len(features) < 2:
+            return None
+        
+        f = features.iloc[-1]
+        f_prev = features.iloc[-2]
+        
+        # EMAを計算（特徴量から）
+        ema_12 = f.get("ema_12") if "ema_12" in features.columns else None
+        ema_26 = f.get("ema_26") if "ema_26" in features.columns else None
+        
+        if ema_12 is None or ema_26 is None:
+            # EMAがない場合はMACD代用
+            macd_hist = f["macd_hist"]
+            macd_hist_prev = f_prev["macd_hist"]
+            
+            if macd_hist > 0 and macd_hist_prev <= 0:
+                return {"direction": "buy", "confidence": 0.6}
+            elif macd_hist < 0 and macd_hist_prev >= 0:
+                return {"direction": "sell", "confidence": 0.6}
+            return None
+        
+        ema_12_prev = f_prev.get("ema_12", ema_12)
+        ema_26_prev = f_prev.get("ema_26", ema_26)
+        
+        # クロス判定
+        if ema_12 > ema_26 and ema_12_prev <= ema_26_prev:
+            return {"direction": "buy", "confidence": 0.65}
+        elif ema_12 < ema_26 and ema_12_prev >= ema_26_prev:
+            return {"direction": "sell", "confidence": 0.65}
+        
+        return None
+    
+    def strategy_triple_screen(self, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+        """
+        TripleScreen戦略（エルダー方式）
+        - AUDUSD向け（低MDD、安定）
+        """
+        if len(features) < 1:
+            return None
+        
+        f = features.iloc[-1]
+        close = df.iloc[-1]["close"]
+        
+        # Screen 1: 長期トレンド（SMA200）
+        sma_200 = f.get("sma_200")
+        if sma_200 is None or pd.isna(sma_200):
+            return None
+        long_trend = close > sma_200
+        
+        # Screen 2: MACD方向
+        macd_hist = f.get("macd_hist", 0)
+        macd_bullish = macd_hist > 0
+        
+        # Screen 3: オシレーター
+        rsi = f.get("rsi_14", 50)
+        stoch_k = f.get("stoch_k") if "stoch_k" in features.columns else 50
+        
+        if long_trend and macd_bullish and rsi < 50 and stoch_k < 40:
+            confidence = min(0.75, 0.55 + (50 - rsi) / 100)
+            return {"direction": "buy", "confidence": confidence}
+        elif not long_trend and not macd_bullish and rsi > 50 and stoch_k > 60:
+            confidence = min(0.75, 0.55 + (rsi - 50) / 100)
+            return {"direction": "sell", "confidence": confidence}
+        
+        return None
+    
+    def strategy_rsi_stoch(self, features: pd.DataFrame) -> dict | None:
+        """
+        RSI + ストキャスティクス戦略
+        - GBPUSD向け（レンジ相場）
+        """
+        if len(features) < 1:
+            return None
+        
+        f = features.iloc[-1]
+        
+        rsi = f.get("rsi_14", 50)
+        stoch_k = f.get("stoch_k") if "stoch_k" in features.columns else 50
+        stoch_d = f.get("stoch_d") if "stoch_d" in features.columns else 50
+        adx = f.get("adx_14", 30)
+        
+        # レンジ相場でのみ有効
+        if adx > 35:
+            return None
+        
+        if rsi < 35 and stoch_k < 20 and stoch_k > stoch_d:
+            confidence = min(0.75, 0.5 + (35 - rsi) / 70 + (20 - stoch_k) / 40)
+            return {"direction": "buy", "confidence": confidence}
+        elif rsi > 65 and stoch_k > 80 and stoch_k < stoch_d:
+            confidence = min(0.75, 0.5 + (rsi - 65) / 70 + (stoch_k - 80) / 40)
+            return {"direction": "sell", "confidence": confidence}
+        
+        return None
+    
+    def strategy_breakout(self, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+        """
+        Breakout戦略: BB幅縮小後のブレイク
+        - EURJPY向け（PF 1.10、バックテスト2位）
+        
+        ボリンジャーバンド幅が縮小した後、価格がバンド外に出たらエントリー。
+        ボラティリティ収縮後のブレイクアウトを狙う。
+        """
+        if len(features) < 6:
+            return None
+        
+        f = features.iloc[-1]
+        close = df.iloc[-1]["close"]
+        
+        # BB関連の特徴量を取得
+        bb_width = f.get("bb_width")
+        bb_upper = f.get("bb_upper")
+        bb_lower = f.get("bb_lower")
+        
+        if bb_width is None or bb_upper is None or bb_lower is None:
+            return None
+        if pd.isna(bb_width) or pd.isna(bb_upper) or pd.isna(bb_lower):
+            return None
+        
+        # 過去5本のBB幅平均を計算
+        bb_width_series = features["bb_width"].iloc[-6:-1]
+        if len(bb_width_series) < 5:
+            return None
+        bb_width_avg = bb_width_series.mean()
+        
+        # スクイーズ判定: 現在のBB幅が平均の80%未満
+        width_squeeze = bb_width < bb_width_avg * 0.8
+        
+        if not width_squeeze:
+            return None
+        
+        # ブレイクアウト判定
+        if close > bb_upper:
+            # スクイーズの深さに応じて信頼度を調整
+            squeeze_ratio = bb_width / bb_width_avg
+            confidence = min(0.75, 0.55 + (0.8 - squeeze_ratio) * 0.5)
+            return {"direction": "buy", "confidence": confidence}
+        elif close < bb_lower:
+            squeeze_ratio = bb_width / bb_width_avg
+            confidence = min(0.75, 0.55 + (0.8 - squeeze_ratio) * 0.5)
+            return {"direction": "sell", "confidence": confidence}
+        
+        return None
         
     def load_models(self) -> bool:
         """モデルを読み込む。"""
@@ -506,51 +681,91 @@ class DemoTrader:
         
         return len(self.models) > 0
     
-    def predict(self, symbol: str, features: pd.DataFrame) -> dict | None:
-        """予測を実行。"""
-        if symbol not in self.models:
-            return None
+    def predict(self, symbol: str, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+        """
+        シンボル別に最適な戦略で予測を実行。
         
-        model = self.models[symbol]
+        戦略割り当て（バックテスト結果に基づく）:
+        - USDJPY: EMACross (PF 1.08, Return 27.2%)
+        - EURJPY: Breakout (PF 1.10, Return 12.3%) ← 最適
+        - AUDUSD: TripleScreen (PF 1.11, Return 9.7%)
+        - GBPUSD: RSI_Stoch (PF 1.02, Return 6.3%)
+        """
+        strategy = SYMBOL_STRATEGIES.get(symbol, "ML")
         
-        # 特徴量を揃える
-        if symbol in self.feature_columns:
-            cols = self.feature_columns[symbol]
-            missing = set(cols) - set(features.columns)
-            if missing:
-                logger.warning(f"特徴量不足: {missing}")
+        if strategy == "EMACross":
+            result = self.strategy_ema_cross(features)
+            if result:
+                result["strategy"] = "EMACross"
+            return result
+        
+        elif strategy == "TripleScreen":
+            result = self.strategy_triple_screen(df, features)
+            if result:
+                result["strategy"] = "TripleScreen"
+            return result
+        
+        elif strategy == "RSI_Stoch":
+            result = self.strategy_rsi_stoch(features)
+            if result:
+                result["strategy"] = "RSI_Stoch"
+            return result
+        
+        elif strategy == "Breakout":
+            result = self.strategy_breakout(df, features)
+            if result:
+                result["strategy"] = "Breakout"
+            return result
+        
+        else:  # ML戦略
+            if symbol not in self.models:
+                # MLモデルがない場合はEMACrossで代用
+                result = self.strategy_ema_cross(features)
+                if result:
+                    result["strategy"] = "EMACross_fallback"
+                return result
+            
+            model = self.models[symbol]
+            
+            # 特徴量を揃える
+            if symbol in self.feature_columns:
+                cols = self.feature_columns[symbol]
+                missing = set(cols) - set(features.columns)
+                if missing:
+                    logger.warning(f"特徴量不足: {missing}")
+                    return None
+                features = features[cols]
+            
+            # 欠損値チェック
+            if features.iloc[-1].isna().any():
                 return None
-            features = features[cols]
-        
-        # 欠損値チェック
-        if features.iloc[-1].isna().any():
-            return None
-        
-        # 予測（Triple-barrier: 3クラス）
-        pred = model.predict(features.iloc[[-1]])
-        
-        # 確率から方向と信頼度を計算
-        prob_sell = pred[0, 0]
-        prob_neutral = pred[0, 1]
-        prob_buy = pred[0, 2]
-        
-        direction_strength = max(prob_buy, prob_sell)
-        edge_confidence = direction_strength - prob_neutral * 0.5
-        
-        if prob_buy > prob_sell:
-            direction = "buy"
-            confidence = edge_confidence
-        else:
-            direction = "sell"
-            confidence = edge_confidence
-        
-        return {
-            "direction": direction,
-            "confidence": confidence,
-            "prob_buy": prob_buy,
-            "prob_sell": prob_sell,
-            "prob_neutral": prob_neutral,
-        }
+            
+            # 予測（Triple-barrier: 3クラス）
+            pred = model.predict(features.iloc[[-1]])
+            
+            # 確率から方向と信頼度を計算
+            prob_sell = pred[0, 0]
+            prob_neutral = pred[0, 1]
+            prob_buy = pred[0, 2]
+            
+            direction_strength = max(prob_buy, prob_sell)
+            edge_confidence = direction_strength - prob_neutral * 0.5
+            
+            if prob_buy > prob_sell:
+                direction = "buy"
+                confidence = edge_confidence
+            else:
+                direction = "sell"
+                confidence = edge_confidence
+            
+            return {
+                "direction": direction,
+                "confidence": confidence,
+                "prob_buy": prob_buy,
+                "prob_sell": prob_sell,
+                "prob_neutral": prob_neutral,
+                "strategy": "ML_LightGBM",
+            }
     
     def apply_filters(
         self,
@@ -707,14 +922,16 @@ class DemoTrader:
             else:
                 self.avg_atr[symbol] = 0.95 * self.avg_atr[symbol] + 0.05 * current_atr
             
-            # 予測
-            pred = self.predict(symbol, features)
+            # 予測（シンボル別の最適戦略を使用）
+            pred = self.predict(symbol, df, features)
             if pred is None:
-                logger.warning("予測失敗")
+                logger.info("シグナルなし")
                 continue
             
-            logger.info(f"予測: {pred['direction']} 信頼度={pred['confidence']:.3f}")
-            logger.debug(f"  P(buy)={pred['prob_buy']:.3f} P(sell)={pred['prob_sell']:.3f} P(neutral)={pred['prob_neutral']:.3f}")
+            strategy_name = pred.get("strategy", "Unknown")
+            logger.info(f"予測: {pred['direction']} 信頼度={pred['confidence']:.3f} ({strategy_name})")
+            if "prob_buy" in pred:
+                logger.debug(f"  P(buy)={pred['prob_buy']:.3f} P(sell)={pred['prob_sell']:.3f} P(neutral)={pred['prob_neutral']:.3f}")
             
             # 信頼度チェック
             if pred["confidence"] < self.config["min_confidence"]:
