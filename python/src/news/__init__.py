@@ -10,7 +10,6 @@ from .news_filter import NewsFilter, NewsFilterConfig
 from .news_provider import (
     EconomicEvent,
     EventImpact,
-    ForexFactoryProvider,
     InvestingComProvider,
     NewsProvider,
 )
@@ -20,7 +19,6 @@ __all__ = [
     "NewsFilter",
     "NewsFilterConfig",
     "NewsProvider",
-    "ForexFactoryProvider",
     "InvestingComProvider",
     "EconomicEvent",
     "EventImpact",

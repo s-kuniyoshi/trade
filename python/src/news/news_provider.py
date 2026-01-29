@@ -248,279 +248,6 @@ class NewsProvider(ABC):
 
 
 # =============================================================================
-# Forex Factory Provider
-# =============================================================================
-
-class ForexFactoryProvider(NewsProvider):
-    """
-    Forex Factory economic calendar provider.
-    
-    Scrapes data from forexfactory.com calendar.
-    """
-    
-    BASE_URL = "https://www.forexfactory.com"
-    CALENDAR_URL = "https://www.forexfactory.com/calendar"
-    
-    # Country code mapping for Forex Factory currency flags
-    CURRENCY_TO_COUNTRY = {
-        "USD": "US",
-        "EUR": "EU",
-        "GBP": "GB",
-        "JPY": "JP",
-        "AUD": "AU",
-        "NZD": "NZ",
-        "CAD": "CA",
-        "CHF": "CH",
-        "CNY": "CN",
-    }
-    
-    @property
-    def source_name(self) -> str:
-        return "forexfactory"
-    
-    def fetch_events(
-        self,
-        start_date: datetime | None = None,
-        end_date: datetime | None = None,
-    ) -> list[EconomicEvent]:
-        """
-        Fetch events from Forex Factory.
-        
-        Args:
-            start_date: Start date (defaults to today)
-            end_date: End date (defaults to 7 days from start)
-            
-        Returns:
-            List of economic events
-        """
-        if start_date is None:
-            start_date = datetime.now(timezone.utc).replace(
-                hour=0, minute=0, second=0, microsecond=0
-            )
-        
-        if end_date is None:
-            end_date = start_date + timedelta(days=7)
-        
-        # Check cache
-        cache_key = f"{start_date.date()}_{end_date.date()}"
-        cached = self._load_from_cache(cache_key)
-        if cached:
-            logger.debug(f"Loaded {len(cached)} events from cache")
-            return cached
-        
-        # Fetch fresh data
-        events = []
-        
-        try:
-            self._rate_limit()
-            
-            # Forex Factory uses week parameter
-            # Format: month.day.year
-            date_param = start_date.strftime("%b%d.%Y").lower()
-            url = f"{self.CALENDAR_URL}?week={date_param}"
-            
-            logger.info(f"Fetching Forex Factory calendar: {url}")
-            
-            response = self.session.get(url, timeout=self.request_timeout)
-            response.raise_for_status()
-            
-            events = self._parse_calendar_page(response.text, start_date.year)
-            
-            # Filter by date range
-            events = [
-                e for e in events
-                if start_date <= e.datetime_utc <= end_date
-            ]
-            
-            logger.info(f"Fetched {len(events)} events from Forex Factory")
-            
-            # Cache results
-            self._save_to_cache(cache_key, events)
-            
-        except requests.RequestException as e:
-            logger.error(f"Failed to fetch Forex Factory calendar: {e}")
-        except Exception as e:
-            logger.error(f"Error parsing Forex Factory calendar: {e}")
-        
-        return events
-    
-    def _parse_calendar_page(self, html: str, year: int) -> list[EconomicEvent]:
-        """Parse Forex Factory calendar HTML."""
-        soup = BeautifulSoup(html, "html.parser")
-        events = []
-        
-        # Find calendar table
-        calendar_table = soup.find("table", class_="calendar__table")
-        if not calendar_table:
-            logger.warning("Calendar table not found")
-            return events
-        
-        current_date = None
-        current_time = None
-        
-        # Process each row
-        for row in calendar_table.find_all("tr", class_="calendar__row"):
-            try:
-                # Check for date row
-                date_cell = row.find("td", class_="calendar__date")
-                if date_cell:
-                    date_text = date_cell.get_text(strip=True)
-                    if date_text:
-                        current_date = self._parse_ff_date(date_text, year)
-                
-                # Check for event row
-                if "calendar__row--event" not in row.get("class", []):
-                    continue
-                
-                # Get time
-                time_cell = row.find("td", class_="calendar__time")
-                if time_cell:
-                    time_text = time_cell.get_text(strip=True)
-                    if time_text and time_text not in ("", "All Day", "Tentative"):
-                        current_time = self._parse_ff_time(time_text)
-                
-                if current_date is None:
-                    continue
-                
-                # Get currency
-                currency_cell = row.find("td", class_="calendar__currency")
-                currency = currency_cell.get_text(strip=True) if currency_cell else ""
-                
-                if not currency:
-                    continue
-                
-                # Get impact
-                impact_cell = row.find("td", class_="calendar__impact")
-                impact = EventImpact.LOW
-                if impact_cell:
-                    impact_span = impact_cell.find("span")
-                    if impact_span:
-                        impact_class = " ".join(impact_span.get("class", []))
-                        if "high" in impact_class or "red" in impact_class:
-                            impact = EventImpact.HIGH
-                        elif "medium" in impact_class or "ora" in impact_class:
-                            impact = EventImpact.MEDIUM
-                        elif "yel" in impact_class:
-                            impact = EventImpact.LOW
-                
-                # Get event title
-                event_cell = row.find("td", class_="calendar__event")
-                title = ""
-                if event_cell:
-                    title_span = event_cell.find("span", class_="calendar__event-title")
-                    title = title_span.get_text(strip=True) if title_span else ""
-                
-                if not title:
-                    continue
-                
-                # Get actual/forecast/previous
-                actual_cell = row.find("td", class_="calendar__actual")
-                actual = actual_cell.get_text(strip=True) if actual_cell else None
-                
-                forecast_cell = row.find("td", class_="calendar__forecast")
-                forecast = forecast_cell.get_text(strip=True) if forecast_cell else None
-                
-                previous_cell = row.find("td", class_="calendar__previous")
-                previous = previous_cell.get_text(strip=True) if previous_cell else None
-                
-                # Build datetime
-                if current_time:
-                    event_dt = current_date.replace(
-                        hour=current_time[0],
-                        minute=current_time[1],
-                    )
-                else:
-                    event_dt = current_date
-                
-                # Create event
-                event_id = hashlib.md5(
-                    f"{title}_{currency}_{event_dt.isoformat()}".encode()
-                ).hexdigest()[:16]
-                
-                country = self.CURRENCY_TO_COUNTRY.get(currency, currency[:2])
-                
-                event = EconomicEvent(
-                    id=event_id,
-                    title=title,
-                    country=country,
-                    currency=currency,
-                    datetime_utc=event_dt,
-                    impact=impact,
-                    actual=actual if actual else None,
-                    forecast=forecast if forecast else None,
-                    previous=previous if previous else None,
-                    source=self.source_name,
-                )
-                events.append(event)
-                
-            except Exception as e:
-                logger.debug(f"Error parsing calendar row: {e}")
-                continue
-        
-        return events
-    
-    def _parse_ff_date(self, date_text: str, year: int) -> datetime:
-        """Parse Forex Factory date format."""
-        # Formats: "Mon Jan 15", "Tue Jan 16"
-        try:
-            # Remove day name prefix if present
-            parts = date_text.split()
-            if len(parts) >= 3:
-                month_str = parts[-2]
-                day_str = parts[-1]
-            elif len(parts) == 2:
-                month_str = parts[0]
-                day_str = parts[1]
-            else:
-                raise ValueError(f"Unknown date format: {date_text}")
-            
-            month_map = {
-                "jan": 1, "feb": 2, "mar": 3, "apr": 4,
-                "may": 5, "jun": 6, "jul": 7, "aug": 8,
-                "sep": 9, "oct": 10, "nov": 11, "dec": 12,
-            }
-            
-            month = month_map.get(month_str.lower()[:3], 1)
-            day = int(re.sub(r"\D", "", day_str))
-            
-            return datetime(year, month, day, tzinfo=timezone.utc)
-            
-        except Exception as e:
-            logger.warning(f"Failed to parse date '{date_text}': {e}")
-            return datetime(year, 1, 1, tzinfo=timezone.utc)
-    
-    def _parse_ff_time(self, time_text: str) -> tuple[int, int]:
-        """Parse Forex Factory time format."""
-        # Formats: "8:30am", "2:00pm", "10:00pm"
-        try:
-            time_text = time_text.lower().strip()
-            
-            # Handle 12-hour format
-            is_pm = "pm" in time_text
-            time_text = time_text.replace("am", "").replace("pm", "")
-            
-            if ":" in time_text:
-                parts = time_text.split(":")
-                hour = int(parts[0])
-                minute = int(parts[1]) if len(parts) > 1 else 0
-            else:
-                hour = int(time_text)
-                minute = 0
-            
-            # Convert to 24-hour
-            if is_pm and hour < 12:
-                hour += 12
-            elif not is_pm and hour == 12:
-                hour = 0
-            
-            return (hour, minute)
-            
-        except Exception as e:
-            logger.warning(f"Failed to parse time '{time_text}': {e}")
-            return (0, 0)
-
-
-# =============================================================================
 # Investing.com Provider
 # =============================================================================
 
@@ -582,7 +309,7 @@ class InvestingComProvider(NewsProvider):
         end_date: datetime | None = None,
     ) -> list[EconomicEvent]:
         """
-        Fetch events from Investing.com.
+        Fetch events from Investing.com via AJAX API.
         
         Args:
             start_date: Start date (defaults to today)
@@ -611,16 +338,37 @@ class InvestingComProvider(NewsProvider):
         try:
             self._rate_limit()
             
-            # Fetch the calendar page first to get cookies
-            logger.info("Fetching Investing.com calendar page")
-            page_response = self.session.get(
+            # First get the main page to establish cookies
+            logger.info("Fetching Investing.com calendar via AJAX API")
+            self.session.get(
                 f"{self.BASE_URL}/economic-calendar/",
                 timeout=self.request_timeout,
             )
-            page_response.raise_for_status()
             
-            # Parse the page for events
-            events = self._parse_calendar_page(page_response.text)
+            # Prepare API request data
+            country_ids = [str(v) for v in self.COUNTRY_IDS.values()]
+            post_data = {
+                "dateFrom": start_date.strftime("%Y-%m-%d"),
+                "dateTo": end_date.strftime("%Y-%m-%d"),
+                "country[]": country_ids,
+                "importance[]": ["2", "3"],  # Medium and High importance
+                "limit_from": "0",
+            }
+            
+            # Fetch via AJAX API
+            api_response = self.session.post(
+                self.CALENDAR_API,
+                data=post_data,
+                timeout=self.request_timeout,
+            )
+            api_response.raise_for_status()
+            
+            # Parse the JSON response containing HTML
+            response_data = api_response.json()
+            html_data = response_data.get("data", "")
+            
+            # Parse the HTML table rows
+            events = self._parse_ajax_response(html_data)
             
             # Filter by date range
             events = [
@@ -759,6 +507,152 @@ class InvestingComProvider(NewsProvider):
         
         return events
     
+    def _parse_ajax_response(self, html: str) -> list[EconomicEvent]:
+        """
+        Parse Investing.com AJAX API response HTML.
+        
+        The API returns HTML table rows directly.
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        events = []
+        
+        current_date = None
+        
+        # Find all table rows in the response
+        for row in soup.find_all("tr"):
+            try:
+                # Check for date header row
+                date_cell = row.find("td", class_="theDay")
+                if date_cell:
+                    date_text = date_cell.get_text(strip=True)
+                    current_date = self._parse_inv_date(date_text)
+                    continue
+                
+                # Check if this is an event row
+                event_attr_id = row.get("event_attr_id")
+                if not event_attr_id and not row.get("id", "").startswith("eventRowId"):
+                    continue
+                
+                # Get time
+                time_cell = row.find("td", class_="time")
+                event_time = None
+                if time_cell:
+                    time_text = time_cell.get_text(strip=True)
+                    if time_text and time_text not in ("", "All Day", "Tentative", "Tent."):
+                        event_time = self._parse_inv_time(time_text)
+                
+                # Get currency and country from flag cell
+                flag_cell = row.find("td", class_="flagCur")
+                country = "US"
+                currency = "USD"
+                if flag_cell:
+                    # Get currency text
+                    currency_text = flag_cell.get_text(strip=True)
+                    if currency_text:
+                        currency = currency_text.strip()
+                    
+                    # Get country from flag span
+                    flag_span = flag_cell.find("span", class_="ceFlags")
+                    if flag_span:
+                        title = flag_span.get("title", "")
+                        # Map country name to code
+                        country_map = {
+                            "United States": "US",
+                            "United Kingdom": "GB",
+                            "European Union": "EU",
+                            "Eurozone": "EU",
+                            "Japan": "JP",
+                            "Australia": "AU",
+                            "New Zealand": "NZ",
+                            "Canada": "CA",
+                            "Switzerland": "CH",
+                            "China": "CN",
+                            "Germany": "DE",
+                            "France": "FR",
+                        }
+                        country = country_map.get(title, "US")
+                
+                # Get impact (sentiment/importance)
+                impact = EventImpact.LOW
+                impact_cell = row.find("td", class_="sentiment")
+                if impact_cell:
+                    # Count bull icons (filled ones indicate importance)
+                    bulls = impact_cell.find_all("i", class_="grayFullBullishIcon")
+                    bull_count = len(bulls) if bulls else 0
+                    if bull_count >= 3:
+                        impact = EventImpact.HIGH
+                    elif bull_count == 2:
+                        impact = EventImpact.MEDIUM
+                
+                # Get event title
+                event_cell = row.find("td", class_="event")
+                title = ""
+                if event_cell:
+                    title_link = event_cell.find("a")
+                    if title_link:
+                        title = title_link.get_text(strip=True)
+                    else:
+                        title = event_cell.get_text(strip=True)
+                
+                if not title:
+                    continue
+                
+                # Get actual/forecast/previous values
+                actual_cell = row.find("td", class_="act")
+                actual = actual_cell.get_text(strip=True) if actual_cell else None
+                
+                forecast_cell = row.find("td", class_="fore")
+                forecast = forecast_cell.get_text(strip=True) if forecast_cell else None
+                
+                previous_cell = row.find("td", class_="prev")
+                previous = previous_cell.get_text(strip=True) if previous_cell else None
+                
+                # Build datetime
+                if current_date is not None:
+                    if event_time:
+                        event_dt = current_date.replace(
+                            hour=event_time[0],
+                            minute=event_time[1],
+                        )
+                    else:
+                        event_dt = current_date
+                else:
+                    # Try to get datetime from data attribute
+                    dt_attr = row.get("data-event-datetime", "")
+                    if dt_attr:
+                        try:
+                            event_dt = datetime.strptime(dt_attr, "%Y/%m/%d %H:%M:%S")
+                            event_dt = event_dt.replace(tzinfo=timezone.utc)
+                        except ValueError:
+                            event_dt = datetime.now(timezone.utc)
+                    else:
+                        event_dt = datetime.now(timezone.utc)
+                
+                # Create event ID
+                event_id = hashlib.md5(
+                    f"{title}_{currency}_{event_dt.isoformat()}".encode()
+                ).hexdigest()[:16]
+                
+                event = EconomicEvent(
+                    id=event_id,
+                    title=title,
+                    country=country,
+                    currency=currency,
+                    datetime_utc=event_dt,
+                    impact=impact,
+                    actual=actual if actual else None,
+                    forecast=forecast if forecast else None,
+                    previous=previous if previous else None,
+                    source=self.source_name,
+                )
+                events.append(event)
+                
+            except Exception as e:
+                logger.debug(f"Error parsing AJAX row: {e}")
+                continue
+        
+        return events
+    
     def _parse_inv_date(self, date_text: str) -> datetime:
         """Parse Investing.com date format."""
         # Formats: "Wednesday, January 15, 2025"
@@ -832,13 +726,12 @@ class AggregatedNewsProvider:
         Initialize aggregated provider.
         
         Args:
-            providers: List of providers (defaults to FF + Investing)
+            providers: List of providers (defaults to Investing.com)
             cache_dir: Cache directory
         """
         if providers is None:
             cache_dir = cache_dir or Path("data/cache/news")
             providers = [
-                ForexFactoryProvider(cache_dir=cache_dir),
                 InvestingComProvider(cache_dir=cache_dir),
             ]
         

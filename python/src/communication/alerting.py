@@ -265,6 +265,7 @@ class DiscordAlertHandler(AlertHandler):
     Handler that sends alerts to Discord via webhook.
     
     Formats alerts as rich embeds with color-coded severity.
+    Japanese messages with friendly/silly tone.
     """
     
     # Discord embed colors by severity
@@ -275,11 +276,27 @@ class DiscordAlertHandler(AlertHandler):
         AlertSeverity.CRITICAL: 0x8E44AD,  # Purple
     }
     
+    # Japanese severity labels (friendly/silly tone)
+    SEVERITY_LABELS = {
+        AlertSeverity.INFO: "おしらせだよ～",
+        AlertSeverity.WARNING: "ちょっとヤバいかも...!?",
+        AlertSeverity.ERROR: "あわわ！エラーだ！",
+        AlertSeverity.CRITICAL: "ぎゃー！大変だー！！",
+    }
+    
+    # Japanese severity emojis
+    SEVERITY_EMOJIS = {
+        AlertSeverity.INFO: "📢",
+        AlertSeverity.WARNING: "⚠️",
+        AlertSeverity.ERROR: "💥",
+        AlertSeverity.CRITICAL: "🔥",
+    }
+    
     def __init__(
         self,
         webhook_url: str,
         min_severity: AlertSeverity = AlertSeverity.WARNING,
-        username: str = "Trading Bot",
+        username: str = "トレードくん",
         avatar_url: str | None = None,
     ):
         """
@@ -303,6 +320,28 @@ class DiscordAlertHandler(AlertHandler):
             AlertSeverity.CRITICAL,
         ]
     
+    def _translate_key(self, key: str) -> str:
+        """Translate common keys to Japanese."""
+        translations = {
+            "source": "どこから",
+            "error_type": "エラーの種類",
+            "symbol": "通貨ペア",
+            "direction": "方向",
+            "confidence": "自信度",
+            "price": "価格",
+            "lots": "ロット",
+            "sl": "損切り",
+            "tp": "利確",
+            "pnl": "損益",
+            "drawdown": "ドローダウン",
+            "consecutive_losses": "連敗数",
+            "event": "イベント",
+            "blackout_ends": "解除時刻",
+            "reason": "理由",
+        }
+        key_lower = key.lower().replace("_", " ").replace(" ", "_")
+        return translations.get(key_lower, key.replace("_", " ").title())
+    
     def send(self, alert: Alert) -> bool:
         """Send alert to Discord."""
         if not self.supports_severity(alert.severity):
@@ -311,36 +350,40 @@ class DiscordAlertHandler(AlertHandler):
         try:
             import requests
             
-            # Build embed
+            # Get Japanese label and emoji
+            label = self.SEVERITY_LABELS.get(alert.severity, "通知")
+            emoji = self.SEVERITY_EMOJIS.get(alert.severity, "📌")
+            
+            # Build embed with Japanese text
             embed = {
-                "title": f"{alert.severity.value.upper()}: {alert.title}",
-                "description": alert.message,
+                "title": f"{emoji} {label}",
+                "description": f"**{alert.title}**\n\n{alert.message}",
                 "color": self.SEVERITY_COLORS.get(alert.severity, 0x95A5A6),
                 "timestamp": alert.timestamp.isoformat(),
                 "fields": [
                     {
-                        "name": "Source",
+                        "name": "どこから",
                         "value": alert.source,
                         "inline": True,
                     },
                 ],
                 "footer": {
-                    "text": "Trading Bot Alert",
+                    "text": "がんばって監視してるよ！",
                 },
             }
             
             # Add error type if present
             if alert.error_type:
                 embed["fields"].append({
-                    "name": "Error Type",
+                    "name": "エラーの種類",
                     "value": alert.error_type,
                     "inline": True,
                 })
             
-            # Add metadata fields
+            # Add metadata fields with Japanese keys
             for key, value in list(alert.metadata.items())[:5]:
                 embed["fields"].append({
-                    "name": key.replace("_", " ").title(),
+                    "name": self._translate_key(key),
                     "value": str(value)[:100],
                     "inline": True,
                 })
@@ -733,4 +776,264 @@ def send_alert(
         message=message,
         source=source,
         **kwargs,
+    )
+
+
+# =============================================================================
+# Trading-Specific Alert Functions (Japanese)
+# =============================================================================
+
+def notify_news_blackout_start(
+    symbol: str,
+    events: list[str],
+    blackout_ends: str | None = None,
+) -> bool:
+    """
+    ニュースブラックアウト開始を通知。
+    
+    Args:
+        symbol: 通貨ペア
+        events: ブロック中のイベント名リスト
+        blackout_ends: 解除予定時刻
+    """
+    event_text = "、".join(events[:3])
+    if len(events) > 3:
+        event_text += f" 他{len(events)-3}件"
+    
+    message = f"重要指標が近いから {symbol} の取引はお休みするね～\n\n📰 **イベント**: {event_text}"
+    if blackout_ends:
+        message += f"\n⏰ **解除予定**: {blackout_ends}"
+    
+    return send_alert(
+        severity=AlertSeverity.WARNING,
+        title=f"ニュース待機中 ({symbol})",
+        message=message,
+        source="ニュースフィルター",
+        metadata={"symbol": symbol, "events": event_text},
+    )
+
+
+def notify_news_blackout_end(symbol: str) -> bool:
+    """
+    ニュースブラックアウト終了を通知。
+    
+    Args:
+        symbol: 通貨ペア
+    """
+    # Use WARNING so it appears on Discord
+    return send_alert(
+        severity=AlertSeverity.WARNING,
+        title=f"取引再開OK！ ({symbol})",
+        message=f"ニュース待機が終わったよ！\n{symbol} の取引を再開するね～",
+        source="ニュースフィルター",
+        metadata={"symbol": symbol},
+    )
+
+
+def notify_signal_generated(
+    symbol: str,
+    direction: str,
+    confidence: float,
+    price: float,
+    sl: float,
+    tp: float,
+    lots: float,
+    strategy: str = "",
+) -> bool:
+    """
+    シグナル発生を通知。
+    
+    Args:
+        symbol: 通貨ペア
+        direction: 方向 (buy/sell)
+        confidence: 信頼度
+        price: 現在価格
+        sl: 損切りライン
+        tp: 利確ライン
+        lots: ロットサイズ
+        strategy: 使用した戦略名
+    """
+    direction_ja = "ロング（買い）" if direction == "buy" else "ショート（売り）"
+    direction_emoji = "📈" if direction == "buy" else "📉"
+    
+    message = (
+        f"{direction_emoji} **{direction_ja}** でエントリーするよ！\n\n"
+        f"💰 **価格**: {price:.5f}\n"
+        f"🛑 **損切り**: {sl:.5f}\n"
+        f"🎯 **利確**: {tp:.5f}\n"
+        f"📊 **ロット**: {lots:.2f}\n"
+        f"🧠 **自信度**: {confidence*100:.1f}%"
+    )
+    if strategy:
+        message += f"\n🎲 **戦略**: {strategy}"
+    
+    # Use WARNING so it appears on Discord (min_severity is typically WARNING)
+    return send_alert(
+        severity=AlertSeverity.WARNING,
+        title=f"シグナル発生！ ({symbol})",
+        message=message,
+        source="シグナル生成",
+        metadata={
+            "symbol": symbol,
+            "direction": direction_ja,
+            "confidence": f"{confidence*100:.1f}%",
+            "lots": lots,
+        },
+    )
+
+
+def notify_trade_result(
+    symbol: str,
+    pnl: float,
+    is_win: bool,
+    current_equity: float,
+    consecutive_losses: int = 0,
+) -> bool:
+    """
+    取引結果を通知。
+    
+    Args:
+        symbol: 通貨ペア
+        pnl: 損益
+        is_win: 勝ちトレードかどうか
+        current_equity: 現在の資産
+        consecutive_losses: 連敗数
+    """
+    if is_win:
+        emoji = "🎉"
+        title = f"やったー！勝ち！ ({symbol})"
+        result_text = f"+{pnl:.2f}"
+    else:
+        emoji = "😢"
+        title = f"負けちゃった... ({symbol})"
+        result_text = f"{pnl:.2f}"
+    
+    message = f"{emoji} **損益**: {result_text}\n💼 **現在の資産**: {current_equity:.2f}"
+    
+    if consecutive_losses > 0:
+        if consecutive_losses >= 3:
+            message += f"\n😰 **{consecutive_losses}連敗中**...ちょっと休憩した方がいいかも"
+        else:
+            message += f"\n（{consecutive_losses}連敗中）"
+    
+    # Use WARNING for both wins and losses so they appear on Discord
+    return send_alert(
+        severity=AlertSeverity.WARNING,
+        title=title,
+        message=message,
+        source="取引結果",
+        metadata={
+            "symbol": symbol,
+            "pnl": result_text,
+            "equity": f"{current_equity:.2f}",
+        },
+    )
+
+
+def notify_trading_halted(
+    reason: str,
+    details: str = "",
+) -> bool:
+    """
+    取引停止を通知。
+    
+    Args:
+        reason: 停止理由
+        details: 詳細
+    """
+    message = f"⛔ **理由**: {reason}"
+    if details:
+        message += f"\n\n{details}"
+    message += "\n\n無理しないで様子見するね..."
+    
+    return send_alert(
+        severity=AlertSeverity.ERROR,
+        title="取引ストップ！",
+        message=message,
+        source="リスク管理",
+        metadata={"reason": reason},
+    )
+
+
+def notify_trading_resumed() -> bool:
+    """取引再開を通知。"""
+    return send_alert(
+        severity=AlertSeverity.WARNING,
+        title="取引再開するよ！",
+        message="調子が戻ってきたから、また頑張るね～💪",
+        source="リスク管理",
+    )
+
+
+def notify_system_error(
+    error_type: str,
+    error_message: str,
+    source: str = "システム",
+) -> bool:
+    """
+    システムエラーを通知。
+    
+    Args:
+        error_type: エラーの種類
+        error_message: エラーメッセージ
+        source: エラー発生元
+    """
+    return send_alert(
+        severity=AlertSeverity.ERROR,
+        title="エラーが起きちゃった...",
+        message=f"💀 **エラー**: {error_type}\n\n```{error_message}```\n\nちょっと確認してほしいな...",
+        source=source,
+        error_type=error_type,
+    )
+
+
+def notify_daily_summary(
+    total_trades: int,
+    wins: int,
+    losses: int,
+    total_pnl: float,
+    current_equity: float,
+) -> bool:
+    """
+    日次サマリーを通知。
+    
+    Args:
+        total_trades: 総取引数
+        wins: 勝ち数
+        losses: 負け数
+        total_pnl: 総損益
+        current_equity: 現在の資産
+    """
+    win_rate = (wins / total_trades * 100) if total_trades > 0 else 0
+    
+    if total_pnl >= 0:
+        emoji = "✨"
+        pnl_text = f"+{total_pnl:.2f}"
+        mood = "今日もお疲れさま！いい感じだったね～"
+    else:
+        emoji = "💭"
+        pnl_text = f"{total_pnl:.2f}"
+        mood = "今日はちょっと調子悪かったけど、また明日頑張ろうね！"
+    
+    message = (
+        f"{mood}\n\n"
+        f"📊 **取引数**: {total_trades}回\n"
+        f"✅ **勝ち**: {wins}回\n"
+        f"❌ **負け**: {losses}回\n"
+        f"📈 **勝率**: {win_rate:.1f}%\n"
+        f"💰 **本日損益**: {pnl_text}\n"
+        f"💼 **現在資産**: {current_equity:.2f}"
+    )
+    
+    # Use WARNING so it appears on Discord
+    return send_alert(
+        severity=AlertSeverity.WARNING,
+        title=f"{emoji} 今日のまとめ",
+        message=message,
+        source="日次レポート",
+        metadata={
+            "trades": total_trades,
+            "win_rate": f"{win_rate:.1f}%",
+            "pnl": pnl_text,
+        },
     )

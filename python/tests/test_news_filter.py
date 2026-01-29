@@ -10,18 +10,17 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from python.src.news.currency_impact import CurrencyImpactMapper, CurrencyPair
-from python.src.news.news_filter import (
+from src.news.currency_impact import CurrencyImpactMapper, CurrencyPair
+from src.news.news_filter import (
     BlackoutAction,
     BlackoutStatus,
     NewsFilter,
     NewsFilterConfig,
 )
-from python.src.news.news_provider import (
+from src.news.news_provider import (
     AggregatedNewsProvider,
     EconomicEvent,
     EventImpact,
-    ForexFactoryProvider,
 )
 
 

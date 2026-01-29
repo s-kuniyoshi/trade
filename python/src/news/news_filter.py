@@ -21,7 +21,6 @@ from .news_provider import (
     AggregatedNewsProvider,
     EconomicEvent,
     EventImpact,
-    ForexFactoryProvider,
     InvestingComProvider,
 )
 
@@ -211,7 +210,6 @@ class NewsFilter:
         # Initialize providers
         self.provider = AggregatedNewsProvider(
             providers=[
-                ForexFactoryProvider(cache_dir=self.config.cache_dir),
                 InvestingComProvider(cache_dir=self.config.cache_dir),
             ]
         )
@@ -348,15 +346,24 @@ class NewsFilter:
                 # Blackout started
                 self._active_blackouts[symbol] = status
                 
-                # Send alert
-                event_titles = ", ".join(e.title for e in status.blocking_events[:3])
+                # Send alert (Japanese)
+                event_titles = "、".join(e.title for e in status.blocking_events[:3])
+                if len(status.blocking_events) > 3:
+                    event_titles += f" 他{len(status.blocking_events)-3}件"
+                
+                blackout_end_str = (
+                    status.blackout_ends.strftime('%H:%M UTC')
+                    if status.blackout_ends else "不明"
+                )
+                
                 self.alert_manager.warning(
-                    title=f"News Blackout Started: {symbol}",
+                    title=f"ニュース待機開始 ({symbol})",
                     message=(
-                        f"Trading blocked due to high-impact news: {event_titles}. "
-                        f"Blackout ends at {status.blackout_ends.strftime('%H:%M UTC') if status.blackout_ends else 'unknown'}."
+                        f"重要指標が近いから {symbol} の取引はお休みするね～\n\n"
+                        f"📰 **イベント**: {event_titles}\n"
+                        f"⏰ **解除予定**: {blackout_end_str}"
                     ),
-                    source="news_filter",
+                    source="ニュースフィルター",
                     metadata={
                         "symbol": symbol,
                         "events": [e.title for e in status.blocking_events],
@@ -381,11 +388,14 @@ class NewsFilter:
                 # Blackout ended
                 del self._active_blackouts[symbol]
                 
-                # Send alert
-                self.alert_manager.info(
-                    title=f"News Blackout Ended: {symbol}",
-                    message=f"Trading resumed for {symbol}.",
-                    source="news_filter",
+                # Send alert (Japanese)
+                self.alert_manager.warning(
+                    title=f"取引再開OK！ ({symbol})",
+                    message=(
+                        f"ニュース待機が終わったよ！\n"
+                        f"{symbol} の取引を再開するね～ 💪"
+                    ),
+                    source="ニュースフィルター",
                     metadata={"symbol": symbol},
                 )
                 

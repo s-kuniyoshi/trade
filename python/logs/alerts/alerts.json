@@ -12,5 +12,189 @@
       "event": "Non-Farm Payrolls",
       "action": "block_entry"
     }
+  },
+  {
+    "severity": "warning",
+    "title": "News Blackout Started: USDJPY",
+    "message": "Trading blocked due to high-impact news: Non-Farm Payrolls. Blackout ends at 13:53 UTC.",
+    "source": "news_filter",
+    "timestamp": "2026-01-29T13:28:10.360639+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "events": [
+        "Non-Farm Payrolls"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "News Blackout Started: EURUSD",
+    "message": "Trading blocked due to high-impact news: FOMC Rate Decision. Blackout ends at 13:48 UTC.",
+    "source": "news_filter",
+    "timestamp": "2026-01-29T13:28:11.739714+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "EURUSD",
+      "events": [
+        "FOMC Rate Decision"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "News Blackout Started: USDJPY",
+    "message": "Trading blocked due to high-impact news: Non-Farm Payrolls. Blackout ends at 13:55 UTC.",
+    "source": "news_filter",
+    "timestamp": "2026-01-29T13:30:40.546161+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "events": [
+        "Non-Farm Payrolls"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "News Blackout Started: EURUSD",
+    "message": "Trading blocked due to high-impact news: FOMC Rate Decision. Blackout ends at 13:50 UTC.",
+    "source": "news_filter",
+    "timestamp": "2026-01-29T13:30:41.386669+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "EURUSD",
+      "events": [
+        "FOMC Rate Decision"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "ニュース待機中 (USDJPY)",
+    "message": "重要指標が近いから USDJPY の取引はお休みするね～\n\n📰 **イベント**: 米国 非農業部門雇用者数、FOMC政策金利発表\n⏰ **解除予定**: 15:30 UTC",
+    "source": "ニュースフィルター",
+    "timestamp": "2026-01-29T13:30:51.978035+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "events": "米国 非農業部門雇用者数、FOMC政策金利発表"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "シグナル発生！ (EURUSD)",
+    "message": "📉 **ショート（売り）** でエントリーするよ！\n\n💰 **価格**: 1.08520\n🛑 **損切り**: 1.08720\n🎯 **利確**: 1.08120\n📊 **ロット**: 0.10\n🧠 **自信度**: 68.0%\n🎲 **戦略**: TripleScreen",
+    "source": "シグナル生成",
+    "timestamp": "2026-01-29T13:32:09.707373+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "EURUSD",
+      "direction": "ショート（売り）",
+      "confidence": "68.0%",
+      "lots": 0.1
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "News Blackout Started: USDJPY",
+    "message": "Trading blocked due to high-impact news: Non-Farm Payrolls. Blackout ends at 13:57 UTC.",
+    "source": "news_filter",
+    "timestamp": "2026-01-29T13:32:31.480101+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "events": [
+        "Non-Farm Payrolls"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "News Blackout Started: EURUSD",
+    "message": "Trading blocked due to high-impact news: FOMC Rate Decision. Blackout ends at 13:52 UTC.",
+    "source": "news_filter",
+    "timestamp": "2026-01-29T13:32:32.277452+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "EURUSD",
+      "events": [
+        "FOMC Rate Decision"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "ニュース待機開始 (USDJPY)",
+    "message": "重要指標が近いから USDJPY の取引はお休みするね～\n\n📰 **イベント**: Non-Farm Payrolls\n⏰ **解除予定**: 14:00 UTC",
+    "source": "ニュースフィルター",
+    "timestamp": "2026-01-29T13:35:07.259102+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "events": [
+        "Non-Farm Payrolls"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "ニュース待機開始 (EURUSD)",
+    "message": "重要指標が近いから EURUSD の取引はお休みするね～\n\n📰 **イベント**: FOMC Rate Decision\n⏰ **解除予定**: 13:55 UTC",
+    "source": "ニュースフィルター",
+    "timestamp": "2026-01-29T13:35:08.237349+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "EURUSD",
+      "events": [
+        "FOMC Rate Decision"
+      ],
+      "action": "block_entry"
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "ニュース待機開始 (USDJPY)",
+    "message": "重要指標が近いから USDJPY の取引はお休みするね～\n\n📰 **イベント**: 米国 非農業部門雇用者数、FOMC政策金利発表\n⏰ **解除予定**: 15:45 UTC",
+    "source": "ニュースフィルター",
+    "timestamp": "2026-01-29T13:35:21.991500+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY",
+      "events": [
+        "米国 非農業部門雇用者数",
+        "FOMC政策金利発表"
+      ]
+    }
+  },
+  {
+    "severity": "warning",
+    "title": "取引再開OK！ (USDJPY)",
+    "message": "ニュース待機が終わったよ！\nUSDJPY の取引を再開するね～ 💪",
+    "source": "ニュースフィルター",
+    "timestamp": "2026-01-29T13:35:23.010431+00:00",
+    "error_type": null,
+    "exception": null,
+    "metadata": {
+      "symbol": "USDJPY"
+    }
   }
 ]

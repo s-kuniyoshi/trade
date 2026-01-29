@@ -174,7 +174,7 @@ communication:
     enabled: true
     webhook_url: "https://discord.com/api/webhooks/1466420741649207456/4NiDYdRveS5ycjzoLQsdIzVpJM6PHlqsEIKeksLZBSh4Y0eilFVpD6gGToMVH4m9HyvH"
     min_severity: "warning"  # info, warning, error, critical
-    username: "FX Trading Bot"
+    username: "トレードくん"
 
 # -----------------------------------------------------------------------------
 # Logging
