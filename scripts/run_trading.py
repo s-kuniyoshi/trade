@@ -175,6 +175,8 @@ CONFIG = {
         "EURJPY": 2.5,
         "AUDUSD": 2.0,
         "GBPUSD": 2.5,
+        "USDCAD": 2.5,
+        "AUDJPY": 3.0,  # クロス円は広め
     },
     
     # pip値
@@ -184,6 +186,8 @@ CONFIG = {
         "EURJPY": 0.01,
         "AUDUSD": 0.0001,
         "GBPUSD": 0.0001,
+        "USDCAD": 0.0001,
+        "AUDJPY": 0.01,  # JPYペアは0.01
     },
     
     # 実行間隔
