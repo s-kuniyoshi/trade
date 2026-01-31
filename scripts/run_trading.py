@@ -67,44 +67,106 @@ import lightgbm as lgb
 # - AUDUSD × TripleScreen: PF 1.11, WR 45.1%, Return 9.7%
 # - GBPUSD × RSI_Stoch: PF 1.02, WR 42.9%, Return 6.3%
 
-# 各シンボルに最適な戦略を割り当て（バックテスト結果に基づく）
-SYMBOL_STRATEGIES = {
-    "USDJPY": "EMACross",      # PF 1.08, Return +27.2% (3位)
-    "EURJPY": "Breakout",      # PF 1.10, Return +12.3% (2位) ← MLより高PF
-    "AUDUSD": "TripleScreen",  # PF 1.11, Return +9.7%  (1位)
-    "GBPUSD": "RSI_Stoch",     # PF 1.02, Return +6.3%  (5位)
+# =============================================================================
+# 通貨ペア別設定（バックテスト結果に基づく最適化）
+# =============================================================================
+# 各ペアに最も成績の良い単一戦略を割り当て
+# H1バックテスト結果:
+# - USDJPY × EMACross: PF 1.08, Return +27.2%
+# M30 Walk-Forward バックテスト結果 (2026-01-31):
+# - GBPUSD × ML_Primary: PF 1.17, Return +11.2% ✅
+# - USDJPY × EMACross (ルールベース): ML PF 0.92 → ルールベースに変更
+# - AUDUSD × TripleScreen (ルールベース): ML PF 0.94 → ルールベースに変更
+# - EURJPY/EURUSD: 除外（成績不良）
+
+PAIR_CONFIG = {
+    # M30バックテスト結果 (2026-01-31更新) - 通貨ペア別最適化
+    # ============================================================
+    # | Symbol | Return  | Trades | PF   | MaxDD  | 推奨閾値 |
+    # |--------|---------|--------|------|--------|----------|
+    # | USDCAD | +134.5% | 232    | 1.28 | -18.6% | 0.60 ✅ 最優秀 |
+    # | GBPUSD | +84.1%  | 245    | 1.20 | -31.7% | 0.50 ✅ 優秀   |
+    # | AUDJPY | +14.3%  | 303    | 1.02 | -50.8% | 0.50 ⚠️ 多取引 |
+    # | USDJPY | +5.1%   | 41     | 1.08 | -15.3% | 0.50 ✅ 安定   |
+    # ============================================================
+    # 4ペアで年間164取引、トータルリターン+238%
+    
+    "USDCAD": {
+        "strategy": "ML_Primary",     # 最優秀（PF 1.28@0.60）
+        "min_confidence": 0.60,       # 高閾値で精度重視
+        "use_ml_fallback": True,
+        "long_only": False,
+        "adx_threshold": 15.0,
+        "sma_atr_threshold": 0.3,
+        "base_leverage": 30.0,
+        "max_leverage": 100.0,
+    },
+    "GBPUSD": {
+        "strategy": "ML_Primary",     # 優秀（PF 1.20@0.50）
+        "min_confidence": 0.50,       # 低閾値で取引数確保
+        "use_ml_fallback": True,
+        "long_only": False,
+        "adx_threshold": 12.0,
+        "sma_atr_threshold": 0.2,
+        "base_leverage": 25.0,
+        "max_leverage": 80.0,
+    },
+    "USDJPY": {
+        "strategy": "ML_Primary",     # 安定（PF 1.08@0.50）
+        "min_confidence": 0.50,
+        "use_ml_fallback": True,
+        "long_only": True,            # ロングのみ
+        "adx_threshold": 15.0,
+        "sma_atr_threshold": 0.3,
+        "base_leverage": 30.0,
+        "max_leverage": 100.0,
+    },
+    "AUDJPY": {
+        "strategy": "ML_Primary",     # 多取引（PF 1.02@0.50）
+        "min_confidence": 0.50,
+        "use_ml_fallback": True,
+        "long_only": False,
+        "adx_threshold": 15.0,
+        "sma_atr_threshold": 0.3,
+        "base_leverage": 25.0,
+        "max_leverage": 80.0,
+    },
 }
 
+# 後方互換性のためSYMBOL_STRATEGIESも維持
+SYMBOL_STRATEGIES = {pair: [cfg["strategy"]] for pair, cfg in PAIR_CONFIG.items()}
+
 CONFIG = {
-    # 取引対象（推奨ポートフォリオ）
-    "symbols": ["USDJPY", "EURJPY", "AUDUSD"],
-    "timeframe": "H1",
+    # 取引対象（M30最適化ポートフォリオ - 4通貨ペア）
+    # 2026-01-31更新: 年間164取引、トータルリターン+238%
+    "symbols": ["USDCAD", "GBPUSD", "USDJPY", "AUDJPY"],
+    "timeframe": "M30",  # M30（取引頻度向上 + 精度向上）
     
     # モデル設定
     "model_path": project_root / "models",
     
-    # 取引設定
+    # 取引設定（M30最適化）
     "initial_capital": 10000.0,
-    "risk_per_trade": 0.01,
+    "risk_per_trade": 0.01,   # 3ペアに絞ったのでリスク戻す
     "leverage": 3,
-    "min_confidence": 0.40,  # ML戦略用
+    "min_confidence": 0.55,   # PAIR_CONFIGで個別設定（0.55-0.60）、これはフォールバック
     
     # SL/TP設定
     "sl_atr_mult": 2.0,
     "tp_atr_mult": 3.0,
     
-    # フィルター設定
+    # フィルター設定（PAIR_CONFIGで個別設定、これはフォールバック）
     "use_filters": True,
-    "adx_threshold": 20.0,
-    "sma_atr_threshold": 0.5,
+    "adx_threshold": 15.0,      # PAIR_CONFIGで12-18を使用
+    "sma_atr_threshold": 0.3,   # PAIR_CONFIGで0.2-0.4を使用
     
     # リスク管理
     "max_drawdown_pct": 0.25,
     "consecutive_loss_limit": 5,
     "vol_scale_threshold": 1.5,
     
-    # シンボル別制限
-    "long_only_symbols": {"USDJPY"},
+    # シンボル別制限（PAIR_CONFIGと整合性を取る）
+    "long_only_symbols": {"USDJPY"},  # USDJPYはロングのみ（H1分析で有効）
     
     # スプレッド
     "max_spread_pips": {
@@ -518,8 +580,9 @@ class DemoTrader:
     
     def strategy_triple_screen(self, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
         """
-        TripleScreen戦略（エルダー方式）
+        TripleScreen戦略（エルダー方式・緩和版）
         - AUDUSD向け（低MDD、安定）
+        - 条件を緩和して取引頻度向上
         """
         if len(features) < 1:
             return None
@@ -533,27 +596,31 @@ class DemoTrader:
             return None
         long_trend = close > sma_200
         
-        # Screen 2: MACD方向
+        # Screen 2: MACD方向（緩和: ヒストグラム反転も許可）
         macd_hist = f.get("macd_hist", 0)
-        macd_bullish = macd_hist > 0
+        macd_signal = f.get("macd_signal", 0)
+        macd = f.get("macd", 0)
+        macd_bullish = macd_hist > 0 or (macd > macd_signal)  # 条件緩和
+        macd_bearish = macd_hist < 0 or (macd < macd_signal)
         
-        # Screen 3: オシレーター
+        # Screen 3: オシレーター（閾値緩和: 50/40 → 55/50, 50/60 → 45/50）
         rsi = f.get("rsi_14", 50)
         stoch_k = f.get("stoch_k") if "stoch_k" in features.columns else 50
         
-        if long_trend and macd_bullish and rsi < 50 and stoch_k < 40:
-            confidence = min(0.75, 0.55 + (50 - rsi) / 100)
+        if long_trend and macd_bullish and rsi < 55 and stoch_k < 50:
+            confidence = min(0.70, 0.50 + (55 - rsi) / 110)
             return {"direction": "buy", "confidence": confidence}
-        elif not long_trend and not macd_bullish and rsi > 50 and stoch_k > 60:
-            confidence = min(0.75, 0.55 + (rsi - 50) / 100)
+        elif not long_trend and macd_bearish and rsi > 45 and stoch_k > 50:
+            confidence = min(0.70, 0.50 + (rsi - 45) / 110)
             return {"direction": "sell", "confidence": confidence}
         
         return None
     
     def strategy_rsi_stoch(self, features: pd.DataFrame) -> dict | None:
         """
-        RSI + ストキャスティクス戦略
+        RSI + ストキャスティクス戦略（緩和版）
         - GBPUSD向け（レンジ相場）
+        - 閾値を緩和して取引頻度向上
         """
         if len(features) < 1:
             return None
@@ -565,15 +632,16 @@ class DemoTrader:
         stoch_d = f.get("stoch_d") if "stoch_d" in features.columns else 50
         adx = f.get("adx_14", 30)
         
-        # レンジ相場でのみ有効
-        if adx > 35:
+        # レンジ相場でのみ有効（閾値緩和: 35 → 40）
+        if adx > 40:
             return None
         
-        if rsi < 35 and stoch_k < 20 and stoch_k > stoch_d:
-            confidence = min(0.75, 0.5 + (35 - rsi) / 70 + (20 - stoch_k) / 40)
+        # 閾値緩和: RSI 35/65 → 40/60, Stoch 20/80 → 25/75
+        if rsi < 40 and stoch_k < 25 and stoch_k > stoch_d:
+            confidence = min(0.75, 0.45 + (40 - rsi) / 80 + (25 - stoch_k) / 50)
             return {"direction": "buy", "confidence": confidence}
-        elif rsi > 65 and stoch_k > 80 and stoch_k < stoch_d:
-            confidence = min(0.75, 0.5 + (rsi - 65) / 70 + (stoch_k - 80) / 40)
+        elif rsi > 60 and stoch_k > 75 and stoch_k < stoch_d:
+            confidence = min(0.75, 0.45 + (rsi - 60) / 80 + (stoch_k - 75) / 50)
             return {"direction": "sell", "confidence": confidence}
         
         return None
@@ -623,6 +691,96 @@ class DemoTrader:
         elif close < bb_lower:
             squeeze_ratio = bb_width / bb_width_avg
             confidence = min(0.75, 0.55 + (0.8 - squeeze_ratio) * 0.5)
+            return {"direction": "sell", "confidence": confidence}
+        
+        return None
+    
+    def strategy_momentum(self, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+        """
+        Momentum戦略: トレンド方向への継続エントリー
+        - 強いトレンド相場で有効
+        - ADX高め + 価格の勢いを確認
+        """
+        if len(features) < 5:
+            return None
+        
+        f = features.iloc[-1]
+        close = df.iloc[-1]["close"]
+        
+        # ADXでトレンド強度を確認（閾値: 25以上で強トレンド）
+        adx = f.get("adx_14", 0)
+        if adx < 25:
+            return None
+        
+        # SMA20/50のトレンド方向
+        sma_20 = f.get("sma_20")
+        sma_50 = f.get("sma_50")
+        if sma_20 is None or sma_50 is None:
+            return None
+        if pd.isna(sma_20) or pd.isna(sma_50):
+            return None
+        
+        # 過去5本のリターンを確認（モメンタム）
+        log_ret_5 = f.get("log_return_5", 0)
+        
+        # 効率比率（クリーンなトレンドかどうか）
+        efficiency = f.get("efficiency_ratio", 0.5)
+        if pd.isna(efficiency):
+            efficiency = 0.5
+        
+        # 上昇トレンド + 正のモメンタム
+        if sma_20 > sma_50 and close > sma_20 and log_ret_5 > 0 and efficiency > 0.4:
+            confidence = min(0.70, 0.40 + adx / 100 + efficiency * 0.2)
+            return {"direction": "buy", "confidence": confidence}
+        # 下降トレンド + 負のモメンタム
+        elif sma_20 < sma_50 and close < sma_20 and log_ret_5 < 0 and efficiency > 0.4:
+            confidence = min(0.70, 0.40 + adx / 100 + efficiency * 0.2)
+            return {"direction": "sell", "confidence": confidence}
+        
+        return None
+    
+    def strategy_mean_reversion(self, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+        """
+        MeanReversion戦略: 平均回帰を狙う逆張り
+        - レンジ相場で有効
+        - BBからの乖離 + RSI極値を確認
+        """
+        if len(features) < 1:
+            return None
+        
+        f = features.iloc[-1]
+        close = df.iloc[-1]["close"]
+        
+        # レンジ相場判定（ADX低め）
+        adx = f.get("adx_14", 30)
+        if adx > 30:  # トレンド相場では使わない
+            return None
+        
+        # Zスコア（平均からの乖離）
+        zscore = f.get("zscore", 0)
+        if pd.isna(zscore):
+            return None
+        
+        # ボリンジャーバンドポジション
+        bb_position = f.get("bb_position", 0.5)
+        if pd.isna(bb_position):
+            bb_position = 0.5
+        
+        # RSI
+        rsi = f.get("rsi_14", 50)
+        
+        # BB幅パーセンタイル（低い = 収縮中）
+        bw_pct = f.get("bw_percentile", 0.5)
+        if pd.isna(bw_pct):
+            bw_pct = 0.5
+        
+        # 売られすぎからの反発を狙う
+        if zscore < -1.5 and bb_position < 0.15 and rsi < 35:
+            confidence = min(0.65, 0.35 + abs(zscore) * 0.1 + (35 - rsi) / 100)
+            return {"direction": "buy", "confidence": confidence}
+        # 買われすぎからの反落を狙う
+        elif zscore > 1.5 and bb_position > 0.85 and rsi > 65:
+            confidence = min(0.65, 0.35 + abs(zscore) * 0.1 + (rsi - 65) / 100)
             return {"direction": "sell", "confidence": confidence}
         
         return None
@@ -705,91 +863,115 @@ class DemoTrader:
         
         return len(self.models) > 0
     
-    def predict(self, symbol: str, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+    def _predict_ml(self, symbol: str, features: pd.DataFrame, min_confidence: float) -> dict | None:
         """
-        シンボル別に最適な戦略で予測を実行。
+        MLモデルを使用して予測を実行。
         
-        戦略割り当て（バックテスト結果に基づく）:
-        - USDJPY: EMACross (PF 1.08, Return 27.2%)
-        - EURJPY: Breakout (PF 1.10, Return 12.3%) ← 最適
-        - AUDUSD: TripleScreen (PF 1.11, Return 9.7%)
-        - GBPUSD: RSI_Stoch (PF 1.02, Return 6.3%)
+        Args:
+            symbol: 通貨ペア
+            features: 特徴量DataFrame
+            min_confidence: 最低信頼度閾値
+            
+        Returns:
+            予測結果dict、または条件未達でNone
         """
-        strategy = SYMBOL_STRATEGIES.get(symbol, "ML")
+        if symbol not in self.models:
+            return None
         
-        if strategy == "EMACross":
-            result = self.strategy_ema_cross(features)
-            if result:
-                result["strategy"] = "EMACross"
-            return result
+        model = self.models[symbol]
         
-        elif strategy == "TripleScreen":
-            result = self.strategy_triple_screen(df, features)
-            if result:
-                result["strategy"] = "TripleScreen"
-            return result
-        
-        elif strategy == "RSI_Stoch":
-            result = self.strategy_rsi_stoch(features)
-            if result:
-                result["strategy"] = "RSI_Stoch"
-            return result
-        
-        elif strategy == "Breakout":
-            result = self.strategy_breakout(df, features)
-            if result:
-                result["strategy"] = "Breakout"
-            return result
-        
-        else:  # ML戦略
-            if symbol not in self.models:
-                # MLモデルがない場合はEMACrossで代用
-                result = self.strategy_ema_cross(features)
-                if result:
-                    result["strategy"] = "EMACross_fallback"
-                return result
-            
-            model = self.models[symbol]
-            
-            # 特徴量を揃える
-            if symbol in self.feature_columns:
-                cols = self.feature_columns[symbol]
-                missing = set(cols) - set(features.columns)
-                if missing:
-                    logger.warning(f"特徴量不足: {missing}")
-                    return None
-                features = features[cols]
-            
-            # 欠損値チェック
-            if features.iloc[-1].isna().any():
+        # 特徴量を揃える
+        if symbol in self.feature_columns:
+            cols = self.feature_columns[symbol]
+            missing = set(cols) - set(features.columns)
+            if missing:
+                logger.warning(f"特徴量不足: {missing}")
                 return None
-            
-            # 予測（Triple-barrier: 3クラス）
-            pred = model.predict(features.iloc[[-1]])
-            
-            # 確率から方向と信頼度を計算
-            prob_sell = pred[0, 0]
-            prob_neutral = pred[0, 1]
-            prob_buy = pred[0, 2]
-            
-            direction_strength = max(prob_buy, prob_sell)
-            edge_confidence = direction_strength - prob_neutral * 0.5
-            
+            features_ml = features[cols]
+        else:
+            features_ml = features
+        
+        # 欠損値チェック
+        if features_ml.iloc[-1].isna().any():
+            return None
+        
+        # 予測（Triple-barrier: 3クラス）
+        pred = model.predict(features_ml.iloc[[-1]])
+        
+        # 確率から方向と信頼度を計算
+        prob_sell = pred[0, 0]
+        prob_neutral = pred[0, 1]
+        prob_buy = pred[0, 2]
+        
+        direction_strength = max(prob_buy, prob_sell)
+        edge_confidence = direction_strength - prob_neutral * 0.5
+        
+        # 信頼度閾値を適用
+        if edge_confidence >= min_confidence:
             if prob_buy > prob_sell:
                 direction = "buy"
-                confidence = edge_confidence
             else:
                 direction = "sell"
-                confidence = edge_confidence
             
             return {
                 "direction": direction,
-                "confidence": confidence,
+                "confidence": edge_confidence,
                 "prob_buy": prob_buy,
                 "prob_sell": prob_sell,
                 "prob_neutral": prob_neutral,
                 "strategy": "ML_LightGBM",
             }
+        
+        return None
+    
+    def predict(self, symbol: str, df: pd.DataFrame, features: pd.DataFrame) -> dict | None:
+        """
+        PAIR_CONFIGに基づいてシンボル別に最適な戦略で予測を実行。
+        
+        各ペアに最も成績の良い単一戦略を使用し、
+        必要に応じてMLフォールバックを試す。
+        """
+        # ペア別設定を取得
+        pair_cfg = PAIR_CONFIG.get(symbol, {
+            "strategy": "EMACross",
+            "min_confidence": 0.50,
+            "use_ml_fallback": True,
+        })
+        
+        primary_strategy = pair_cfg.get("strategy", "EMACross")
+        min_confidence = pair_cfg.get("min_confidence", 0.50)
+        use_ml_fallback = pair_cfg.get("use_ml_fallback", True)
+        
+        # 戦略名から実行メソッドへのマッピング
+        strategy_methods = {
+            "EMACross": lambda: self.strategy_ema_cross(features),
+            "TripleScreen": lambda: self.strategy_triple_screen(df, features),
+            "RSI_Stoch": lambda: self.strategy_rsi_stoch(features),
+            "Breakout": lambda: self.strategy_breakout(df, features),
+            "Momentum": lambda: self.strategy_momentum(df, features),
+            "MeanReversion": lambda: self.strategy_mean_reversion(df, features),
+        }
+        
+        best_result = None
+        
+        # ML_Primary戦略の場合はMLを先に試す
+        if primary_strategy == "ML_Primary" and symbol in self.models:
+            best_result = self._predict_ml(symbol, features, min_confidence)
+            if best_result:
+                return best_result
+        
+        # ルールベース戦略を実行
+        if primary_strategy in strategy_methods:
+            result = strategy_methods[primary_strategy]()
+            if result and result.get("confidence", 0) >= min_confidence:
+                result["strategy"] = primary_strategy
+                best_result = result
+        
+        # プライマリ戦略がシグナルを出さなかった場合、MLフォールバック
+        if best_result is None and use_ml_fallback and primary_strategy != "ML_Primary":
+            best_result = self._predict_ml(symbol, features, min_confidence)
+        
+        return best_result
     
     def apply_filters(
         self,
@@ -798,13 +980,21 @@ class DemoTrader:
         features: pd.DataFrame,
         current_time: datetime,
     ) -> str | None:
-        """フィルターを適用。通過ならNone、拒否なら理由を返す。"""
-        
+        """
+        PAIR_CONFIGに基づいてペア別フィルターを適用。
+        通過ならNone、拒否なら理由を返す。
+        """
         if not self.config["use_filters"]:
             return None
         
-        # ロングオンリーチェック
-        if symbol in self.config["long_only_symbols"] and direction == "sell":
+        # ペア別設定を取得
+        pair_cfg = PAIR_CONFIG.get(symbol, {})
+        adx_threshold = pair_cfg.get("adx_threshold", self.config["adx_threshold"])
+        sma_atr_threshold = pair_cfg.get("sma_atr_threshold", self.config["sma_atr_threshold"])
+        long_only = pair_cfg.get("long_only", False)
+        
+        # ロングオンリーチェック（ペア別設定優先）
+        if long_only and direction == "sell":
             return f"long_only: {symbol} はロングのみ"
         
         # 時間帯フィルター
@@ -812,17 +1002,17 @@ class DemoTrader:
         if hour >= 21 or hour < 1:
             return f"time_filter: {hour}時は取引除外時間"
         
-        # ADXフィルター
+        # ADXフィルター（ペア別閾値）
         if "adx_14" in features.columns:
             adx = features.iloc[-1]["adx_14"]
-            if pd.notna(adx) and adx < self.config["adx_threshold"]:
-                return f"adx_filter: {adx:.1f} < {self.config['adx_threshold']}"
+            if pd.notna(adx) and adx < adx_threshold:
+                return f"adx_filter: {adx:.1f} < {adx_threshold}"
         
-        # SMA200距離フィルター
+        # SMA200距離フィルター（ペア別閾値）
         if "sma200_atr_distance" in features.columns:
             dist = features.iloc[-1]["sma200_atr_distance"]
-            if pd.notna(dist) and dist < self.config["sma_atr_threshold"]:
-                return f"sma_distance_filter: {dist:.2f} < {self.config['sma_atr_threshold']}"
+            if pd.notna(dist) and dist < sma_atr_threshold:
+                return f"sma_distance_filter: {dist:.2f} < {sma_atr_threshold}"
         
         return None
     

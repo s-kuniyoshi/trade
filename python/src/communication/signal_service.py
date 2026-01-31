@@ -47,7 +47,8 @@ class SignalService:
     """
     
     # Symbol-specific restrictions based on backtesting
-    LONG_ONLY_SYMBOLS = {"USDJPY"}  # Symbols that only trade long
+    # USDJPY short now allowed to increase trade frequency
+    LONG_ONLY_SYMBOLS: set[str] = set()  # Empty - all symbols can trade both directions
     
     def __init__(
         self,
@@ -115,10 +116,10 @@ class SignalService:
         self.min_confidence = min_confidence if min_confidence is not None else \
             config.trading.signals.get("min_confidence", 0.65)
         
-        # Filter settings
+        # Filter settings - relaxed for more trades
         self.use_filters = use_filters
-        self.adx_threshold = adx_threshold
-        self.sma_atr_threshold = sma_atr_threshold
+        self.adx_threshold = 15.0 if adx_threshold == 20.0 else adx_threshold  # Relaxed from 20
+        self.sma_atr_threshold = 0.3 if sma_atr_threshold == 0.5 else sma_atr_threshold  # Relaxed from 0.5
         
         # Risk management settings
         self.max_drawdown_pct = max_drawdown_pct
@@ -537,9 +538,9 @@ class SignalService:
         last_bar = self.buffers[symbol][self.base_timeframe].index[-1]
         hour = pd.Timestamp(last_bar).hour
         
-        # Time filter: Avoid low liquidity hours (UTC 21:00-01:00)
-        if hour >= 21 or hour < 1:
-            return f"time_filter: hour={hour} in excluded range (21-01 UTC)"
+        # Time filter: Avoid low liquidity hours (UTC 22:00-00:00) - narrowed window
+        if hour >= 22 or hour < 0:
+            return f"time_filter: hour={hour} in excluded range (22-00 UTC)"
         
         # ADX trend filter
         if "adx_14" in features.columns:

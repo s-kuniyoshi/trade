@@ -116,22 +116,22 @@ news_filter:
       blackout_before_minutes: 45
 
 # -----------------------------------------------------------------------------
-# Signal Generation
+# Signal Generation (取引頻度向上設定)
 # -----------------------------------------------------------------------------
 signals:
-  # Minimum confidence to generate signal
-  min_confidence: 0.65
+  # Minimum confidence to generate signal (緩和: 0.65 → 0.35)
+  min_confidence: 0.35
   
   # Signal types
   allowed_directions:
     - "long"
     - "short"
   
-  # Maximum signals per symbol per day
-  max_signals_per_day: 5
+  # Maximum signals per symbol per day (増加: 5 → 10)
+  max_signals_per_day: 10
   
-  # Cooldown between signals for same symbol (minutes)
-  signal_cooldown_minutes: 60
+  # Cooldown between signals for same symbol (minutes) (短縮: 60 → 30)
+  signal_cooldown_minutes: 30
 
 # -----------------------------------------------------------------------------
 # Order Execution

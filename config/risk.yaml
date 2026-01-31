@@ -130,43 +130,44 @@ trailing_stop:
   step_pips: 5
 
 # -----------------------------------------------------------------------------
-# Trade Filters
+# Trade Filters (取引頻度向上のため緩和)
 # -----------------------------------------------------------------------------
 filters:
   # Spread filter
   spread:
     enabled: true
-    # Maximum spread as ratio of ATR
-    max_spread_atr_ratio: 0.3
+    # Maximum spread as ratio of ATR (緩和: 0.3 → 0.4)
+    max_spread_atr_ratio: 0.4
     # Maximum spread in pips (hard limit)
     max_spread_pips: 5.0
   
-  # Volatility filter
+  # Volatility filter (緩和)
   volatility:
     enabled: true
-    # Minimum ATR (as percentage of price)
-    min_atr_pct: 0.05
-    # Maximum ATR (as percentage of price)
-    max_atr_pct: 0.5
+    # Minimum ATR (as percentage of price) - 緩和: 0.05 → 0.03
+    min_atr_pct: 0.03
+    # Maximum ATR (as percentage of price) - 緩和: 0.5 → 0.8
+    max_atr_pct: 0.8
   
-  # Time filter
+  # Time filter (緩和)
   time:
     enabled: true
-    # Avoid trading during specific hours (UTC)
-    blackout_hours: [22, 23, 0, 1, 2]
+    # Avoid trading during specific hours (UTC) - 短縮: 22-2 → 23-1
+    blackout_hours: [23, 0, 1]
     # Avoid trading on specific days (1=Monday, 5=Friday)
     reduced_days: [5]
     reduced_day_cutoff_hour: 20
   
-  # Regime filter
+  # Regime filter (緩和)
   regime:
     enabled: true
-    # Only trade in these regimes
+    # Only trade in these regimes - 全レジームを許可
     allowed_regimes:
       - "trending"
       - "ranging"
-    # Avoid high volatility regime
-    avoid_high_volatility: true
+      - "volatile"
+    # Avoid high volatility regime - 無効化
+    avoid_high_volatility: false
 
 # -----------------------------------------------------------------------------
 # Emergency Stop (Circuit Breakers)

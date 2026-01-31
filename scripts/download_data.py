@@ -134,6 +134,7 @@ def main():
     ]
     timeframes = [
         (mt5.TIMEFRAME_M15, "M15"),
+        (mt5.TIMEFRAME_M30, "M30"),  # M30追加（取引頻度向上用）
         (mt5.TIMEFRAME_H1, "H1"),
         (mt5.TIMEFRAME_H4, "H4"),
         (mt5.TIMEFRAME_D1, "D1"),
