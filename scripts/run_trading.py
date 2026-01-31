@@ -30,6 +30,10 @@ import pandas as pd
 project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root))
 
+# 共通モジュールからインポート
+from config.pair_config import PAIR_CONFIG as BASE_PAIR_CONFIG, get_pair_config as get_base_pair_config, COMMON_CONFIG
+from python.features import compute_features
+
 # ログ設定
 log_dir = project_root / "logs"
 log_dir.mkdir(exist_ok=True)
@@ -79,62 +83,37 @@ import lightgbm as lgb
 # - AUDUSD × TripleScreen (ルールベース): ML PF 0.94 → ルールベースに変更
 # - EURJPY/EURUSD: 除外（成績不良）
 
-PAIR_CONFIG = {
-    # M30バックテスト結果 (2026-01-31更新) - 通貨ペア別最適化
-    # ============================================================
-    # | Symbol | Return  | Trades | PF   | MaxDD  | 推奨閾値 |
-    # |--------|---------|--------|------|--------|----------|
-    # | USDCAD | +134.5% | 232    | 1.28 | -18.6% | 0.60 ✅ 最優秀 |
-    # | GBPUSD | +84.1%  | 245    | 1.20 | -31.7% | 0.50 ✅ 優秀   |
-    # | AUDJPY | +14.3%  | 303    | 1.02 | -50.8% | 0.50 ⚠️ 多取引 |
-    # | USDJPY | +5.1%   | 41     | 1.08 | -15.3% | 0.50 ✅ 安定   |
-    # ============================================================
-    # 4ペアで年間164取引、トータルリターン+238%
-    
+# 取引固有の設定（戦略情報など）を共通設定に追加
+# BASE_PAIR_CONFIGをベースに、取引固有フィールドを追加
+TRADING_PAIR_CONFIG = {
+    # 取引対象ペアのみ定義（BASE_PAIR_CONFIGの設定をオーバーライド）
     "USDCAD": {
+        **get_base_pair_config("USDCAD"),
         "strategy": "ML_Primary",     # 最優秀（PF 1.28@0.60）
-        "min_confidence": 0.60,       # 高閾値で精度重視
         "use_ml_fallback": True,
-        "long_only": False,
-        "adx_threshold": 15.0,
-        "sma_atr_threshold": 0.3,
-        "base_leverage": 30.0,
-        "max_leverage": 100.0,
     },
     "GBPUSD": {
+        **get_base_pair_config("GBPUSD"),
         "strategy": "ML_Primary",     # 優秀（PF 1.20@0.50）
-        "min_confidence": 0.50,       # 低閾値で取引数確保
         "use_ml_fallback": True,
-        "long_only": False,
-        "adx_threshold": 12.0,
-        "sma_atr_threshold": 0.2,
-        "base_leverage": 25.0,
-        "max_leverage": 80.0,
     },
     "USDJPY": {
+        **get_base_pair_config("USDJPY"),
         "strategy": "ML_Primary",     # 安定（PF 1.08@0.50）
-        "min_confidence": 0.50,
         "use_ml_fallback": True,
-        "long_only": True,            # ロングのみ
-        "adx_threshold": 15.0,
-        "sma_atr_threshold": 0.3,
-        "base_leverage": 30.0,
-        "max_leverage": 100.0,
     },
     "AUDJPY": {
+        **get_base_pair_config("AUDJPY"),
         "strategy": "ML_Primary",     # 多取引（PF 1.02@0.50）
-        "min_confidence": 0.50,
         "use_ml_fallback": True,
-        "long_only": False,
-        "adx_threshold": 15.0,
-        "sma_atr_threshold": 0.3,
-        "base_leverage": 25.0,
-        "max_leverage": 80.0,
     },
 }
 
+# 後方互換性のため PAIR_CONFIG エイリアスを維持
+PAIR_CONFIG = TRADING_PAIR_CONFIG
+
 # 後方互換性のためSYMBOL_STRATEGIESも維持
-SYMBOL_STRATEGIES = {pair: [cfg["strategy"]] for pair, cfg in PAIR_CONFIG.items()}
+SYMBOL_STRATEGIES = {pair: [cfg["strategy"]] for pair, cfg in TRADING_PAIR_CONFIG.items()}
 
 CONFIG = {
     # 取引対象（M30最適化ポートフォリオ - 4通貨ペア）
@@ -145,15 +124,15 @@ CONFIG = {
     # モデル設定
     "model_path": project_root / "models",
     
-    # 取引設定（M30最適化）
+    # 取引設定（M30最適化 - バックテストと同期）
     "initial_capital": 10000.0,
-    "risk_per_trade": 0.01,   # 3ペアに絞ったのでリスク戻す
-    "leverage": 3,
-    "min_confidence": 0.55,   # PAIR_CONFIGで個別設定（0.55-0.60）、これはフォールバック
+    "risk_per_trade": 0.03,   # バックテストと同期（3%）
+    "leverage": 25,           # フォールバック（PAIR_CONFIGで個別設定）
+    "min_confidence": 0.50,   # PAIR_CONFIGで個別設定（0.50-0.60）、これはフォールバック
     
-    # SL/TP設定
-    "sl_atr_mult": 2.0,
-    "tp_atr_mult": 3.0,
+    # SL/TP設定（バックテストと同期）
+    "sl_atr_mult": 1.5,       # 2.0→1.5（バックテストと同期）
+    "tp_atr_mult": 2.5,       # 3.0→2.5（バックテストと同期）
     
     # フィルター設定（PAIR_CONFIGで個別設定、これはフォールバック）
     "use_filters": True,
@@ -199,187 +178,8 @@ CONFIG = {
 
 
 # =============================================================================
-# 特徴量計算（run_backtest.pyと完全一致）
+# 特徴量計算: python/features.py からインポート済み
 # =============================================================================
-
-def compute_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    テクニカル指標ベースの特徴量を計算。
-    
-    リーク防止: すべて過去データのみ使用（shift使用）
-    
-    ※ run_backtest.py の compute_features() と完全一致
-    """
-    features = pd.DataFrame(index=df.index)
-    
-    # 価格系
-    features["log_return_1"] = np.log(df["close"] / df["close"].shift(1))
-    features["log_return_5"] = np.log(df["close"] / df["close"].shift(5))
-    features["log_return_20"] = np.log(df["close"] / df["close"].shift(20))
-    
-    # レンジ
-    features["range_hl"] = (df["high"] - df["low"]) / df["close"]
-    
-    # ボラティリティ
-    features["realized_vol_20"] = features["log_return_1"].rolling(20).std() * np.sqrt(252 * 24)
-    
-    # 移動平均
-    features["sma_20"] = df["close"].rolling(20).mean()
-    features["sma_50"] = df["close"].rolling(50).mean()
-    features["sma_200"] = df["close"].rolling(200).mean()  # トレンドフィルター用
-    features["price_to_sma20"] = df["close"] / features["sma_20"] - 1
-    features["price_to_sma50"] = df["close"] / features["sma_50"] - 1
-    features["price_to_sma200"] = df["close"] / features["sma_200"] - 1  # SMA200乖離
-    features["sma_cross"] = (features["sma_20"] > features["sma_50"]).astype(int)
-    
-    # RSI
-    delta = df["close"].diff()
-    gain = delta.where(delta > 0, 0).rolling(14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
-    rs = gain / loss
-    features["rsi_14"] = 100 - (100 / (1 + rs))
-    
-    # MACD
-    ema_12 = df["close"].ewm(span=12, adjust=False).mean()
-    ema_26 = df["close"].ewm(span=26, adjust=False).mean()
-    features["macd"] = ema_12 - ema_26
-    features["macd_signal"] = features["macd"].ewm(span=9, adjust=False).mean()
-    features["macd_hist"] = features["macd"] - features["macd_signal"]
-    
-    # ATR
-    tr1 = df["high"] - df["low"]
-    tr2 = abs(df["high"] - df["close"].shift(1))
-    tr3 = abs(df["low"] - df["close"].shift(1))
-    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-    features["atr_14"] = tr.rolling(14).mean()
-    
-    # ADX (Average Directional Index) - トレンド強度フィルター用
-    plus_dm = df["high"].diff()
-    minus_dm = -df["low"].diff()
-    plus_dm = plus_dm.where((plus_dm > minus_dm) & (plus_dm > 0), 0)
-    minus_dm = minus_dm.where((minus_dm > plus_dm) & (minus_dm > 0), 0)
-    
-    atr_smooth = tr.ewm(span=14, adjust=False).mean()
-    plus_di = 100 * (plus_dm.ewm(span=14, adjust=False).mean() / atr_smooth)
-    minus_di = 100 * (minus_dm.ewm(span=14, adjust=False).mean() / atr_smooth)
-    dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di + 1e-10)
-    features["adx_14"] = dx.ewm(span=14, adjust=False).mean()
-    
-    # SMA200からの乖離をATRで正規化（トレンドフィルター用）
-    features["sma200_atr_distance"] = abs(df["close"] - features["sma_200"]) / features["atr_14"]
-    
-    # ボリンジャーバンド
-    bb_mid = df["close"].rolling(20).mean()
-    bb_std = df["close"].rolling(20).std()
-    features["bb_upper"] = bb_mid + 2 * bb_std
-    features["bb_lower"] = bb_mid - 2 * bb_std
-    features["bb_width"] = (features["bb_upper"] - features["bb_lower"]) / bb_mid
-    features["bb_position"] = (df["close"] - features["bb_lower"]) / (features["bb_upper"] - features["bb_lower"])
-    
-    # 時間特徴量
-    features["hour"] = df.index.hour
-    features["day_of_week"] = df.index.dayofweek
-    
-    # ========================================
-    # 新規特徴量: セッション特性（東京/ロンドン/NY）
-    # ========================================
-    hour = df.index.hour
-    
-    # セッションフラグ (UTC基準)
-    features["is_tokyo"] = ((hour >= 0) & (hour < 9)).astype(int)
-    features["is_london"] = ((hour >= 7) & (hour < 16)).astype(int)
-    features["is_ny"] = ((hour >= 13) & (hour < 22)).astype(int)
-    features["is_ldn_ny_overlap"] = ((hour >= 13) & (hour < 16)).astype(int)
-    
-    # セッション別累積リターン（セッション開始からのトレンド方向）
-    ret1 = features["log_return_1"]
-    day = df.index.floor("D")
-    
-    # 東京セッション累積リターン
-    tokyo_ret = ret1.where(features["is_tokyo"].astype(bool), 0.0)
-    features["tokyo_cumret"] = tokyo_ret.groupby(day).cumsum()
-    
-    # ロンドンセッション累積リターン
-    london_ret = ret1.where(features["is_london"].astype(bool), 0.0)
-    features["london_cumret"] = london_ret.groupby(day).cumsum()
-    
-    # NYセッション累積リターン
-    ny_ret = ret1.where(features["is_ny"].astype(bool), 0.0)
-    features["ny_cumret"] = ny_ret.groupby(day).cumsum()
-    
-    # セッション別ボラティリティ（全体のローリングボラに対するセッションの相対ボラ）
-    overall_vol = ret1.rolling(24, min_periods=12).std()
-    features["tokyo_vol_ratio"] = features["is_tokyo"] * overall_vol
-    features["london_vol_ratio"] = features["is_london"] * overall_vol
-    features["ny_vol_ratio"] = features["is_ny"] * overall_vol
-    
-    # ========================================
-    # 新規特徴量: トレンド品質（Efficiency Ratio）
-    # ========================================
-    n = 20
-    close = df["close"]
-    
-    # Kaufman Efficiency Ratio: 0=チョップ、1=クリーンなトレンド
-    change = close.diff(n).abs()
-    volatility = close.diff().abs().rolling(n).sum()
-    features["efficiency_ratio"] = (change / volatility).replace([np.inf, -np.inf], np.nan)
-    
-    # SMAスロープ（トレンドの傾き）
-    sma_20 = features["sma_20"]
-    features["sma_slope"] = sma_20.diff(3) / 3.0
-    features["sma_accel"] = features["sma_slope"].diff(3) / 3.0
-    
-    # リターン持続性（同じ方向が続く割合）
-    ret = features["log_return_1"]
-    same_sign = (np.sign(ret) == np.sign(ret.shift(1))).astype(float)
-    features["ret_persistence"] = same_sign.rolling(n).mean()
-    
-    # ========================================
-    # 新規特徴量: ジャンプ/テールリスク
-    # ========================================
-    win = 48
-    
-    # Parkinsonボラティリティ（レンジベース）
-    parkinson = (1.0 / (4.0 * np.log(2.0))) * (np.log(df["high"] / df["low"]) ** 2)
-    features["parkinson_vol"] = np.sqrt(parkinson.rolling(win).mean())
-    
-    # ジャンプスコア（異常な動きの検出）
-    med_abs = ret.abs().rolling(win).median()
-    features["jump_score"] = (ret.abs() / med_abs).replace([np.inf, -np.inf], np.nan)
-    
-    # テール非対称性（下落リスク vs 上昇リスク）
-    down = (ret.clip(upper=0.0) ** 2).rolling(win).mean()
-    up = (ret.clip(lower=0.0) ** 2).rolling(win).mean()
-    features["tail_asymmetry"] = (down / up).replace([np.inf, -np.inf], np.nan)
-    
-    # ========================================
-    # 新規特徴量: ミーンリバージョン（レンジ相場用）
-    # ========================================
-    ma = close.rolling(n).mean()
-    sd = close.rolling(n).std()
-    
-    # Zスコア
-    features["zscore"] = (close - ma) / sd
-    
-    # バンド幅のパーセンタイル（圧縮度）- シンプルな方法で計算
-    bw = features["bb_width"]
-    bw_rolling_max = bw.rolling(100, min_periods=20).max()
-    bw_rolling_min = bw.rolling(100, min_periods=20).min()
-    features["bw_percentile"] = (bw - bw_rolling_min) / (bw_rolling_max - bw_rolling_min + 1e-10)
-    
-    # レンジ相場フラグ（低ボラ + 低トレンド品質）
-    features["is_range_regime"] = (
-        (features["bw_percentile"] < 0.25) & 
-        (features["efficiency_ratio"] < 0.3)
-    ).astype(int)
-    
-    # ミーンリバージョンシグナル（レンジ相場でのみ有効）
-    features["mr_signal"] = features["is_range_regime"] * (-features["zscore"])
-    
-    # 欠損値を削除
-    features = features.dropna()
-    
-    return features
 
 
 # =============================================================================
@@ -844,7 +644,7 @@ class DemoTrader:
                 df, atr,
                 tp_atr=self.config["tp_atr_mult"],
                 sl_atr=self.config["sl_atr_mult"],
-                max_hold=48,
+                max_hold=36,  # バックテストと同期
             )
             
             # 共通インデックス
@@ -1058,9 +858,32 @@ class DemoTrader:
         symbol: str,
         sl_distance: float,
         risk_multiplier: float,
+        confidence: float = 0.5,
     ) -> float:
-        """ポジションサイズを計算。"""
-        base_risk = self.config["risk_per_trade"] * self.config["leverage"]
+        """
+        ポジションサイズを計算。
+        
+        PAIR_CONFIGのレバレッジ設定を使用:
+        - base_leverage: 基本レバレッジ
+        - max_leverage: 高確信度時の最大レバレッジ
+        - 確信度0.65以上でレバレッジが増加
+        """
+        # ペア別レバレッジ設定を取得
+        pair_cfg = PAIR_CONFIG.get(symbol, {})
+        base_leverage = pair_cfg.get("base_leverage", 25.0)
+        max_leverage = pair_cfg.get("max_leverage", 80.0)
+        leverage_threshold = 0.65  # この確信度以上でレバレッジ増加
+        
+        # 確信度に応じたレバレッジ計算
+        if confidence >= leverage_threshold:
+            # 確信度0.65-1.00をbase-maxにマッピング
+            confidence_ratio = (confidence - leverage_threshold) / (1.0 - leverage_threshold)
+            current_leverage = base_leverage + (max_leverage - base_leverage) * confidence_ratio
+        else:
+            current_leverage = base_leverage
+        
+        # リスク計算
+        base_risk = self.config["risk_per_trade"] * current_leverage
         adjusted_risk = base_risk * risk_multiplier
         
         risk_amount = self.current_equity * adjusted_risk
@@ -1078,6 +901,8 @@ class DemoTrader:
         
         # ロットサイズ制限
         lots = max(0.01, min(lots, 1.0))  # 0.01〜1.0ロット
+        
+        logger.debug(f"  レバレッジ: {current_leverage:.1f}x (確信度: {confidence:.2f})")
         
         return round(lots, 2)
     
@@ -1161,9 +986,10 @@ class DemoTrader:
             if "prob_buy" in pred:
                 logger.debug(f"  P(buy)={pred['prob_buy']:.3f} P(sell)={pred['prob_sell']:.3f} P(neutral)={pred['prob_neutral']:.3f}")
             
-            # 信頼度チェック
-            if pred["confidence"] < self.config["min_confidence"]:
-                logger.info(f"信頼度不足: {pred['confidence']:.3f} < {self.config['min_confidence']}")
+            # 信頼度チェック（PAIR_CONFIGを優先）
+            pair_min_conf = PAIR_CONFIG.get(symbol, {}).get("min_confidence", self.config["min_confidence"])
+            if pred["confidence"] < pair_min_conf:
+                logger.info(f"信頼度不足: {pred['confidence']:.3f} < {pair_min_conf}")
                 continue
             
             # フィルター適用
@@ -1180,8 +1006,12 @@ class DemoTrader:
             
             # SL/TP計算
             current_price = df.iloc[-1]["close"]
-            sl_distance = current_atr * self.config["sl_atr_mult"]
-            tp_distance = current_atr * self.config["tp_atr_mult"]
+            # SL/TP計算（PAIR_CONFIGを優先、なければグローバル設定）
+            pair_cfg = PAIR_CONFIG.get(symbol, {})
+            sl_mult = pair_cfg.get("sl_atr_mult", self.config["sl_atr_mult"])
+            tp_mult = pair_cfg.get("tp_atr_mult", self.config["tp_atr_mult"])
+            sl_distance = current_atr * sl_mult
+            tp_distance = current_atr * tp_mult
             
             if pred["direction"] == "buy":
                 sl = current_price - sl_distance
@@ -1190,14 +1020,24 @@ class DemoTrader:
                 sl = current_price + sl_distance
                 tp = current_price - tp_distance
             
-            # ポジションサイズ
-            lots = self.calculate_position_size(symbol, sl_distance, risk_mult)
+            # ポジションサイズ（確信度に応じたレバレッジ適用）
+            lots = self.calculate_position_size(symbol, sl_distance, risk_mult, pred["confidence"])
+            
+            # 適用されたレバレッジを計算して表示
+            base_lev = pair_cfg.get("base_leverage", 25.0)
+            max_lev = pair_cfg.get("max_leverage", 80.0)
+            if pred["confidence"] >= 0.65:
+                conf_ratio = (pred["confidence"] - 0.65) / 0.35
+                current_lev = base_lev + (max_lev - base_lev) * conf_ratio
+            else:
+                current_lev = base_lev
             
             logger.info(f"★ シグナル発生! {symbol} {pred['direction']}")
             logger.info(f"  価格: {current_price:.5f}")
             logger.info(f"  SL: {sl:.5f} ({sl_distance/self.config['pip_value'][symbol]:.1f}pips)")
             logger.info(f"  TP: {tp:.5f} ({tp_distance/self.config['pip_value'][symbol]:.1f}pips)")
             logger.info(f"  ロット: {lots}")
+            logger.info(f"  レバレッジ: {current_lev:.1f}x (確信度={pred['confidence']:.2f})")
             logger.info(f"  リスク調整: {risk_mult:.2f}")
             
             # 注文実行
@@ -1213,7 +1053,12 @@ class DemoTrader:
         logger.info(f"対象: {self.config['symbols']}")
         logger.info(f"タイムフレーム: {self.config['timeframe']}")
         logger.info(f"初期資金: {self.config['initial_capital']}")
-        logger.info(f"レバレッジ: {self.config['leverage']}倍")
+        # ペア別レバレッジ設定を表示
+        for sym in self.config['symbols']:
+            pair_cfg = PAIR_CONFIG.get(sym, {})
+            base_lev = pair_cfg.get("base_leverage", 25.0)
+            max_lev = pair_cfg.get("max_leverage", 80.0)
+            logger.info(f"  {sym}: レバレッジ {base_lev:.0f}-{max_lev:.0f}x")
         logger.info(f"DRY RUN: {self.config['dry_run']}")
         logger.info("="*60)
         
